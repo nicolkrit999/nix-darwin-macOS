@@ -24,21 +24,21 @@
           nix.settings.experimental-features = [ "nix-command" "flakes" ];
           ids.gids.nixbld = 350;
           environment.systemPath = [ "/opt/homebrew/bin" "/opt/homebrew/sbin" ];
-          environment.variables.JAVA_HOME = "${pkgs.jdk25}";
+          environment.variables.JAVA_HOME = "${pkgs.jdk23}";
 
           environment.systemPackages = with pkgs; [
             neovim git nodejs maven gradle ripgrep fd unzip eza btop jq
             cmake docker glew glfw pandoc postgresql_14 rbenv redis sox
             speedtest-cli starship pay-respects tree yt-dlp zlib wakeonlan
             pokemon-colorscripts cloudflared tealdeer black ruff maven pyright glow
-            xclip nerd-fonts.hack which jdk25 universal-ctags fzf tree-sitter
+            xclip nerd-fonts.hack which universal-ctags fzf tree-sitter
             lazygit viu chafa ueberzugpp ghostscript tectonic mermaid-cli imagemagick
             kitty vimPlugins.coc-pyright
             nodePackages.vim-language-server
             nodePackages.bash-language-server
             nodePackages.yaml-language-server
             lua-language-server fastfetch
-            vimPlugins.nvim-treesitter stow
+            vimPlugins.nvim-treesitter stow vimPlugins.nvim-jdtls
             vimPlugins.nvim-treesitter-parsers.regex texliveFull
             vimPlugins.nvim-java-test nerd-fonts.jetbrains-mono
             (pkgs.python313.withPackages (ps: with ps; [

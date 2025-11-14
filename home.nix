@@ -8,8 +8,8 @@
   programs.home-manager.enable = true;
 
   home.sessionVariables = {
-    JAVA_HOME = "${pkgs.jdk25}";
-    JAVA_HOME_FOR_NEOVIM = "${pkgs.jdk25}";
+    JAVA_HOME = "${pkgs.jdk23}";
+    JAVA_HOME_FOR_NEOVIM = "${pkgs.jdk23}";
   };
 
   programs.zsh = {
