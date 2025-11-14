@@ -8,9 +8,10 @@
   programs.home-manager.enable = true;
 
   home.sessionVariables = {
-    JAVA_HOME = "${pkgs.jdk25}";
-    JAVA_HOME_FOR_NEOVIM = "${pkgs.jdk25}";
+  JAVA_HOME = "${pkgs.jdk25}";
+  JDTLS_BIN = "${pkgs.jdt-language-server}/bin/jdtls";
   };
+
 
   programs.zsh = {
     enable = true;

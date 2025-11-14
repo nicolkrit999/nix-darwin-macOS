@@ -27,6 +27,8 @@
           ids.gids.nixbld = 350;
           environment.systemPath = [ "/opt/homebrew/bin" "/opt/homebrew/sbin" ];
           environment.variables.JAVA_HOME = "${pkgs.jdk25}";
+          environment.variables.JDTLS_BIN = "${pkgs.jdt-language-server}/bin/jdtls";
+
 
           environment.systemPackages = with pkgs; [
             neovim git nodejs maven gradle ripgrep fd unzip eza btop jq
@@ -43,6 +45,7 @@
             vimPlugins.nvim-treesitter stow
             vimPlugins.nvim-treesitter-parsers.regex texliveFull
             vimPlugins.nvim-java-test nerd-fonts.jetbrains-mono
+            jdt-language-server
             (pkgs.python313.withPackages (ps: with ps; [
               pip
               setuptools
