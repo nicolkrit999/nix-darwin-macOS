@@ -42,7 +42,7 @@
             nodePackages.bash-language-server
             nodePackages.yaml-language-server
             lua-language-server fastfetch
-            vimPlugins.nvim-treesitter stow
+            vimPlugins.nvim-treesitter stow ranger pipes
             vimPlugins.nvim-treesitter-parsers.regex texliveFull
             vimPlugins.nvim-java-test nerd-fonts.jetbrains-mono
             jdt-language-server
