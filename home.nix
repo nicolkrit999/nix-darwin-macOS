@@ -46,6 +46,9 @@
     '';
   };
 
+
+  programs.command-not-found.enable = false;
+
   home.shellAliases = {
     upd        = "brew update && brew upgrade";
     updres     = "brew update-reset";

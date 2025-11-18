@@ -41,8 +41,8 @@
             nodePackages.vim-language-server
             nodePackages.bash-language-server
             nodePackages.yaml-language-server
-            lua-language-server fastfetch
-            vimPlugins.nvim-treesitter stow ranger
+            lua-language-server fastfetch pay-respects
+            vimPlugins.nvim-treesitter stow ranger neo-cowsay
             vimPlugins.nvim-treesitter-parsers.regex texliveFull
             vimPlugins.nvim-java-test nerd-fonts.jetbrains-mono
             jdt-language-server
@@ -63,9 +63,10 @@
           programs.zsh = {
             enable = true;
             enableCompletion = true;
-            promptInit = ''eval "$(starship init zsh)"'';
+            promptInit = ''eval "$(starship init zsh)"; eval "$(pay-respects zsh --alias)"'';
             shellInit = '' '';
           };
+
 
           homebrew = {
             enable = true;
