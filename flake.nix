@@ -25,6 +25,7 @@
       # Define nix enabled modules and various options
       modules = [
         ({ pkgs, lib, ... }: {
+          nix.enable = false;  # tell nix-darwin to not manage nix installation
           nixpkgs.hostPlatform = system;
           nixpkgs.config.allowUnfree = true; # Allow allowUnfree packages
 
