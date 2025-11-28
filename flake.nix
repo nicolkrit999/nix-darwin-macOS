@@ -88,7 +88,7 @@
             onActivation = { autoUpdate = false; upgrade = false; cleanup = "uninstall"; };
             taps = [];
             brews = ["pipes-sh"];
-            casks = [ "only-switch" "pearcleaner"];
+            casks = [ "only-switch" "pearcleaner" "font-jetbrains-mono-nerd-font"];
             user = "krit";
           };
 
