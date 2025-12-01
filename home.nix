@@ -17,33 +17,45 @@
 
   # Define the fact that the zsh configuration is defined in nix. ~/.zshrc is an alias and not the actual file
   programs.zsh = {
-    enable = true; # Needed to allow nix to manage the zshrc
-    enableCompletion = true; # Enable zsh completeation. It means when you press tab there is command/path/etc completetion (autosuggestion)
-    autosuggestion.enable = true; # Enable autosuggestion (completetion) of command based on the history. You can accept the autosuggestion by pressing →
-    syntaxHighlighting.enable = true; # Highlight command sintax allowing you to understand more clearly the different sections of the command
+    enable = true;
+    enableCompletion = true;
+    autosuggestion.enable = true;
+    syntaxHighlighting.enable = true;
 
-    # Replace all the conent of zshrc with the current one. This get loaded before the entire home manager. In the case this is not a wanted behaviour then initExtra is a better option
-    # This block define homebrew path (mac specific), the iterm integration (mac specific), catpuccin mocha terminal theme, pokemon colorscripts when opening a new terminal
-    initContent = ''
+    # 'initExtra' is the standard way to add custom scripts to .zshrc in Home Manager
+    initExtra = ''
       export CASE_SENSITIVE="true"
       export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+      
+      # SSH Agent Logic
       if [ -z "$SSH_AUTH_SOCK" ]; then
         eval "$(ssh-agent -s)" >/dev/null
         if [ -f "$HOME/.ssh/id_ed25519" ]; then
           ssh-add --apple-use-keychain "$HOME/.ssh/id_ed25519" >/dev/null 2>&1 || true
         fi
       fi
+      
+      # iTerm Integration
       if [ -f "$HOME/.iterm2_shell_integration.zsh" ]; then
         . "$HOME/.iterm2_shell_integration.zsh"
       fi
+      
+      # FZF Options
       export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS \
         --color=fg:#cdd6f4,bg:#1e1e2e,hl:#f38ba8 \
         --color=fg+:#cdd6f4,bg+:#313244,hl+:#f38ba8 \
         --color=info:#94e2d5,prompt:#89b4fa,pointer:#f5c2e7 \
         --color=marker:#a6e3a1,spinner:#f5c2e7,header:#f9e2af,border:#45475a"
+
+      # FASTFETCH + POKEMON CONFIG
+      # Only run if in interactive mode (*l*) and commands exist
       case "$-" in
         *l*)
-          if command -v pokemon-colorscripts >/dev/null 2>&1; then
+          if command -v fastfetch >/dev/null 2>&1 && command -v pokemon-colorscripts >/dev/null 2>&1; then
+            # Run fastfetch using the pokemon output as the raw logo
+            fastfetch --data-raw "$(pokemon-colorscripts --no-title -r 1,3,6)"
+          elif command -v pokemon-colorscripts >/dev/null 2>&1; then
+            # Fallback: run just pokemon if fastfetch is missing
             pokemon-colorscripts --no-title -r 1,3,6
           fi
           ;;
@@ -148,5 +160,8 @@
 
     # Maven rebuild for java projects
     rebuildmvn = "cd ~/java-projects && mvn clean install";
+
+    # Various commands to load at startup
+    #fastfetch;
   };
 }
