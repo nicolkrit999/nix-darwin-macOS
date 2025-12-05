@@ -126,7 +126,7 @@
     clone        = "git clone";
     clonedepth1  = "git clone --depth=1";
     gitkeep      = "find . -type d -empty -not -path './.git/*' -exec touch {}/.gitkeep \\;";
-    gac = "find /Users/krit/0001_Github_Repos -name '.git' -type d | while read gitdir; do repo=$(dirname \"$gitdir\"); echo \"Processing: $repo\"; (cd \"$repo\" && git add . && git commit -m \"General-$(date +%Y-%m-%d)\" && git push) 2>/dev/null || echo \"Failed: $repo\"; done";
+    gac = "find ~/0001_Github_Repos -name '.git' -type d | while read gitdir; do repo=$(dirname \"$gitdir\"); echo \"Processing: $repo\"; (cd \"$repo\" && git add . && git commit -m \"General-$(date +%Y-%m-%d)\" && git push) 2>/dev/null || echo \"Failed: $repo\"; done";
 
 
     # Other commands
