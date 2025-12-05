@@ -1,1 +1,1 @@
-Personal nix darwin (for mac os=
+Personal nix darwin (for mac os)
