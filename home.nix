@@ -67,6 +67,6 @@
 
     # Nix-darwing specific
     cdnix = "cd ~/nix-config/";
-    nixpush = "cd ~/nix-config/ && sudo nix run nix-darwin -- switch --flake \".#$(scutil --get LocalHostName)\"";
+    nixpush = "cd ~/nix-darwin-macOS/ && sudo nix run nix-darwin -- switch --flake \".#$(scutil --get LocalHostName)\"";
   };
 }
