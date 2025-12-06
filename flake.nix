@@ -20,7 +20,6 @@
     system = "aarch64-darwin";
 
     # HOSTNAMES LIST
-    # Add any new machine names here to automatically generate their config
     supportedMachines = [ "MacBook-Air-di-Roberta" "Krits-MacBook-Pro" ];
 
     # CONFIGURATION GENERATOR
@@ -50,34 +49,129 @@
 
           # General nix packages installation
           environment.systemPackages = with pkgs; [
-            neovim git nodejs maven gradle ripgrep fd unzip eza btop jq
-            cmake docker glew glfw pandoc postgresql_14 rbenv redis sox
-            speedtest-cli starship pay-respects tree yt-dlp zlib wakeonlan
-            pokemon-colorscripts cloudflared tealdeer black ruff maven pyright glow
-            xclip nerd-fonts.hack which universal-ctags fzf tree-sitter
-            lazygit viu chafa ueberzugpp ghostscript tectonic mermaid-cli imagemagick
-            kitty vimPlugins.coc-pyright jdk25
-            nodePackages.vim-language-server
-            nodePackages.bash-language-server
-            nodePackages.yaml-language-server
-            lua-language-server fastfetch pay-respects
-            vimPlugins.nvim-treesitter stow ranger neo-cowsay
-            vimPlugins.nvim-treesitter-parsers.regex texliveFull
-            vimPlugins.nvim-java-test nerd-fonts.jetbrains-mono
-            jdt-language-server cbonsai asciinema croc ttyd grex
+            # ---------------------------------------------------
+            # 1. CORE SYSTEM UTILITIES & SHELL ENHANCEMENTS
+            # ---------------------------------------------------
+            starship        # Customizable shell prompt
+            eza             # Modern replacement for 'ls'
+            btop            # Resource monitor (better 'top')
+            ripgrep         # Ultra-fast replacement for 'grep'
+            fd              # User-friendly replacement for 'find'
+            fzf             # Command-line fuzzy finder
+            zlib            # Compression library (required by many system tools)
+            unzip           # Tool to extract zip files
+            which           # Locate a command
+            tree            # Display directories as a tree
+            stow            # Symlink farm manager (used for dotfiles)
+            ranger          # Console file manager with VI keybindings
+            tealdeer        # Fast implementation of tldr (simplified man pages)
+            xclip           # Command line interface to X selections (clipboard)
+            wakeonlan       # Tool to send magic packets to wake devices
 
-            # Define options for python3.13
+            # ---------------------------------------------------
+            # 2. DEVELOPMENT TOOLS & VERSION CONTROL
+            # ---------------------------------------------------
+            git             # Distributed version control system
+            lazygit         # Simple terminal UI for git commands
+            cmake           # Cross-platform build system
+            docker          # Containerization platform
+            universal-ctags # Tool to generate index (tags) files of source code
+            jq              # Command-line JSON processor
+            glow            # Markdown renderer for the terminal
+            grex            # Command-line tool for generating regular expressions
+
+            # ---------------------------------------------------
+            # 3. NEOVIM & EDITOR SUPPORT
+            # ---------------------------------------------------
+            neovim          # Hyperextensible Vim-based text editor
+            tree-sitter     # Incremental parsing system (core for syntax highlighting)
+            # Neovim Plugins (System Level)
+            vimPlugins.coc-pyright                  # Python support for CoC
+            vimPlugins.nvim-treesitter              # Treesitter configurations
+            vimPlugins.nvim-treesitter-parsers.regex # Regex parser for treesitter
+            vimPlugins.nvim-java-test               # Java testing support
+            # Fonts
+            nerd-fonts.hack           # Hack font with icons
+            nerd-fonts.jetbrains-mono # JetBrains Mono with icons
+
+            # ---------------------------------------------------
+            # 4. LANGUAGES, RUNTIMES & BUILD TOOLS
+            # ---------------------------------------------------
+            # Java
+            jdk25                   # Java Development Kit 25
+            maven                   # Build automation tool for Java
+            gradle                  # Build automation tool for multi-language
+            jdt-language-server     # Java language server (LSP)
+            
+            # Node / Web
+            nodejs                  # JavaScript runtime
+            nodePackages.vim-language-server  # LSP for Vim script
+            nodePackages.bash-language-server # LSP for Bash
+            nodePackages.yaml-language-server # LSP for YAML
+            
+            # C/C++ Libraries
+            glew                    # OpenGL Extension Wrangler Library
+            glfw                    # Multi-platform library for OpenGL/Vulkan
+            
+            # Other Languages
+            lua-language-server     # LSP for Lua
+            rbenv                   # Ruby version manager
+            postgresql_14           # PostgreSQL database client/server
+            redis                   # In-memory data store
+            pyright                 # Static type checker for Python
+
+            # ---------------------------------------------------
+            # 5. DOCUMENT PROCESSING & MEDIA
+            # ---------------------------------------------------
+            pandoc          # Universal markup converter (docs/markdown/etc)
+            tectonic        # Modernized, complete, self-contained TeX/LaTeX engine
+            texliveFull     # The complete TeX Live distribution (Note: Large download)
+            mermaid-cli     # CLI for generating diagrams from Mermaid code
+            ghostscript     # Interpreter for PostScript and PDF
+            imagemagick     # Image manipulation library
+            sox             # "Swiss Army knife" of sound processing
+            yt-dlp          # Command-line audio/video downloader
+            
+            # Image Viewers in Terminal
+            viu             # Terminal image viewer
+            chafa           # Terminal graphics (images to text/sixel)
+            ueberzugpp      # C++ port of ueberzug (images in terminal)
+
+            # ---------------------------------------------------
+            # 6. NETWORKING & INTERNET
+            # ---------------------------------------------------
+            cloudflared     # Cloudflare Tunnel client
+            speedtest-cli   # Command line interface for testing internet bandwidth
+            croc            # Securely and easily send files between two computers
+            ttyd            # Share your terminal over the web
+
+            # ---------------------------------------------------
+            # 7. FUN, VISUALS & TERMINAL TOYS
+            # ---------------------------------------------------
+            pay-respects            # Typo correction tool (Press F)
+            fastfetch               # System information fetcher (faster neofetch)
+            pokemon-colorscripts    # Prints random pokemon on start
+            neo-cowsay              # Cowsay reborn (ASCII art with text)
+            cbonsai                 # Grow bonsai trees in your terminal
+            asciinema               # Record and share terminal sessions
+            kitty                   # GPU-based terminal emulator
+
+            # ---------------------------------------------------
+            # 8. PYTHON ENVIRONMENT (Bundled with Packages)
+            # ---------------------------------------------------
             (pkgs.python313.withPackages (ps: with ps; [
-              pip
-              setuptools
-              pynvim
-              python-lsp-server
-              pylsp-mypy
-              isort
-              python-lsp-black
-              pylint
-              flake8
-              faker
+              pip                 # Package installer for Python
+              setuptools          # Library for packaging Python projects
+              pynvim              # Python client for Neovim
+              python-lsp-server   # Python LSP (pylsp)
+              python-lsp-black    # Black formatting support for pylsp
+              pylsp-mypy          # Mypy type checking for pylsp
+              isort               # Sort imports alphabetically
+              pylint              # Source code analyzer
+              flake8              # Style guide enforcement
+              black               # The uncompromising code formatter
+              ruff                # Extremely fast Python linter
+              faker               # Generate fake data
             ]))
           ];
 
@@ -100,7 +194,14 @@
 
           # Define the path of the home user.
           users.users.krit.home = "/Users/krit";
-          security.pam.services.sudo_local.enable = true;
+          
+          # --- TOUCH ID ENABLED HERE ---
+          security.pam.services.sudo_local = {
+            enable = true;
+            touchIdAuth = true;
+          };
+          # -----------------------------
+
           system.primaryUser = "krit";
           system.stateVersion = 4;
 
@@ -116,13 +217,26 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.backupFileExtension = "";
-          home-manager.users.krit = import ./home.nix;
+          
+          # --- FIXED HOME MANAGER SECTION ---
+          # (Restored the logic that fixes the nix-index prompt)
+          home-manager.users.krit = { ... }: {
+            imports = [ 
+              ./home.nix 
+              nix-index-database.hmModules.nix-index 
+            ];
+
+            programs.nix-index = {
+              enable = true;
+              enableZshIntegration = false; # Disables the annoying prompt
+            };
+          };
+          # --------------------------------
         }
       ];
     };
   in {
     # OUTPUT GENERATION
-    # Generates configurations for every machine in the 'supportedMachines' list
     darwinConfigurations = nixpkgs.lib.genAttrs supportedMachines createDarwinConfig;
   };
 }
