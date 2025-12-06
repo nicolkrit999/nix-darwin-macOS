@@ -15,7 +15,7 @@
   };
 
   outputs = { self, nixpkgs, nix-darwin, home-manager, nix-index-database }: let
-    
+
     # SYSTEM ARCHITECTURE
     system = "aarch64-darwin";
 
@@ -28,24 +28,24 @@
       modules = [
         # Include the nixpkgs and home-manager modules
         ({ pkgs, lib, ... }: {
-          
+
           # DYNAMIC HOSTNAME CONFIGURATION
           networking.hostName = hostname;
           networking.computerName = hostname;
           documentation.enable = false;
           nix.enable = false;
           nixpkgs.hostPlatform = system;
-          nixpkgs.config.allowUnfree = true; 
+          nixpkgs.config.allowUnfree = true;
 
           nixpkgs.config.permittedInsecurePackages = [
           ];
 
-          nix.settings.experimental-features = [ "nix-command" "flakes" ]; 
+          nix.settings.experimental-features = [ "nix-command" "flakes" ];
           ids.gids.nixbld = 350;
-          environment.systemPath = [ "/opt/homebrew/bin" "/opt/homebrew/sbin" ]; 
-          
-          environment.variables.JAVA_HOME = "${pkgs.jdk25}"; 
-          environment.variables.JDTLS_BIN = "${pkgs.jdt-language-server}/bin/jdtls"; 
+          environment.systemPath = [ "/opt/homebrew/bin" "/opt/homebrew/sbin" ];
+
+          environment.variables.JAVA_HOME = "${pkgs.jdk25}";
+          environment.variables.JDTLS_BIN = "${pkgs.jdt-language-server}/bin/jdtls";
 
           # General nix packages installation
           environment.systemPackages = with pkgs; [
@@ -102,17 +102,17 @@
             maven                   # Build automation tool for Java
             gradle                  # Build automation tool for multi-language
             jdt-language-server     # Java language server (LSP)
-            
+
             # Node / Web
             nodejs                  # JavaScript runtime
             nodePackages.vim-language-server  # LSP for Vim script
             nodePackages.bash-language-server # LSP for Bash
             nodePackages.yaml-language-server # LSP for YAML
-            
+
             # C/C++ Libraries
             glew                    # OpenGL Extension Wrangler Library
             glfw                    # Multi-platform library for OpenGL/Vulkan
-            
+
             # Other Languages
             lua-language-server     # LSP for Lua
             rbenv                   # Ruby version manager
@@ -131,7 +131,7 @@
             imagemagick     # Image manipulation library
             sox             # "Swiss Army knife" of sound processing
             yt-dlp          # Command-line audio/video downloader
-            
+
             # Image Viewers in Terminal
             viu             # Terminal image viewer
             chafa           # Terminal graphics (images to text/sixel)
@@ -189,12 +189,12 @@
             # ---------------------------------------------------
             # BEHAVIOR CONFIGURATION
             # ---------------------------------------------------
-            onActivation = { 
+            onActivation = {
               autoUpdate = false;      # Don't update Homebrew every time nix-darwin runs
               upgrade = false;         # Don't automatically upgrade packages (faster builds)
               cleanup = "uninstall";   # Uninstall any brew package not listed here (Declarative)
             };
-            
+
             user = "krit";             # The user needed to run Homebrew commands
 
             # ---------------------------------------------------
@@ -220,8 +220,8 @@
               # Utilities
               "only-switch"                    # All-in-one menu bar toggle (Dark mode, Hide notch, etc.)
               "pearcleaner"                    # Free, open-source app uninstaller and cleaner
-              
-              # Fonts 
+
+              # Fonts
               # (Note: You also have this in systemPackages, usually one is enough)
               "font-jetbrains-mono-nerd-font"  # JetBrains Mono font patched with Nerd icons
             ];
@@ -229,7 +229,7 @@
 
           # Define the path of the home user.
           users.users.krit.home = "/Users/krit";
-          
+
           # --- TOUCH ID ENABLED HERE ---
           security.pam.services.sudo_local = {
             enable = true;
@@ -242,7 +242,7 @@
 
           environment.shellAliases = {
             # DYNAMIC ALIAS: automatically detects hostname
-            nixpush = "cd /etc/nix-darwin/ && sudo nix run nix-darwin -- switch --flake \".#$(scutil --get LocalHostName)\"";
+            nixpush = "cd ~/nix-config/ && sudo nix run nix-darwin -- switch --flake \".#$(scutil --get LocalHostName)\"";
           };
         })
 
@@ -252,13 +252,13 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.backupFileExtension = "";
-          
+
           # --- FIXED HOME MANAGER SECTION ---
           # (Restored the logic that fixes the nix-index prompt)
           home-manager.users.krit = { ... }: {
-            imports = [ 
-              ./home.nix 
-              nix-index-database.hmModules.nix-index 
+            imports = [
+              ./home.nix
+              nix-index-database.hmModules.nix-index
             ];
 
             programs.nix-index = {

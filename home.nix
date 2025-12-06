@@ -66,7 +66,7 @@
     cleardns    = "sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder";
 
     # Nix-darwing specific
-    cdnix = "cd /etc/nix-darwin/";
-    nixpush = "cd /etc/nix-darwin/ && sudo nix run nix-darwin -- switch --flake \".#$(scutil --get LocalHostName)\"";
+    cdnix = "cd ~/nix-config/";
+    nixpush = "cd ~/nix-config/ && sudo nix run nix-darwin -- switch --flake \".#$(scutil --get LocalHostName)\"";
   };
 }
