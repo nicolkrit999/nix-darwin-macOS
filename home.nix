@@ -20,8 +20,8 @@
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
 
-    # THIS IS THE IMPORTANT PART
-    initExtra = ''
+    # Tell to add specific init code to a general zshrc stowed in dotfiles
+    initContent = ''
       # REBUILD_TRIGGER: 1 
       # 1. Source the GENERAL ZSHRC (The one you use on Linux)
       if [ -f "$HOME/dotfiles/general-zshrc/.zshrc" ]; then
@@ -64,6 +64,6 @@
     changehosts = "sudo nvim /etc/hosts";
     cleardns    = "sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder";
 
-    nixpush     = "cd /etc/nix-darwin/ && sudo nix run nix-darwin -- switch --flake .#Krits-MacBook-Pro";
+    nixpush = "cd /etc/nix-darwin/ && sudo nix run nix-darwin -- switch --flake \".#$(scutil --get LocalHostName)\"";
   };
 }
