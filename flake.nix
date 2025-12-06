@@ -185,11 +185,46 @@
           # Define installed homebrew packages
           homebrew = {
             enable = true;
-            onActivation = { autoUpdate = false; upgrade = false; cleanup = "uninstall"; };
-            taps = [];
-            brews = ["pipes-sh"];
-            casks = [ "only-switch" "pearcleaner" "font-jetbrains-mono-nerd-font"];
-            user = "krit";
+
+            # ---------------------------------------------------
+            # BEHAVIOR CONFIGURATION
+            # ---------------------------------------------------
+            onActivation = { 
+              autoUpdate = false;      # Don't update Homebrew every time nix-darwin runs
+              upgrade = false;         # Don't automatically upgrade packages (faster builds)
+              cleanup = "uninstall";   # Uninstall any brew package not listed here (Declarative)
+            };
+            
+            user = "krit";             # The user needed to run Homebrew commands
+
+            # ---------------------------------------------------
+            # TAPS (Third-party Repositories)
+            # ---------------------------------------------------
+            taps = [
+              # "homebrew/cask-fonts"  # Example: If you need specific font versions
+            ];
+
+            # ---------------------------------------------------
+            # BREWS (CLI Tools managed by Homebrew)
+            # ---------------------------------------------------
+            # Use this for tools that are broken or missing in Nixpkgs
+            brews = [
+              "pipes-sh"               # Animated pipes terminal screensaver (Visual toy)
+            ];
+
+            # ---------------------------------------------------
+            # CASKS (GUI Applications & Fonts)
+            # ---------------------------------------------------
+            # macOS native apps that are easier to install via Homebrew
+            casks = [
+              # Utilities
+              "only-switch"                    # All-in-one menu bar toggle (Dark mode, Hide notch, etc.)
+              "pearcleaner"                    # Free, open-source app uninstaller and cleaner
+              
+              # Fonts 
+              # (Note: You also have this in systemPackages, usually one is enough)
+              "font-jetbrains-mono-nerd-font"  # JetBrains Mono font patched with Nerd icons
+            ];
           };
 
           # Define the path of the home user.
