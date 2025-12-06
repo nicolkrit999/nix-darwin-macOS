@@ -8,7 +8,7 @@ A declarative macOS system configuration using **Nix-Darwin**, **Home Manager**,
 ## 📍 Repository Location
 **Important:** This repository is designed to be cloned into the main user folder at the following specific path:
 
-```bash
+
 ~/nix-darwin-macOS/
 ````
 
