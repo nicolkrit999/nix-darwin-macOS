@@ -10,9 +10,11 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-index-database.url = "github:nix-community/nix-index-database";
+    nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, nix-darwin, home-manager }: let
+  outputs = { self, nixpkgs, nix-darwin, home-manager, nix-index-database }: let
     
     # SYSTEM ARCHITECTURE
     system = "aarch64-darwin";
@@ -25,6 +27,8 @@
     createDarwinConfig = hostname: nix-darwin.lib.darwinSystem {
       specialArgs = { };
       modules = [
+        # Include the nixpkgs and home-manager modules
+        nix-index-database.darwinModules.nix-index
         ({ pkgs, lib, ... }: {
           
           # DYNAMIC HOSTNAME CONFIGURATION
@@ -38,7 +42,6 @@
           nixpkgs.config.permittedInsecurePackages = [
           ];
 
-          programs.nix-index.enable = true;
           nix.settings.experimental-features = [ "nix-command" "flakes" ]; 
           ids.gids.nixbld = 350;
           environment.systemPath = [ "/opt/homebrew/bin" "/opt/homebrew/sbin" ]; 
