@@ -54,7 +54,7 @@ You can manage multiple Macs with this single repository.
 
   * **Nix Settings:** Flakes and `nix-command` are enabled by default. `allowUnfree` is true.
   * **Java:** `JAVA_HOME` is explicitly set to the installed `jdk25` package.
-  * **JDTLS:** `JDTLS_BIN` is exported globally, pointing to the nix-installed language server.
+  * **JDTLS:** `JDTLS_BIN` is exported globally, pointing to the nix-installed language server. The folder that contains it is in ~/tools/jdtls
 
 ### Python Environment
 
