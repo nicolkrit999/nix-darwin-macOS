@@ -1,44 +1,50 @@
 {
   description = "A complete, declarative macOS setup with Neovim, home manager with aliases";
 
-  # Define from where the packages are installed
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable"; # Define that all installed packages are from the unstable channel (the more update one)
-    nix-darwin.url = "github:LnL7/nix-darwin"; # Nix-darwing url fetch
-    nix-darwin.inputs.nixpkgs.follows = "nixpkgs"; # Define that nix-darwin uses the regular nix packages
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nix-darwin.url = "github:LnL7/nix-darwin";
+    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Home-manager module support
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  # Define outputs
   outputs = { self, nixpkgs, nix-darwin, home-manager }: let
-    system = "aarch64-darwin"; # Define that the system is aarch64 based on darwin
-  in {
-    # Define hostname
-    darwinConfigurations."Krits-MacBook-Pro" = nix-darwin.lib.darwinSystem {
-      specialArgs = { };
+    
+    # SYSTEM ARCHITECTURE
+    system = "aarch64-darwin";
 
-      # Define nix enabled modules and various options
+    # HOSTNAMES LIST
+    # Add any new machine names here to automatically generate their config
+    supportedMachines = [ "MacBook-Air-di-Roberta" "Krits-MacBook-Pro" ];
+
+    # CONFIGURATION GENERATOR
+    createDarwinConfig = hostname: nix-darwin.lib.darwinSystem {
+      specialArgs = { };
       modules = [
         ({ pkgs, lib, ... }: {
-          nix.enable = false;  # tell nix-darwin to not manage nix installation
+          
+          # DYNAMIC HOSTNAME CONFIGURATION
+          networking.hostName = hostname;
+          networking.computerName = hostname;
+          documentation.enable = false;
+          nix.enable = false;  
           nixpkgs.hostPlatform = system;
-          nixpkgs.config.allowUnfree = true; # Allow allowUnfree packages
+          nixpkgs.config.allowUnfree = true; 
 
-          # Allow insecured packages, for example older not maintained version
           nixpkgs.config.permittedInsecurePackages = [
           ];
-          programs.nix-index.enable = true;
-          nix.settings.experimental-features = [ "nix-command" "flakes" ]; # Define experimental feature, enable support for flakes and cli nix commands
-          ids.gids.nixbld = 350;
-          environment.systemPath = [ "/opt/homebrew/bin" "/opt/homebrew/sbin" ]; # Define homebrew as systemPath
-          environment.variables.JAVA_HOME = "${pkgs.jdk25}"; # Set the installed java packages in the environment variable JAVA_HOME. Useful to take it in setup like neovim
-          environment.variables.JDTLS_BIN = "${pkgs.jdt-language-server}/bin/jdtls"; # Override default jdtls, for example to tell neovim to use the installed one instead of installing an older version
 
+          programs.nix-index.enable = true;
+          nix.settings.experimental-features = [ "nix-command" "flakes" ]; 
+          ids.gids.nixbld = 350;
+          environment.systemPath = [ "/opt/homebrew/bin" "/opt/homebrew/sbin" ]; 
+          
+          environment.variables.JAVA_HOME = "${pkgs.jdk25}"; 
+          environment.variables.JDTLS_BIN = "${pkgs.jdt-language-server}/bin/jdtls"; 
 
           # General nix packages installation
           environment.systemPackages = with pkgs; [
@@ -70,17 +76,14 @@
               pylint
               flake8
             ]))
-
           ];
 
           # Tell zsh to eval the necessary packages
           programs.zsh = {
             enable = true;
             enableCompletion = true;
-            promptInit = ''eval "$(starship init zsh)"; eval "$(pay-respects zsh --alias)"'';
-            shellInit = '' '';
+            promptInit = "";
           };
-
 
           # Define installed homebrew packages
           homebrew = {
@@ -92,14 +95,15 @@
             user = "krit";
           };
 
-          # Define the path of the home user. It need to match the related section in home manager (home.nix)
+          # Define the path of the home user.
           users.users.krit.home = "/Users/krit";
           security.pam.services.sudo_local.enable = true;
           system.primaryUser = "krit";
           system.stateVersion = 4;
 
           environment.shellAliases = {
-            nixpush = "cd /etc/nix-darwin/ && sudo nix run nix-darwin -- switch --flake .#Krits-MacBook-Pro";
+            # DYNAMIC ALIAS: automatically detects hostname
+            nixpush = "cd /etc/nix-darwin/ && sudo nix run nix-darwin -- switch --flake \".#$(scutil --get LocalHostName)\"";
           };
         })
 
@@ -113,5 +117,9 @@
         }
       ];
     };
+  in {
+    # OUTPUT GENERATION
+    # Generates configurations for every machine in the 'supportedMachines' list
+    darwinConfigurations = nixpkgs.lib.genAttrs supportedMachines createDarwinConfig;
   };
 }
