@@ -1,5 +1,5 @@
 {
-  description = "A complete, declarative macOS setup with Neovim, home manager with aliases";
+  description = "Personal nix darwing configuration, including mac specific zshrc options, and source for dotfiles";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
@@ -28,14 +28,13 @@
       specialArgs = { };
       modules = [
         # Include the nixpkgs and home-manager modules
-        nix-index-database.darwinModules.nix-index
         ({ pkgs, lib, ... }: {
           
           # DYNAMIC HOSTNAME CONFIGURATION
           networking.hostName = hostname;
           networking.computerName = hostname;
           documentation.enable = false;
-          nix.enable = false;  
+          nix.enable = false;
           nixpkgs.hostPlatform = system;
           nixpkgs.config.allowUnfree = true; 
 
@@ -65,7 +64,7 @@
             vimPlugins.nvim-treesitter stow ranger neo-cowsay
             vimPlugins.nvim-treesitter-parsers.regex texliveFull
             vimPlugins.nvim-java-test nerd-fonts.jetbrains-mono
-            jdt-language-server
+            jdt-language-server cbonsai asciinema croc ttyd grex
 
             # Define options for python3.13
             (pkgs.python313.withPackages (ps: with ps; [
@@ -78,6 +77,7 @@
               python-lsp-black
               pylint
               flake8
+              faker
             ]))
           ];
 
