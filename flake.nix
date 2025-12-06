@@ -242,7 +242,7 @@
 
           environment.shellAliases = {
             # DYNAMIC ALIAS: automatically detects hostname
-            nixpush = "cd ~/nix-config/ && sudo nix run nix-darwin -- switch --flake \".#$(scutil --get LocalHostName)\"";
+            nixpush = "cd ~/nix-darwin-macOS/ && sudo nix run nix-darwin -- switch --flake \".#$(scutil --get LocalHostName)\"";
           };
         })
 
