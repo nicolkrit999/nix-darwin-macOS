@@ -1,5 +1,3 @@
-Here is the `README.md` file content in plain text markdown.
-
 ````markdown
 # Personal Nix-Darwin Configuration
 
