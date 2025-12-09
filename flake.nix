@@ -45,51 +45,53 @@
     createVmConfig = vmHostname: let
       hwConfig = vmSpecs.${vmHostname};
     in nixpkgs.lib.nixosSystem {
-      system = "aarch64-linux"; # Linux architecture
       modules = [
         ({ pkgs, modulesPath, ... }: {
           imports = [ "${modulesPath}/virtualisation/qemu-vm.nix" ];
 
-          # HOST CONFIGURATION
-          # This tells the VM to use the host's (macOS) QEMU package
+          # 1. ENABLE CROSS-COMPILATION
+          nixpkgs.buildPlatform = "aarch64-darwin"; 
+          nixpkgs.hostPlatform = "aarch64-linux";   
+
+          # 2. DISABLE DOCUMENTATION (Fixes the 'yodl' build error)
+          documentation.enable = false;
+          documentation.doc.enable = false;
+          documentation.info.enable = false;
+          documentation.man.enable = false;
+          documentation.nixos.enable = false;
+
+          # 3. HOST CONFIGURATION
           virtualisation.host.pkgs = nixpkgs.legacyPackages.aarch64-darwin;
 
-          # VARIABLE HARDWARE SETTINGS
+          # 4. HARDWARE SETTINGS
           virtualisation.graphics = false;
           virtualisation.memorySize = hwConfig.ram;
           virtualisation.cores = hwConfig.cores;
           virtualisation.diskSize = hwConfig.diskSize; 
           
           networking.hostName = vmHostname;
-          networking.firewall.enable = false;   # Disable firewall for easier dev
+          networking.firewall.enable = false;
 
-          # USER CONFIGURATION
+          # 5. USER & PACKAGES
           users.users.nixos = {
             isNormalUser = true;
             extraGroups = [ "wheel" "networkmanager" ];
-            password = "nixos"; # Default password
+            password = "nixos";
           };
           
-          # Allow passwordless sudo for convenience inside the VM
           security.sudo.wheelNeedsPassword = false;
 
-          # PACKAGES (Inside the VM)
           environment.systemPackages = with pkgs; [
-            git
-            neovim
-            curl
-            wget
-            gnumake
-            # Add minimal tools needed to clone your main repo later
+            git neovim curl wget gnumake
           ];
 
-          # Enable flakes inside the VM
           nix.settings.experimental-features = [ "nix-command" "flakes" ];
-          
           system.stateVersion = "25.11";
         })
       ];
     };
+
+
 
     # -------------------------------------------------------------------------
     # 2. DARWIN CONFIGURATION (macOS Host)
