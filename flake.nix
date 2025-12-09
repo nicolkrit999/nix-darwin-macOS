@@ -44,31 +44,46 @@
     # Function to create the NixOS VM configuration
     createVmConfig = vmHostname: let
       hwConfig = vmSpecs.${vmHostname};
+      
+      # 1. CONFIGURE CROSS-COMPILATION
+      # Define a package set that builds ON Darwin (Mac) FOR Linux
+      crossPkgs = import nixpkgs {
+        localSystem = "aarch64-darwin";
+        crossSystem = "aarch64-linux";
+        config.allowUnsupportedSystem = true;
+      };
+
     in nixpkgs.lib.nixosSystem {
+      # Pass the cross-compiled package set to the system
+      pkgs = crossPkgs;
+      
       modules = [
-        ({ pkgs, modulesPath, ... }: {
+        ({ config, lib, modulesPath, ... }: {
           imports = [ "${modulesPath}/virtualisation/qemu-vm.nix" ];
 
-          # 1. ENABLE CROSS-COMPILATION
-          nixpkgs.buildPlatform = "aarch64-darwin"; 
-          nixpkgs.hostPlatform = "aarch64-linux";   
+          # -------------------------------------------------------
+          # 2. BUILD FIXES (Use mkForce to override defaults)
+          # -------------------------------------------------------
+          
+          # Fix 'yodl' error by forcing documentation off
+          documentation.enable = lib.mkForce false;
+          documentation.doc.enable = lib.mkForce false;
+          documentation.info.enable = lib.mkForce false;
+          documentation.man.enable = lib.mkForce false;
+          documentation.nixos.enable = lib.mkForce false;
+          
+          # Fix 'driverLink' error & conflict by forcing Guest Agent off
+          services.qemuGuest.enable = lib.mkForce false;
 
-          # 2. FIX FOR YODL ERROR
-          # This forces Nix to attempt building 'yodl' even though it's marked unsupported on Mac.
-          # This is required for cross-compiling the base Linux system.
-          nixpkgs.config.allowUnsupportedSystem = true;
-
-          # 3. DISABLE DOCUMENTATION
-          documentation.enable = false;
-          documentation.doc.enable = false;
-          documentation.info.enable = false;
-          documentation.man.enable = false;
-          documentation.nixos.enable = false;
-
-          # 4. HOST CONFIGURATION
+          # -------------------------------------------------------
+          # 3. HOST CONFIGURATION
+          # -------------------------------------------------------
+          # Use the host's (macOS) QEMU to run the VM
           virtualisation.host.pkgs = nixpkgs.legacyPackages.aarch64-darwin;
 
-          # 5. HARDWARE SETTINGS
+          # -------------------------------------------------------
+          # 4. HARDWARE SETTINGS
+          # -------------------------------------------------------
           virtualisation.graphics = false;
           virtualisation.memorySize = hwConfig.ram;
           virtualisation.cores = hwConfig.cores;
@@ -77,7 +92,9 @@
           networking.hostName = vmHostname;
           networking.firewall.enable = false;
 
-          # 6. USER & PACKAGES
+          # -------------------------------------------------------
+          # 5. USER & PACKAGES
+          # -------------------------------------------------------
           users.users.nixos = {
             isNormalUser = true;
             extraGroups = [ "wheel" "networkmanager" ];
@@ -86,7 +103,7 @@
           
           security.sudo.wheelNeedsPassword = false;
 
-          environment.systemPackages = with pkgs; [
+          environment.systemPackages = with crossPkgs; [
             git neovim curl wget gnumake
           ];
 
@@ -95,6 +112,7 @@
         })
       ];
     };
+
 
 
 
