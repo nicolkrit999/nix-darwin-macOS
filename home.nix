@@ -3,7 +3,7 @@
 {
   home.username = "krit";
   home.homeDirectory = "/Users/krit";
-  home.stateVersion = "24.05";
+  home.stateVersion = "25.11";
 
   programs.home-manager.enable = true;
 
@@ -20,6 +20,7 @@
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
 
+    # Using initContent as requested
     initContent = ''
       # REBUILD_TRIGGER: 1
       # 1. Source the GENERAL ZSHRC (The one you use on Linux)
@@ -45,43 +46,68 @@
       fi
       
       # -----------------------------------------------------------------------
-      # VMUP FUNCTION
-      # (Defined as a function instead of an alias to handle the logic safely)
+      # VMUP FUNCTION (Bootstrap Mode)
       # -----------------------------------------------------------------------
+      # Downloads/Runs official NixOS Image. Bypasses build issues.
       vmup() {
-        # 1. Define where the VM disk should live (Outside the repo!)
-        local VM_DATA_DIR="$HOME/nixos-vm-data"
-        local FLAKE_DIR="$HOME/nix-darwin-macOS"
-  
-        # 2. Create directory if missing and enter it
-        mkdir -p "$VM_DATA_DIR"
-        cd "$VM_DATA_DIR" || return
-  
-        # 3. Detect Hostname
+        local DATA_DIR="$HOME/nixos-vm-data"
+        # Download Latest Minimal ISO (AArch64)
+        local IMAGE_URL="https://channels.nixos.org/nixos-25.11/latest-nixos-minimal-aarch64-linux.iso"
+        
+        mkdir -p "$DATA_DIR"
+        cd "$DATA_DIR" || return
+
+        # 1. Detect Hostname & Set Hardware Specs
         local HOST
         HOST=$(scutil --get LocalHostName)
-        local VM_NAME=""
-        
+        local MEMORY="4G"
+        local CORES="2"
+        local DISK_SIZE="64G"
+
         if [ "$HOST" = "MacBook-Air-di-Roberta" ]; then
-          VM_NAME="mac-book-air-roberta-nixos-vm"
+          MEMORY="3G"; CORES="2"; DISK_SIZE="64G"
         elif [ "$HOST" = "Krits-MacBook-Pro" ]; then
-          VM_NAME="mac-book-pro-krit-nixos-vm"
-        else
-          echo "❌ Unknown host for VM mapping" 
-          return 1
+          MEMORY="12G"; CORES="6"; DISK_SIZE="128G"
         fi
-  
-        echo "🚀 Starting NixOS VM for host: $HOST"
-        echo "📂 Storage Location: $VM_DATA_DIR"
+
+        # 2. Create Persistent Disk if missing
+        local DISK_IMG="nixos-disk.qcow2"
+        if [ ! -f "$DISK_IMG" ]; then
+          echo "📦 Creating virtual hard drive ($DISK_SIZE)..."
+          # Use 'qemu-img' from the 'qemu' package we installed in systemPackages
+          qemu-img create -f qcow2 "$DISK_IMG" "$DISK_SIZE"
+        fi
+
+        # 3. Download Installer ISO if missing
+        local ISO_IMG="nixos-minimal.iso"
+        if [ ! -f "$ISO_IMG" ]; then
+           echo "⬇️  Downloading NixOS Installer ISO..."
+           curl -L -o "$ISO_IMG" "$IMAGE_URL"
+        fi
+
+        echo "🚀 Starting NixOS VM..."
+        echo "   Host: $HOST"
+        echo "   Specs: $MEMORY RAM / $CORES Cores"
         
-        # 4. Run the VM referencing the flake directory
-        nix run "$FLAKE_DIR#nixosConfigurations.$VM_NAME.config.system.build.vm"
+        # 4. Run QEMU
+        # -cdrom: This boots the Installer ISO.
+        # Once you install NixOS to disk, remove '-cdrom "$ISO_IMG"' from this command.
+        qemu-system-aarch64 \
+          -machine virt,accel=hvf,highmem=off \
+          -cpu host \
+          -smp "$CORES" \
+          -m "$MEMORY" \
+          -drive file="$DISK_IMG",if=virtio,format=qcow2 \
+          -cdrom "$ISO_IMG" \
+          -nic user,model=virtio \
+          -nographic
       }
     '';
   };
 
   programs.command-not-found.enable = false;
 
+  # ONLY Mac specific aliases here.
   home.shellAliases = {
     # Homebrew aliases
     brew-upd      = "brew update && brew upgrade";
@@ -97,10 +123,10 @@
     changehosts = "sudo nvim /etc/hosts";
     cleardns    = "sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder";
 
-    # VM Management (Simple commands)
+    # VM Management
     vmstop   = "pkill qemu-system-aarch64";
-
-    # Nix-darwin specific
+    
+    # Nix-darwing specific
     cdnix = "cd ~/nix-config/";
     nixpush = "cd ~/nix-darwin-macOS/ && sudo nix run nix-darwin -- switch --flake \".#$(scutil --get LocalHostName)\"";
   };

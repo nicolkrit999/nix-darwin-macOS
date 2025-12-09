@@ -23,98 +23,7 @@
     # HOSTNAMES LIST
     supportedMachines = [ "MacBook-Air-di-Roberta" "Krits-MacBook-Pro" ];
 
-    # -------------------------------------------------------------------------
-    # 1. VM CONFIGURATION (Variable Hardware)
-    # -------------------------------------------------------------------------
-    
-    # Define hardware specs per VM hostname
-    vmSpecs = {
-      "mac-book-air-roberta-nixos-vm" = {
-        ram = 3072;       # 3GB RAM
-        cores = 2;        # 2 Cores
-        diskSize = 65536; # 64 GB (in MB) - Sparse file, grows as needed
-      };
-      "mac-book-pro-krit-nixos-vm" = {
-        ram = 12288;       # 12GB RAM
-        cores = 6;        # 6 Cores
-        diskSize = 65536; # 64 GB (in MB)
-      };
-    };
-
-    # Function to create the NixOS VM configuration
-    createVmConfig = vmHostname: let
-      hwConfig = vmSpecs.${vmHostname};
-    in nixpkgs.lib.nixosSystem {
-      system = "aarch64-linux";
-      
-      modules = [
-        # NUCLEAR OPTION: Completely disable the module causing the "run executable" error
-        { disabledModules = [ "config/terminfo.nix" ]; }
-        
-        ({ config, lib, modulesPath, pkgs, ... }: {
-          imports = [ "${modulesPath}/virtualisation/qemu-vm.nix" ];
-
-          # CROSS-COMPILATION
-          nixpkgs.buildPlatform.system = "aarch64-darwin";
-          nixpkgs.hostPlatform.system = "aarch64-linux";
-          nixpkgs.config.allowUnsupportedSystem = true;
-
-          # MINIMALISM (Disable everything that might run a binary)
-          services.dbus.enable = lib.mkForce false;
-          documentation.enable = lib.mkForce false;
-          services.qemuGuest.enable = lib.mkForce false;
-          security.polkit.enable = lib.mkForce false;
-          hardware.graphics.enable = lib.mkForce false;
-          security.pam.services.sudo.startSession = lib.mkForce false;
-
-          # NETWORK
-          networking.useDHCP = false;
-          networking.interfaces.eth0.useDHCP = true;
-          networking.firewall.enable = false;
-          networking.hostName = vmHostname;
-
-          # HARDWARE
-          virtualisation.host.pkgs = nixpkgs.legacyPackages.aarch64-darwin;
-          virtualisation.graphics = false;
-          virtualisation.memorySize = hwConfig.ram;
-          virtualisation.cores = hwConfig.cores;
-          virtualisation.diskSize = hwConfig.diskSize;
-
-          # USER
-          users.users.nixos = {
-            isNormalUser = true;
-            extraGroups = [ "wheel" ];
-            password = "nixos";
-          };
-          security.sudo.wheelNeedsPassword = false;
-
-          # PACKAGES: Kept minimal (git is essential for your workflow)
-          environment.systemPackages = with pkgs; [
-            git 
-            curl
-          ];
-
-          nix.settings.experimental-features = [ "nix-command" "flakes" ];
-          system.stateVersion = "25.11";
-        })
-      ];
-    };
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # -------------------------------------------------------------------------
-    # 2. DARWIN CONFIGURATION (macOS Host)
-    # -------------------------------------------------------------------------
+    # CONFIGURATION GENERATOR
     createDarwinConfig = hostname: nix-darwin.lib.darwinSystem {
       specialArgs = { };
       modules = [
@@ -159,6 +68,7 @@
             tealdeer        # Fast implementation of tldr (simplified man pages)
             xclip           # Command line interface to X selections (clipboard)
             wakeonlan       # Tool to send magic packets to wake devices
+            qemu            # Virtualization (Added for VM support)
 
             # ---------------------------------------------------
             # 2. DEVELOPMENT TOOLS & VERSION CONTROL
@@ -350,7 +260,7 @@
           home-manager.users.krit = { ... }: {
             imports = [
               ./home.nix
-              nix-index-database.homeModules.nix-index
+              nix-index-database.hmModules.nix-index
             ];
 
             programs.nix-index = {
@@ -363,11 +273,7 @@
       ];
     };
   in {
-    # OUTPUT GENERATION: MacOS
+    # OUTPUT GENERATION
     darwinConfigurations = nixpkgs.lib.genAttrs supportedMachines createDarwinConfig;
-    
-    # OUTPUT GENERATION: NixOS VM
-    # Generates configurations for keys in vmSpecs
-    nixosConfigurations = nixpkgs.lib.genAttrs (builtins.attrNames vmSpecs) createVmConfig;
-  };
+  };\
 }
