@@ -45,9 +45,8 @@
         . "$HOME/.iterm2_shell_integration.zsh"
       fi
 
-
             # -----------------------------------------------------------------------
-      # VMUP FUNCTION (Bootstrap Mode)
+      # VMUP FUNCTION (Safe Mode)
       # -----------------------------------------------------------------------
       vmup() {
         local DATA_DIR="$HOME/nixos-vm-data"
@@ -56,53 +55,46 @@
         mkdir -p "$DATA_DIR"
         cd "$DATA_DIR" || return
 
-        # 1. Detect Hostname & Set Hardware Specs
-        local HOST
-        HOST=$(scutil --get LocalHostName)
-        local MEMORY="4G"
-        local CORES="2"
-        local DISK_SIZE="64G"
+        local HOST; HOST=$(scutil --get LocalHostName)
+        local MEMORY="4G"; local CORES="2"; local DISK_SIZE="64G"
 
-        if [ "$HOST" = "MacBook-Air-di-Roberta" ]; then
-          MEMORY="3G"; CORES="2"; DISK_SIZE="64G"
-        elif [ "$HOST" = "Krits-MacBook-Pro" ]; then
-          MEMORY="12G"; CORES="6"; DISK_SIZE="128G"
-        fi
+        if [ "$HOST" = "MacBook-Air-di-Roberta" ]; then MEMORY="3G"; CORES="2"; DISK_SIZE="64G"; 
+        elif [ "$HOST" = "Krits-MacBook-Pro" ]; then MEMORY="12G"; CORES="6"; DISK_SIZE="128G"; fi
 
-        # 2. Create Disk
         local DISK_IMG="nixos-disk.qcow2"
+        local ISO_IMG="nixos-minimal.iso"
+        local CDROM_ARG=""
+
         if [ ! -f "$DISK_IMG" ]; then
           echo "📦 Creating virtual hard drive ($DISK_SIZE)..."
           qemu-img create -f qcow2 "$DISK_IMG" "$DISK_SIZE"
-        fi
-
-        # 3. Download ISO
-        local ISO_IMG="nixos-minimal.iso"
-        if [ ! -f "$ISO_IMG" ]; then
-           echo "⬇️  Downloading NixOS Installer ISO..."
-           curl -L -o "$ISO_IMG" "$IMAGE_URL"
+          echo "💿 New disk detected: Attaching Installer ISO."
+          if [ ! -f "$ISO_IMG" ]; then curl -L -o "$ISO_IMG" "$IMAGE_URL"; fi
+          CDROM_ARG="-cdrom $ISO_IMG"
+        else
+          echo "✅ Existing disk detected: Booting from Hard Drive."
         fi
 
         echo "🚀 Starting NixOS VM..."
-        echo "   Host: $HOST"
-        echo "   Specs: $MEMORY RAM / $CORES Cores"
         
-        # 4. Run QEMU
-        # -device virtio-gpu-pci: Better graphics for Hyprland
-        # -device usb-tablet: Fixes mouse synchronization
-        # -cdrom: REMOVE THIS LINE AFTER INSTALLING!
+        # 3. Run QEMU (Safe Mode)
+        # Removed explicit display/gpu flags to fix "Display active" error
         qemu-system-aarch64 \
           -machine virt,accel=hvf,highmem=off \
           -cpu host \
           -smp "$CORES" \
           -m "$MEMORY" \
           -drive file="$DISK_IMG",if=virtio,format=qcow2 \
-          -cdrom "$ISO_IMG" \
-          -device virtio-gpu-pci \
+          ''${=CDROM_ARG} \
           -device usb-ehci -device usb-tablet \
           -nic user,model=virtio \
           -serial stdio
       }
+
+
+
+
+
 
     '';
   };
