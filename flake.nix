@@ -53,17 +53,22 @@
           nixpkgs.buildPlatform = "aarch64-darwin"; 
           nixpkgs.hostPlatform = "aarch64-linux";   
 
-          # 2. DISABLE DOCUMENTATION (Fixes the 'yodl' build error)
+          # 2. FIX FOR YODL ERROR
+          # This forces Nix to attempt building 'yodl' even though it's marked unsupported on Mac.
+          # This is required for cross-compiling the base Linux system.
+          nixpkgs.config.allowUnsupportedSystem = true;
+
+          # 3. DISABLE DOCUMENTATION
           documentation.enable = false;
           documentation.doc.enable = false;
           documentation.info.enable = false;
           documentation.man.enable = false;
           documentation.nixos.enable = false;
 
-          # 3. HOST CONFIGURATION
+          # 4. HOST CONFIGURATION
           virtualisation.host.pkgs = nixpkgs.legacyPackages.aarch64-darwin;
 
-          # 4. HARDWARE SETTINGS
+          # 5. HARDWARE SETTINGS
           virtualisation.graphics = false;
           virtualisation.memorySize = hwConfig.ram;
           virtualisation.cores = hwConfig.cores;
@@ -72,7 +77,7 @@
           networking.hostName = vmHostname;
           networking.firewall.enable = false;
 
-          # 5. USER & PACKAGES
+          # 6. USER & PACKAGES
           users.users.nixos = {
             isNormalUser = true;
             extraGroups = [ "wheel" "networkmanager" ];
@@ -90,6 +95,7 @@
         })
       ];
     };
+
 
 
 
