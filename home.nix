@@ -44,7 +44,8 @@
       if [ -f "$HOME/.iterm2_shell_integration.zsh" ]; then
         . "$HOME/.iterm2_shell_integration.zsh"
       fi
-      
+
+
             # -----------------------------------------------------------------------
       # VMUP FUNCTION (Bootstrap Mode)
       # -----------------------------------------------------------------------
@@ -68,28 +69,28 @@
           MEMORY="12G"; CORES="6"; DISK_SIZE="128G"
         fi
 
-        # 2. Create Persistent Disk if missing
+        # 2. Create Disk
         local DISK_IMG="nixos-disk.qcow2"
         if [ ! -f "$DISK_IMG" ]; then
           echo "📦 Creating virtual hard drive ($DISK_SIZE)..."
           qemu-img create -f qcow2 "$DISK_IMG" "$DISK_SIZE"
         fi
 
-        # 3. Download Installer ISO if missing
+        # 3. Download ISO
         local ISO_IMG="nixos-minimal.iso"
         if [ ! -f "$ISO_IMG" ]; then
            echo "⬇️  Downloading NixOS Installer ISO..."
            curl -L -o "$ISO_IMG" "$IMAGE_URL"
         fi
 
-        echo "🚀 Starting NixOS VM (Window Mode)..."
+        echo "🚀 Starting NixOS VM..."
         echo "   Host: $HOST"
         echo "   Specs: $MEMORY RAM / $CORES Cores"
         
         # 4. Run QEMU
-        # Removed -nographic so you see the window.
-        # Added -serial stdio so you see logs in terminal too.
-        # Remove '-cdrom "$ISO_IMG"' later after you install!
+        # -device virtio-gpu-pci: Better graphics for Hyprland
+        # -device usb-tablet: Fixes mouse synchronization
+        # -cdrom: REMOVE THIS LINE AFTER INSTALLING!
         qemu-system-aarch64 \
           -machine virt,accel=hvf,highmem=off \
           -cpu host \
@@ -97,9 +98,12 @@
           -m "$MEMORY" \
           -drive file="$DISK_IMG",if=virtio,format=qcow2 \
           -cdrom "$ISO_IMG" \
+          -device virtio-gpu-pci \
+          -device usb-ehci -device usb-tablet \
           -nic user,model=virtio \
           -serial stdio
       }
+
     '';
   };
 
