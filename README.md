@@ -3,6 +3,11 @@
 
 A declarative macOS system configuration using **Nix-Darwin**, **Home Manager**, and **Nix Flakes**.
 
+** Version**:
+
+- Nix pkgs && nix-darwin version must match. Currently stable 25.11
+- Home manager Can be less than nixpkgs && nix-darwin tough it is not advisable. Currently stable 25.11
+
 ## 📍 Repository Location
 **Important:** This repository is designed to be cloned into the main user folder at the following specific path:
 

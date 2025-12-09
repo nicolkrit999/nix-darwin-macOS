@@ -2,12 +2,13 @@
   description = "Personal nix darwing configuration, including mac specific zshrc options, and source for dotfiles";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    nix-darwin.url = "github:LnL7/nix-darwin";
-    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-25.11-darwin";  # Darwin stable
+    #nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nix-darwin.url = "github:LnL7/nix-darwin/nix-darwin-25.11"; # Matching Darwin 
+    nix-darwin.inputs.nixpkgs.follows = "nixpkgs"; # Ensure nix-darwin uses the same nixpkgs
 
     home-manager = {
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/release-25.11";  # Match 25.11
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-index-database.url = "github:nix-community/nix-index-database";
