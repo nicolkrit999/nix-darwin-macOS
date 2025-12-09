@@ -51,47 +51,40 @@
         ({ config, lib, modulesPath, ... }: {
           imports = [ "${modulesPath}/virtualisation/qemu-vm.nix" ];
 
-          # CROSS-COMPILATION SETUP
+          # CROSS-COMPILATION
           nixpkgs.buildPlatform.system = "aarch64-darwin";
           nixpkgs.hostPlatform.system = "aarch64-linux";
           nixpkgs.config.allowUnsupportedSystem = true;
 
-          # DISABLE ALL EXECUTION-PRONE MODULES
+          # DISABLE PROBLEMATIC MODULES (Minimal set)
           services.dbus.enable = lib.mkForce false;
-          systemd.network.enable = lib.mkForce false;
-          services.systemd-resolved.enable = lib.mkForce false;
-          
           documentation.enable = lib.mkForce false;
           documentation.doc.enable = lib.mkForce false;
           documentation.man.enable = lib.mkForce false;
           documentation.nixos.enable = lib.mkForce false;
-          
           services.qemuGuest.enable = lib.mkForce false;
           security.polkit.enable = lib.mkForce false;
           hardware.graphics.enable = lib.mkForce false;
-          xdg.icons.enable = lib.mkForce false;
-          xdg.mime.enable = lib.mkForce false;
 
-          # NETWORK CONFIG (Ultra-minimal)
-          networking.useDHCP = lib.mkForce false;
+          # NETWORK
+          networking.useDHCP = false;
           networking.interfaces.eth0.useDHCP = true;
           networking.firewall.enable = false;
           networking.hostName = vmHostname;
 
-          # HARDWARE SETTINGS
+          # HARDWARE
           virtualisation.host.pkgs = nixpkgs.legacyPackages.aarch64-darwin;
           virtualisation.graphics = false;
           virtualisation.memorySize = hwConfig.ram;
           virtualisation.cores = hwConfig.cores;
           virtualisation.diskSize = hwConfig.diskSize;
 
-          # USER & PACKAGES
+          # USER
           users.users.nixos = {
             isNormalUser = true;
             extraGroups = [ "wheel" ];
             password = "nixos";
           };
-          
           security.sudo.wheelNeedsPassword = false;
 
           environment.systemPackages = with config.nixpkgs.pkgs; [
@@ -103,6 +96,7 @@
         })
       ];
     };
+
 
 
 
