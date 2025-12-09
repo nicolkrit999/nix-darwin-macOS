@@ -45,13 +45,11 @@
         . "$HOME/.iterm2_shell_integration.zsh"
       fi
       
-      # -----------------------------------------------------------------------
+            # -----------------------------------------------------------------------
       # VMUP FUNCTION (Bootstrap Mode)
       # -----------------------------------------------------------------------
-      # Downloads/Runs official NixOS Image. Bypasses build issues.
       vmup() {
         local DATA_DIR="$HOME/nixos-vm-data"
-        # Download Latest Minimal ISO (AArch64) - Version 25.11
         local IMAGE_URL="https://channels.nixos.org/nixos-25.11/latest-nixos-minimal-aarch64-linux.iso"
         
         mkdir -p "$DATA_DIR"
@@ -74,7 +72,6 @@
         local DISK_IMG="nixos-disk.qcow2"
         if [ ! -f "$DISK_IMG" ]; then
           echo "📦 Creating virtual hard drive ($DISK_SIZE)..."
-          # Use 'qemu-img' from the 'qemu' package we installed in systemPackages
           qemu-img create -f qcow2 "$DISK_IMG" "$DISK_SIZE"
         fi
 
@@ -85,13 +82,14 @@
            curl -L -o "$ISO_IMG" "$IMAGE_URL"
         fi
 
-        echo "🚀 Starting NixOS VM..."
+        echo "🚀 Starting NixOS VM (Window Mode)..."
         echo "   Host: $HOST"
         echo "   Specs: $MEMORY RAM / $CORES Cores"
         
         # 4. Run QEMU
-        # -cdrom: This boots the Installer ISO.
-        # Once you install NixOS to disk, remove '-cdrom "$ISO_IMG"' from this command.
+        # Removed -nographic so you see the window.
+        # Added -serial stdio so you see logs in terminal too.
+        # Remove '-cdrom "$ISO_IMG"' later after you install!
         qemu-system-aarch64 \
           -machine virt,accel=hvf,highmem=off \
           -cpu host \
@@ -100,7 +98,7 @@
           -drive file="$DISK_IMG",if=virtio,format=qcow2 \
           -cdrom "$ISO_IMG" \
           -nic user,model=virtio \
-          -nographic
+          -serial stdio
       }
     '';
   };
