@@ -41,8 +41,8 @@
       };
     };
 
-    
-    # Function to create the NixOS VM configuration
+
+        # Function to create the NixOS VM configuration
     createVmConfig = vmHostname: let
       hwConfig = vmSpecs.${vmHostname};
     in nixpkgs.lib.nixosSystem {
@@ -57,7 +57,7 @@
           nixpkgs.hostPlatform.system = "aarch64-linux";
           nixpkgs.config.allowUnsupportedSystem = true;
 
-          # DISABLE PROBLEMATIC MODULES
+          # DISABLE EXECUTION-PRONE MODULES
           services.dbus.enable = lib.mkForce false;
           documentation.enable = lib.mkForce false;
           documentation.doc.enable = lib.mkForce false;
@@ -66,6 +66,9 @@
           services.qemuGuest.enable = lib.mkForce false;
           security.polkit.enable = lib.mkForce false;
           hardware.graphics.enable = lib.mkForce false;
+
+          # FIX: DISABLE TERMINFO GENERATION (Causes 'Don't know how to run...')
+          environment.enableAllTerminfo = lib.mkForce false;
 
           # NETWORK
           networking.useDHCP = false;
@@ -88,7 +91,7 @@
           };
           security.sudo.wheelNeedsPassword = false;
 
-          # PACKAGES (Fixed: use pkgs directly, not config.nixpkgs.pkgs)
+          # PACKAGES
           environment.systemPackages = with pkgs; [
             git neovim curl wget gnumake
           ];
@@ -98,6 +101,7 @@
         })
       ];
     };
+
 
 
 
