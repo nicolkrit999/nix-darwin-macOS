@@ -41,6 +41,7 @@
       };
     };
 
+    
     # Function to create the NixOS VM configuration
     createVmConfig = vmHostname: let
       hwConfig = vmSpecs.${vmHostname};
@@ -48,7 +49,7 @@
       system = "aarch64-linux";
       
       modules = [
-        ({ config, lib, modulesPath, ... }: {
+        ({ config, lib, modulesPath, pkgs, ... }: {
           imports = [ "${modulesPath}/virtualisation/qemu-vm.nix" ];
 
           # CROSS-COMPILATION
@@ -56,7 +57,7 @@
           nixpkgs.hostPlatform.system = "aarch64-linux";
           nixpkgs.config.allowUnsupportedSystem = true;
 
-          # DISABLE PROBLEMATIC MODULES (Minimal set)
+          # DISABLE PROBLEMATIC MODULES
           services.dbus.enable = lib.mkForce false;
           documentation.enable = lib.mkForce false;
           documentation.doc.enable = lib.mkForce false;
@@ -87,7 +88,8 @@
           };
           security.sudo.wheelNeedsPassword = false;
 
-          environment.systemPackages = with config.nixpkgs.pkgs; [
+          # PACKAGES (Fixed: use pkgs directly, not config.nixpkgs.pkgs)
+          environment.systemPackages = with pkgs; [
             git neovim curl wget gnumake
           ];
 
@@ -96,6 +98,8 @@
         })
       ];
     };
+
+
 
 
 
