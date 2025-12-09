@@ -46,7 +46,6 @@
       hwConfig = vmSpecs.${vmHostname};
       
       # 1. CONFIGURE CROSS-COMPILATION
-      # Define a package set that builds ON Darwin (Mac) FOR Linux
       crossPkgs = import nixpkgs {
         localSystem = "aarch64-darwin";
         crossSystem = "aarch64-linux";
@@ -54,7 +53,6 @@
       };
 
     in nixpkgs.lib.nixosSystem {
-      # Pass the cross-compiled package set to the system
       pkgs = crossPkgs;
       
       modules = [
@@ -62,42 +60,49 @@
           imports = [ "${modulesPath}/virtualisation/qemu-vm.nix" ];
 
           # -------------------------------------------------------
-          # 2. BUILD FIXES (Use mkForce to override defaults)
+          # 2. CROSS-COMPILATION FIXES (The "Minimalist" Approach)
           # -------------------------------------------------------
+          # We must disable services that try to RUN binaries during build.
           
-          # Fix 'yodl' error by forcing documentation off
+          # Fix 'yodl' / Documentation generation
           documentation.enable = lib.mkForce false;
           documentation.doc.enable = lib.mkForce false;
-          documentation.info.enable = lib.mkForce false;
           documentation.man.enable = lib.mkForce false;
           documentation.nixos.enable = lib.mkForce false;
-          
-          # Fix 'driverLink' error & conflict by forcing Guest Agent off
+
+          # Fix 'driverLink' / Guest Agent
           services.qemuGuest.enable = lib.mkForce false;
 
+          # Fix 'Don't know how to run...' (D-Bus/Polkit/NetworkManager checks)
+          networking.networkmanager.enable = lib.mkForce false; # Use simple DHCP instead
+          security.polkit.enable = lib.mkForce false;
+          hardware.graphics.enable = lib.mkForce false;         # Disable OpenGL generation
+          xdg.icons.enable = lib.mkForce false;                 # Disable icon cache generation
+          xdg.mime.enable = lib.mkForce false;
+          
           # -------------------------------------------------------
-          # 3. HOST CONFIGURATION
+          # 3. NETWORK CONFIG (Simple DHCP)
           # -------------------------------------------------------
-          # Use the host's (macOS) QEMU to run the VM
-          virtualisation.host.pkgs = nixpkgs.legacyPackages.aarch64-darwin;
+          networking.useDHCP = false;
+          networking.interfaces.eth0.useDHCP = true;
+          networking.firewall.enable = false;
+          networking.hostName = vmHostname;
 
           # -------------------------------------------------------
-          # 4. HARDWARE SETTINGS
+          # 4. HOST CONFIGURATION
           # -------------------------------------------------------
+          virtualisation.host.pkgs = nixpkgs.legacyPackages.aarch64-darwin;
           virtualisation.graphics = false;
           virtualisation.memorySize = hwConfig.ram;
           virtualisation.cores = hwConfig.cores;
           virtualisation.diskSize = hwConfig.diskSize; 
-          
-          networking.hostName = vmHostname;
-          networking.firewall.enable = false;
 
           # -------------------------------------------------------
           # 5. USER & PACKAGES
           # -------------------------------------------------------
           users.users.nixos = {
             isNormalUser = true;
-            extraGroups = [ "wheel" "networkmanager" ];
+            extraGroups = [ "wheel" ]; # Removed 'networkmanager' group
             password = "nixos";
           };
           
@@ -112,6 +117,7 @@
         })
       ];
     };
+
 
 
 
