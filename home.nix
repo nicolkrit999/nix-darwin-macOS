@@ -3,7 +3,7 @@
 {
   home.username = "krit";
   home.homeDirectory = "/Users/krit";
-  home.stateVersion = "25.11";
+  home.stateVersion = "25.11";  # Bumped to 25.11
 
   programs.home-manager.enable = true;
 
