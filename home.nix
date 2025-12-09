@@ -20,8 +20,8 @@
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
 
-    # Tell to add specific init code to a general zshrc stowed in dotfiles
-    initContent = ''
+    # 'initExtra' is the standard place for custom zsh logic (renamed from initContent)
+    initExtra = ''
       # REBUILD_TRIGGER: 1
       # 1. Source the GENERAL ZSHRC (The one you use on Linux)
       if [ -f "$HOME/dotfiles/general-zshrc/.zshrc" ]; then
@@ -44,12 +44,45 @@
       if [ -f "$HOME/.iterm2_shell_integration.zsh" ]; then
         . "$HOME/.iterm2_shell_integration.zsh"
       fi
+      
+      # -----------------------------------------------------------------------
+      # VMUP FUNCTION
+      # (Defined as a function instead of an alias to handle the logic safely)
+      # -----------------------------------------------------------------------
+      vmup() {
+        # 1. Define where the VM disk should live (Outside the repo!)
+        local VM_DATA_DIR="$HOME/nixos-vm-data"
+        local FLAKE_DIR="$HOME/nix-darwin-macOS"
+  
+        # 2. Create directory if missing and enter it
+        mkdir -p "$VM_DATA_DIR"
+        cd "$VM_DATA_DIR" || return
+  
+        # 3. Detect Hostname
+        local HOST
+        HOST=$(scutil --get LocalHostName)
+        local VM_NAME=""
+        
+        if [ "$HOST" = "MacBook-Air-di-Roberta" ]; then
+          VM_NAME="mac-book-air-roberta-nixos-vm"
+        elif [ "$HOST" = "Krits-MacBook-Pro" ]; then
+          VM_NAME="mac-book-pro-krit-nixos-vm"
+        else
+          echo "❌ Unknown host for VM mapping" 
+          return 1
+        fi
+  
+        echo "🚀 Starting NixOS VM for host: $HOST"
+        echo "📂 Storage Location: $VM_DATA_DIR"
+        
+        # 4. Run the VM referencing the flake directory
+        nix run "$FLAKE_DIR#nixosConfigurations.$VM_NAME.config.system.build.vm"
+      }
     '';
   };
 
   programs.command-not-found.enable = false;
 
-  # ONLY Mac specific aliases here.
   home.shellAliases = {
     # Homebrew aliases
     brew-upd      = "brew update && brew upgrade";
@@ -65,7 +98,10 @@
     changehosts = "sudo nvim /etc/hosts";
     cleardns    = "sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder";
 
-    # Nix-darwing specific
+    # VM Management (Simple commands)
+    vmstop   = "pkill qemu-system-aarch64";
+
+    # Nix-darwin specific
     cdnix = "cd ~/nix-config/";
     nixpush = "cd ~/nix-darwin-macOS/ && sudo nix run nix-darwin -- switch --flake \".#$(scutil --get LocalHostName)\"";
   };

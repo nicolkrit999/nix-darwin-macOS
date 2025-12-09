@@ -1,5 +1,5 @@
 {
-  description = "Personal nix darwing configuration, including mac specific zshrc options, and source for dotfiles";
+  description = "Personal nix darwin configuration, including mac specific zshrc options, and source for dotfiles";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-25.11-darwin";  # Darwin stable
@@ -23,7 +23,77 @@
     # HOSTNAMES LIST
     supportedMachines = [ "MacBook-Air-di-Roberta" "Krits-MacBook-Pro" ];
 
-    # CONFIGURATION GENERATOR
+    # -------------------------------------------------------------------------
+    # 1. VM CONFIGURATION (Variable Hardware)
+    # -------------------------------------------------------------------------
+    
+    # Define hardware specs per VM hostname
+    vmSpecs = {
+      "mac-book-air-roberta-nixos-vm" = {
+        ram = 3072;       # 3GB RAM
+        cores = 2;        # 2 Cores
+        diskSize = 65536; # 64 GB (in MB) - Sparse file, grows as needed
+      };
+      "mac-book-pro-krit-nixos-vm" = {
+        ram = 12288;       # 12GB RAM
+        cores = 6;        # 6 Cores
+        diskSize = 65536; # 64 GB (in MB)
+      };
+    };
+
+    # Function to create the NixOS VM configuration
+    createVmConfig = vmHostname: let
+      hwConfig = vmSpecs.${vmHostname};
+    in nixpkgs.lib.nixosSystem {
+      system = "aarch64-linux"; # Linux architecture
+      modules = [
+        ({ pkgs, modulesPath, ... }: {
+          imports = [ "${modulesPath}/virtualisation/qemu-vm.nix" ];
+
+          # HOST CONFIGURATION
+          # This tells the VM to use the host's (macOS) QEMU package
+          virtualisation.host.pkgs = nixpkgs.legacyPackages.aarch64-darwin;
+
+          # VARIABLE HARDWARE SETTINGS
+          virtualisation.graphics = false;
+          virtualisation.memorySize = hwConfig.ram;
+          virtualisation.cores = hwConfig.cores;
+          virtualisation.diskSize = hwConfig.diskSize; 
+          
+          networking.hostName = vmHostname;
+          networking.firewall.enable = false;   # Disable firewall for easier dev
+
+          # USER CONFIGURATION
+          users.users.nixos = {
+            isNormalUser = true;
+            extraGroups = [ "wheel" "networkmanager" ];
+            password = "nixos"; # Default password
+          };
+          
+          # Allow passwordless sudo for convenience inside the VM
+          security.sudo.wheelNeedsPassword = false;
+
+          # PACKAGES (Inside the VM)
+          environment.systemPackages = with pkgs; [
+            git
+            neovim
+            curl
+            wget
+            gnumake
+            # Add minimal tools needed to clone your main repo later
+          ];
+
+          # Enable flakes inside the VM
+          nix.settings.experimental-features = [ "nix-command" "flakes" ];
+          
+          system.stateVersion = "25.11";
+        })
+      ];
+    };
+
+    # -------------------------------------------------------------------------
+    # 2. DARWIN CONFIGURATION (macOS Host)
+    # -------------------------------------------------------------------------
     createDarwinConfig = hostname: nix-darwin.lib.darwinSystem {
       specialArgs = { };
       modules = [
@@ -259,7 +329,7 @@
           home-manager.users.krit = { ... }: {
             imports = [
               ./home.nix
-              nix-index-database.hmModules.nix-index
+              nix-index-database.homeModules.nix-index
             ];
 
             programs.nix-index = {
@@ -272,7 +342,11 @@
       ];
     };
   in {
-    # OUTPUT GENERATION
+    # OUTPUT GENERATION: MacOS
     darwinConfigurations = nixpkgs.lib.genAttrs supportedMachines createDarwinConfig;
+    
+    # OUTPUT GENERATION: NixOS VM
+    # Generates configurations for keys in vmSpecs
+    nixosConfigurations = nixpkgs.lib.genAttrs (builtins.attrNames vmSpecs) createVmConfig;
   };
 }
