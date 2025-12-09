@@ -44,71 +44,57 @@
     # Function to create the NixOS VM configuration
     createVmConfig = vmHostname: let
       hwConfig = vmSpecs.${vmHostname};
-      
-      # 1. CONFIGURE CROSS-COMPILATION
-      crossPkgs = import nixpkgs {
-        localSystem = "aarch64-darwin";
-        crossSystem = "aarch64-linux";
-        config.allowUnsupportedSystem = true;
-      };
-
     in nixpkgs.lib.nixosSystem {
-      pkgs = crossPkgs;
+      system = "aarch64-linux";
       
       modules = [
         ({ config, lib, modulesPath, ... }: {
           imports = [ "${modulesPath}/virtualisation/qemu-vm.nix" ];
 
-          # -------------------------------------------------------
-          # 2. CROSS-COMPILATION FIXES (The "Minimalist" Approach)
-          # -------------------------------------------------------
-          # We must disable services that try to RUN binaries during build.
+          # CROSS-COMPILATION SETUP
+          nixpkgs.buildPlatform.system = "aarch64-darwin";
+          nixpkgs.hostPlatform.system = "aarch64-linux";
+          nixpkgs.config.allowUnsupportedSystem = true;
+
+          # DISABLE ALL EXECUTION-PRONE MODULES
+          services.dbus.enable = lib.mkForce false;
+          systemd.network.enable = lib.mkForce false;
+          services.systemd-resolved.enable = lib.mkForce false;
           
-          # Fix 'yodl' / Documentation generation
           documentation.enable = lib.mkForce false;
           documentation.doc.enable = lib.mkForce false;
           documentation.man.enable = lib.mkForce false;
           documentation.nixos.enable = lib.mkForce false;
-
-          # Fix 'driverLink' / Guest Agent
-          services.qemuGuest.enable = lib.mkForce false;
-
-          # Fix 'Don't know how to run...' (D-Bus/Polkit/NetworkManager checks)
-          networking.networkmanager.enable = lib.mkForce false; # Use simple DHCP instead
-          security.polkit.enable = lib.mkForce false;
-          hardware.graphics.enable = lib.mkForce false;         # Disable OpenGL generation
-          xdg.icons.enable = lib.mkForce false;                 # Disable icon cache generation
-          xdg.mime.enable = lib.mkForce false;
           
-          # -------------------------------------------------------
-          # 3. NETWORK CONFIG (Simple DHCP)
-          # -------------------------------------------------------
-          networking.useDHCP = false;
+          services.qemuGuest.enable = lib.mkForce false;
+          security.polkit.enable = lib.mkForce false;
+          hardware.graphics.enable = lib.mkForce false;
+          xdg.icons.enable = lib.mkForce false;
+          xdg.mime.enable = lib.mkForce false;
+
+          # NETWORK CONFIG (Ultra-minimal)
+          networking.useDHCP = lib.mkForce false;
           networking.interfaces.eth0.useDHCP = true;
           networking.firewall.enable = false;
           networking.hostName = vmHostname;
 
-          # -------------------------------------------------------
-          # 4. HOST CONFIGURATION
-          # -------------------------------------------------------
+          # HARDWARE SETTINGS
           virtualisation.host.pkgs = nixpkgs.legacyPackages.aarch64-darwin;
           virtualisation.graphics = false;
           virtualisation.memorySize = hwConfig.ram;
           virtualisation.cores = hwConfig.cores;
-          virtualisation.diskSize = hwConfig.diskSize; 
+          virtualisation.diskSize = hwConfig.diskSize;
 
-          # -------------------------------------------------------
-          # 5. USER & PACKAGES
-          # -------------------------------------------------------
+          # USER & PACKAGES
           users.users.nixos = {
             isNormalUser = true;
-            extraGroups = [ "wheel" ]; # Removed 'networkmanager' group
+            extraGroups = [ "wheel" ];
             password = "nixos";
           };
           
           security.sudo.wheelNeedsPassword = false;
 
-          environment.systemPackages = with crossPkgs; [
+          environment.systemPackages = with config.nixpkgs.pkgs; [
             git neovim curl wget gnumake
           ];
 
@@ -117,6 +103,8 @@
         })
       ];
     };
+
+
 
 
 
