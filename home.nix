@@ -3,7 +3,7 @@
 {
   home.username = "krit";
   home.homeDirectory = "/Users/krit";
-  home.stateVersion = "25.11";  # Bumped to 25.11
+  home.stateVersion = "25.11";
 
   programs.home-manager.enable = true;
 
@@ -51,7 +51,7 @@
       # Downloads/Runs official NixOS Image. Bypasses build issues.
       vmup() {
         local DATA_DIR="$HOME/nixos-vm-data"
-        # Download Latest Minimal ISO (AArch64)
+        # Download Latest Minimal ISO (AArch64) - Version 25.11
         local IMAGE_URL="https://channels.nixos.org/nixos-25.11/latest-nixos-minimal-aarch64-linux.iso"
         
         mkdir -p "$DATA_DIR"
