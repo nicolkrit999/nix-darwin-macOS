@@ -81,6 +81,7 @@
             jq              # Command-line JSON processor
             glow            # Markdown renderer for the terminal
             grex            # Command-line tool for generating regular expressions
+            vscode          # Microsoft ide
 
             # ---------------------------------------------------
             # 3. NEOVIM & EDITOR SUPPORT
