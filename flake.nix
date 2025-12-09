@@ -41,14 +41,16 @@
       };
     };
 
-
-        # Function to create the NixOS VM configuration
+    # Function to create the NixOS VM configuration
     createVmConfig = vmHostname: let
       hwConfig = vmSpecs.${vmHostname};
     in nixpkgs.lib.nixosSystem {
       system = "aarch64-linux";
       
       modules = [
+        # NUCLEAR OPTION: Completely disable the module causing the "run executable" error
+        { disabledModules = [ "config/terminfo.nix" ]; }
+        
         ({ config, lib, modulesPath, pkgs, ... }: {
           imports = [ "${modulesPath}/virtualisation/qemu-vm.nix" ];
 
@@ -57,18 +59,13 @@
           nixpkgs.hostPlatform.system = "aarch64-linux";
           nixpkgs.config.allowUnsupportedSystem = true;
 
-          # DISABLE EXECUTION-PRONE MODULES
+          # MINIMALISM (Disable everything that might run a binary)
           services.dbus.enable = lib.mkForce false;
           documentation.enable = lib.mkForce false;
-          documentation.doc.enable = lib.mkForce false;
-          documentation.man.enable = lib.mkForce false;
-          documentation.nixos.enable = lib.mkForce false;
           services.qemuGuest.enable = lib.mkForce false;
           security.polkit.enable = lib.mkForce false;
           hardware.graphics.enable = lib.mkForce false;
-
-          # FIX: DISABLE TERMINFO GENERATION (Causes 'Don't know how to run...')
-          environment.enableAllTerminfo = lib.mkForce false;
+          security.pam.services.sudo.startSession = lib.mkForce false;
 
           # NETWORK
           networking.useDHCP = false;
@@ -91,9 +88,10 @@
           };
           security.sudo.wheelNeedsPassword = false;
 
-          # PACKAGES
+          # PACKAGES: Kept minimal (git is essential for your workflow)
           environment.systemPackages = with pkgs; [
-            git neovim curl wget gnumake
+            git 
+            curl
           ];
 
           nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -101,6 +99,7 @@
         })
       ];
     };
+
 
 
 
