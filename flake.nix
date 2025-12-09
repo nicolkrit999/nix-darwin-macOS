@@ -275,5 +275,5 @@
   in {
     # OUTPUT GENERATION
     darwinConfigurations = nixpkgs.lib.genAttrs supportedMachines createDarwinConfig;
-  };\
+  };
 }
