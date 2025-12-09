@@ -20,8 +20,7 @@
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
 
-    # 'initExtra' is the standard place for custom zsh logic (renamed from initContent)
-    initExtra = ''
+    initContent = ''
       # REBUILD_TRIGGER: 1
       # 1. Source the GENERAL ZSHRC (The one you use on Linux)
       if [ -f "$HOME/dotfiles/general-zshrc/.zshrc" ]; then
