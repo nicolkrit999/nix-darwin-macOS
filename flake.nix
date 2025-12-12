@@ -211,6 +211,7 @@
             # Use this for tools that are broken or missing in Nixpkgs
             brews = [
               "pipes-sh"               # Animated pipes terminal screensaver (Visual toy)
+              "nixfmt"                # Nix formatter
             ];
 
             # ---------------------------------------------------
