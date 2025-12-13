@@ -60,6 +60,7 @@
             fd              # User-friendly replacement for 'find'
             fzf             # Command-line fuzzy finder
             zlib            # Compression library (required by many system tools)
+            bat             # Alternative to cat with sintax highlight, git support and line numbers
             unzip           # Tool to extract zip files
             which           # Locate a command
             tree            # Display directories as a tree
