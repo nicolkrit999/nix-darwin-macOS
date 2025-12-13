@@ -27,8 +27,8 @@ This configuration is strictly for macOS. It manages system settings, package in
 
 Unlike standard Nix setups that completely override your shell configuration, this setup is designed to work **alongside** a cross-platform dotfiles repository.
 
-  * **No Override:** It uses `initContent` to append configuration rather than replacing `~/.zshrc` entirely.
-  * **Sourcing Strategy:** It sources a general, OS-agnostic `zshrc` located at `~/dotfiles/general-zshrc/.zshrc`.
+  * **No Override:** It uses `initContent` to append configuration rather than replacing `~/.zshrc_custom` entirely.
+  * **Sourcing Strategy:** It sources a general, OS-agnostic `zshrc_custom` located at `~/dotfiles/general-zshrc/.zshrc_custom`.
   * **Mac-Specific Additions:** After sourcing the general file, it adds macOS-specific environment variables and integrations inside `home.nix`.
   * **Aliases:** Mac-specific aliases (like `xcodeaccept` or `cleardns`) are defined in `home.nix`, while general aliases remain in the cross-platform `dotfiles` repo.
 
