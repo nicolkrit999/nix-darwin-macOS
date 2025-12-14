@@ -24,8 +24,8 @@
     initContent = ''
       # REBUILD_TRIGGER: 1
       # 1. Source the GENERAL ZSHRC (The one you use on Linux)
-      if [ -f "$HOME/dotfiles/general-zshrc/.zshrc" ]; then
-        source "$HOME/dotfiles/general-zshrc/.zshrc"
+      if [ -f "$HOME/dotfiles/general-zshrc/.zshrc_custom" ]; then
+        source "$HOME/dotfiles/general-zshrc/.zshrc_custom"
       fi
 
       # 2. Mac/Nix Specific Additions
@@ -104,18 +104,18 @@
   # ONLY Mac specific aliases here.
   home.shellAliases = {
     # Homebrew aliases
-    brew-upd      = "brew update && brew upgrade";
-    brew-upd-res  = "brew update-reset";
-    brew-inst     = "brew install";
-    brew-inst-cask= "brew install --cask";
-    brew-search   = "brew search";
-    brew-clean    = "brew cleanup";
+    brew-upd = "brew update && brew upgrade";
+    brew-upd-res = "brew update-reset";
+    brew-inst = "brew install";
+    brew-inst-cask = "brew install --cask";
+    brew-search = "brew search";
+    brew-clean = "brew cleanup";
 
     # Various mac specific utilities
-    caff        = "caffeinate";
+    caff = "caffeinate";
     xcodeaccept = "sudo xcodebuild -license accept";
     changehosts = "sudo nvim /etc/hosts";
-    cleardns    = "sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder";
+    cleardns = "sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder";
 
     # VM Management
     vmstop   = "pkill qemu-system-aarch64";
