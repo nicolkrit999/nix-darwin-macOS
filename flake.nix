@@ -51,6 +51,7 @@
             ./modules/darwin/default.nix
             ./hosts/${hostname}/local-packages.nix
             { nixpkgs.hostPlatform = "aarch64-darwin"; }
+            ./nixDarwin/modules
 
             (
               { pkgs, ... }:
@@ -123,14 +124,14 @@
           hostname = "MacBook-Air-di-Roberta";
           monitorConfig = [ "eDP-1,2560x1664,1" ];
           user = "krit";
-          base16Theme = "catppuccin-latte";
-          polarity = "light";
-          catppuccinEnable = false;
-          catppuccinFlavor = "latte";
-          catppuccinAccent = "blue";
+          base16Theme = "catppuccin-macchiato";
+          polarity = "dark";
+          catppuccinEnable = true;
+          catppuccinFlavor = "macchiato";
+          catppuccinAccent = "sky";
           # 🆕 Git Config
-          gitUserName = "Roberta Name";
-          gitUserEmail = "roberta@example.com";
+          gitUserName = "nicolkrit999";
+          gitUserEmail = "githubgitlabmain.hu5b7@passfwd.com";
         };
       };
     };

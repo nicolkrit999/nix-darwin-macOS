@@ -6,6 +6,7 @@
     ./firefox.nix
     ./git.nix
     ./lazygit.nix
+    ./maintenance.nix
     ./neovim.nix
     ./ranger.nix
     ./starship.nix

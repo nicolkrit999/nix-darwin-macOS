@@ -20,6 +20,14 @@
     # 🌗 Polarity (dark/light)
     polarity = polarity;
 
+    # 🖱️ Cursor
+    # macOS manages its own cursor. Disabling this prevents build warnings.
+    cursor = {
+      package = pkgs.bibata-cursors; # Just in case a Linux app needs it
+      name = "Bibata-Modern-Ice";
+      size = 24;
+    };
+
     # 🅰️ Fonts
     fonts = {
       monospace = {
@@ -38,7 +46,7 @@
       sizes = {
         applications = 12;
         terminal = 14;
-        desktop = 10;
+        desktop = 12;
         popups = 10;
       };
     };

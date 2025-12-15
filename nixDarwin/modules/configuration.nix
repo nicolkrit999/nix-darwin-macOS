@@ -110,6 +110,12 @@
     neo-cowsay
     cbonsai
     asciinema
+
+    # Fonts support
+    pkgs.inter
+    pkgs.noto-fonts
+    pkgs.nerd-fonts.jetbrains-mono
+
   ];
 
   # ---------------------------------------------------
