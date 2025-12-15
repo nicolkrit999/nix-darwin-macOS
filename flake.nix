@@ -32,39 +32,41 @@
       ...
     }@inputs:
     let
+      # 🛠️ SYSTEM BUILDER (with Fallbacks)
       mkSystem =
         {
           hostname,
-          monitorConfig,
           user,
-          base16Theme,
-          polarity,
-          catppuccinEnable,
-          catppuccinFlavor,
-          catppuccinAccent,
-          gitUserName,
-          gitUserEmail,
+          # 🟢 OPTIONAL ARGUMENTS (With Defaults/Fallbacks)
+          monitorConfig ? [ ], # Default to empty list
+          base16Theme ? "catppuccin-macchiato",
+          polarity ? "dark",
+          catppuccinEnable ? true,
+          catppuccinFlavor ? "macchiato",
+          catppuccinAccent ? "mauve",
+          gitUserName ? "",
+          gitUserEmail ? "",
 
-          wallpaperURL,
-          wallpaperSHA256,
+          # 🖼️ DEFAULT WALLPAPER (Rain World)
+          # If you don't provide a specific wallpaper for a host, this one is used.
+          wallpaperURL ? "https://raw.githubusercontent.com/HyDE-Project/hyde-themes/Catppuccin-Mocha/Configs/.config/hyde/themes/Catppuccin%20Mocha/wallpapers/2%20rain_world.png",
+          wallpaperSHA256 ? "0z03f4kwqc6w830pw1mlgrbpn30ljqg2m1lzrwclnd7giak2arpm",
         }:
         nix-darwin.lib.darwinSystem {
           specialArgs = {
             inherit inputs user;
-            # Pass theme variables to System modules (if needed later)
-            base16Theme = base16Theme;
-            polarity = polarity;
-            catppuccin = catppuccinEnable;
+            # Pass variables to System modules
+            inherit base16Theme polarity catppuccinEnable;
           };
           modules = [
             # 1. Platform & Host Specifics
             { nixpkgs.hostPlatform = "aarch64-darwin"; }
             ./hosts/${hostname}/local-packages.nix
 
-            # 2. Stylix System Module (Required for System Fonts/Colors)
+            # 2. Stylix System Module
             inputs.stylix.darwinModules.stylix
 
-            # 3. System Configuration (Your Clean Path)
+            # 3. System Configuration
             ./nixDarwin/modules
 
             # 4. Inline System Settings
@@ -76,8 +78,6 @@
                 users.users.${user}.home = "/Users/${user}";
                 system.stateVersion = 4;
                 system.primaryUser = user;
-
-                # Fix for Determinate Systems Installer
                 nix.enable = false;
               }
             )
@@ -91,22 +91,22 @@
 
               home-manager.extraSpecialArgs = {
                 inherit inputs user;
-                base16Theme = base16Theme;
-                polarity = polarity;
-                catppuccin = catppuccinEnable;
-                inherit catppuccinFlavor catppuccinAccent;
-                monitors = monitorConfig;
+                # Pass all variables (including defaults) to Home Manager
+                inherit
+                  base16Theme
+                  polarity
+                  catppuccinEnable
+                  catppuccinFlavor
+                  catppuccinAccent
+                  ;
                 inherit gitUserName gitUserEmail;
-                # 🆕 Pass wallpaper info to Home Manager (where stylix.nix is)
+                monitors = monitorConfig;
                 inherit wallpaperURL wallpaperSHA256;
               };
 
               home-manager.users.${user} = {
                 imports = [
-                  # 🟢 Import User Modules
                   ./home-manager/modules
-
-                  # 🟢 Import Plugins
                   inputs.catppuccin.homeModules.catppuccin
                   inputs.stylix.homeModules.stylix
                   inputs.nix-index-database.homeModules.nix-index
@@ -119,38 +119,28 @@
     in
     {
       darwinConfigurations = {
-        # 💻 Configuration 1: MacBook Pro (Krit)
+        # 💻 HOST 1: KRIT (Custom Wallpaper)
         "Krits-MacBook-Pro" = mkSystem {
           hostname = "Krits-MacBook-Pro";
-          monitorConfig = [ "eDP-1,3024x1964,1" ];
           user = "krit";
-          base16Theme = "catppuccin-macchiato";
-          polarity = "dark";
-          catppuccinEnable = true;
-          catppuccinFlavor = "macchiato";
-          catppuccinAccent = "mauve";
+          monitorConfig = [ "eDP-1,3024x1964,1" ];
           gitUserName = "nicolkrit999";
           gitUserEmail = "githubgitlabmain.hu5b7@passfwd.com";
 
-          # 🖼️ WALLPAPER
+          # Overriding the default wallpaper
           wallpaperURL = "https://raw.githubusercontent.com/HyDE-Project/hyde-themes/Catppuccin-Mocha/Configs/.config/hyde/themes/Catppuccin%20Mocha/wallpapers/2%20rain_world.png";
           wallpaperSHA256 = "0z03f4kwqc6w830pw1mlgrbpn30ljqg2m1lzrwclnd7giak2arpm";
         };
 
-        # 💻 Configuration 2: MacBook Air (Roberta)
+        # 💻 HOST 2: ROBERTA (Uses Defaults)
         "MacBook-Air-di-Roberta" = mkSystem {
           hostname = "MacBook-Air-di-Roberta";
-          monitorConfig = [ "eDP-1,2560x1664,1" ];
           user = "krit";
-          base16Theme = "catppuccin-macchiato";
-          polarity = "dark";
-          catppuccinEnable = true;
-          catppuccinFlavor = "macchiato";
-          catppuccinAccent = "sky";
+          monitorConfig = [ "eDP-1,2560x1664,1" ];
+          catppuccinAccent = "sky"; # Custom accent
           gitUserName = "nicolkrit999";
           gitUserEmail = "githubgitlabmain.hu5b7@passfwd.com";
 
-          # 🖼️ WALLPAPER
           wallpaperURL = "https://raw.githubusercontent.com/HyDE-Project/hyde-themes/Catppuccin-Mocha/Configs/.config/hyde/themes/Catppuccin%20Mocha/wallpapers/2%20rain_world.png";
           wallpaperSHA256 = "0z03f4kwqc6w830pw1mlgrbpn30ljqg2m1lzrwclnd7giak2arpm";
         };

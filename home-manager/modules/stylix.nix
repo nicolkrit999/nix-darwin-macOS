@@ -4,8 +4,8 @@
   polarity,
   catppuccin,
   user,
-  wallpaperURL,
-  wallpaperSHA256,
+  wallpaperURL, # Provided by flake (either specific or default)
+  wallpaperSHA256, # Provided by flake (either specific or default)
   ...
 }:
 {
@@ -14,8 +14,8 @@
     base16Scheme = "${pkgs.base16-schemes}/share/themes/${base16Theme}.yaml";
     polarity = polarity;
 
-    # 🖼️ DYNAMIC WALLPAPER
-    # Stylix on Mac handles resizing automatically for any monitor count.
+    # 🖼️ WALLPAPER
+    # This downloads the image to the Nix store and sets it as the macOS desktop background.
     image = pkgs.fetchurl {
       url = wallpaperURL;
       sha256 = wallpaperSHA256;
@@ -28,6 +28,7 @@
       popups = 1.0;
     };
 
+    # ... fonts and targets ...
     fonts = {
       monospace = {
         package = pkgs.nerd-fonts.jetbrains-mono;
@@ -51,11 +52,9 @@
 
     targets = {
       neovim.enable = false;
-
       bat.enable = !catppuccin;
       lazygit.enable = !catppuccin;
       starship.enable = !catppuccin;
-
       firefox.profileNames = [ user ];
     };
   };
