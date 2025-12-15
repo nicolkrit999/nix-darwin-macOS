@@ -51,9 +51,11 @@
 
     targets = {
       neovim.enable = false;
+
       bat.enable = !catppuccin;
-      fzf.enable = !catppuccin;
       lazygit.enable = !catppuccin;
+      starship.enable = !catppuccin;
+
       firefox.profileNames = [ user ];
     };
   };

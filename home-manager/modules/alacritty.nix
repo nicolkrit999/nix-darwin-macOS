@@ -45,7 +45,7 @@ in
   programs.alacritty = {
     enable = true;
     settings = {
-      window.opacity = 1.0;
+      window.opacity = lib.mkForce 1.0;
       font = {
         size = lib.mkForce smartFontSize; # Forced to avoid issues when building with catppuccin disabled
         builtin_box_drawing = true;
