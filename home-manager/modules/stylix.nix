@@ -4,8 +4,8 @@
   polarity,
   catppuccin,
   user,
-  wallpaperUrl,
-  wallpaperSha256,
+  wallpaperURL,
+  wallpaperSHA256,
   ...
 }:
 {
@@ -17,8 +17,8 @@
     # 🖼️ DYNAMIC WALLPAPER
     # Stylix on Mac handles resizing automatically for any monitor count.
     image = pkgs.fetchurl {
-      url = wallpaperUrl;
-      sha256 = wallpaperSha256;
+      url = wallpaperURL;
+      sha256 = wallpaperSHA256;
     };
 
     opacity = {

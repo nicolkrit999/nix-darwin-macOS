@@ -44,9 +44,9 @@
           catppuccinAccent,
           gitUserName,
           gitUserEmail,
-          # 🆕 WALLPAPER ARGUMENTS
-          wallpaperUrl,
-          wallpaperSha256,
+
+          wallpaperURL,
+          wallpaperHA256,
         }:
         nix-darwin.lib.darwinSystem {
           specialArgs = {
@@ -98,7 +98,7 @@
                 monitors = monitorConfig;
                 inherit gitUserName gitUserEmail;
                 # 🆕 Pass wallpaper info to Home Manager (where stylix.nix is)
-                inherit wallpaperUrl wallpaperSha256;
+                inherit wallpaperURL wallpaperSHA256;
               };
 
               home-manager.users.${user} = {
