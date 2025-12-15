@@ -84,7 +84,7 @@
               home-manager.users.${user} = {
                 imports = [
                   ./modules/home-manager/default.nix
-                  inputs.catppuccin.homeManagerModules.catppuccin
+                  inputs.catppuccin.homeModules.catppuccin
                   inputs.nix-index-database.hmModules.nix-index
 
                   # 🟢 ADDED HERE:
