@@ -41,7 +41,7 @@
           monitorConfig ? [ ], # Default to empty list
           base16Theme ? "catppuccin-macchiato",
           polarity ? "dark",
-          catppuccinEnable ? true,
+          catppuccin ? true,
           catppuccinFlavor ? "macchiato",
           catppuccinAccent ? "mauve",
           gitUserName ? "",
@@ -56,7 +56,7 @@
           specialArgs = {
             inherit inputs user;
             # Pass variables to System modules
-            inherit base16Theme polarity catppuccinEnable;
+            inherit base16Theme polarity catppuccin;
           };
           modules = [
             # 1. Platform & Host Specifics
@@ -95,7 +95,7 @@
                 inherit
                   base16Theme
                   polarity
-                  catppuccinEnable
+                  catppuccin
                   catppuccinFlavor
                   catppuccinAccent
                   ;
