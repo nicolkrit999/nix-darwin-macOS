@@ -45,10 +45,15 @@
           gitUserName, # <--- 🆕 Added
           gitUserEmail, # <--- 🆕 Added
         }:
+
         nix-darwin.lib.darwinSystem {
-          specialArgs = { inherit inputs user; };
+          specialArgs = {
+            inherit inputs user;
+            base16Theme = base16Theme;
+            polarity = polarity;
+            catppuccin = catppuccinEnable;
+          };
           modules = [
-            ./modules/darwin/default.nix
             ./hosts/${hostname}/local-packages.nix
             { nixpkgs.hostPlatform = "aarch64-darwin"; }
             ./nixDarwin/modules
@@ -86,15 +91,13 @@
 
               home-manager.users.${user} = {
                 imports = [
-                  ./modules/home-manager/default.nix
+                  ./home-manager/modules
 
                   # 🟢 Import Modules (The "Schema")
                   inputs.catppuccin.homeModules.catppuccin
                   inputs.stylix.homeModules.stylix # <--- FIXED: Explicit import here
                   inputs.nix-index-database.homeModules.nix-index
 
-                  # 🟢 Import Your Config (The "Settings")
-                  ./modules/darwin/stylix.nix
                 ];
                 home.stateVersion = "24.05";
               };
