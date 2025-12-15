@@ -38,6 +38,7 @@
     xclip
     wakeonlan
     zlib
+    nh
 
     # Dev Tools
     git

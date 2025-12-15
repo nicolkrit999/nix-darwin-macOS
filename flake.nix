@@ -46,11 +46,6 @@
           catppuccinAccent ? "mauve",
           gitUserName ? "",
           gitUserEmail ? "",
-
-          # 🖼️ DEFAULT WALLPAPER (Rain World)
-          # If you don't provide a specific wallpaper for a host, this one is used.
-          wallpaperURL ? "https://raw.githubusercontent.com/HyDE-Project/hyde-themes/Catppuccin-Mocha/Configs/.config/hyde/themes/Catppuccin%20Mocha/wallpapers/2%20rain_world.png",
-          wallpaperSHA256 ? "0z03f4kwqc6w830pw1mlgrbpn30ljqg2m1lzrwclnd7giak2arpm",
         }:
         nix-darwin.lib.darwinSystem {
           specialArgs = {
@@ -101,7 +96,6 @@
                   ;
                 inherit gitUserName gitUserEmail;
                 monitors = monitorConfig;
-                inherit wallpaperURL wallpaperSHA256;
               };
 
               home-manager.users.${user} = {
@@ -119,7 +113,7 @@
     in
     {
       darwinConfigurations = {
-        # 💻 HOST 1: KRIT (Custom Wallpaper)
+        # 💻 HOST 1: KRIT
         "Krits-MacBook-Pro" = mkSystem {
           hostname = "Krits-MacBook-Pro";
           user = "krit";
@@ -127,12 +121,9 @@
           gitUserName = "nicolkrit999";
           gitUserEmail = "githubgitlabmain.hu5b7@passfwd.com";
 
-          # Overriding the default wallpaper
-          wallpaperURL = "https://raw.githubusercontent.com/HyDE-Project/hyde-themes/Catppuccin-Mocha/Configs/.config/hyde/themes/Catppuccin%20Mocha/wallpapers/2%20rain_world.png";
-          wallpaperSHA256 = "0z03f4kwqc6w830pw1mlgrbpn30ljqg2m1lzrwclnd7giak2arpm";
         };
 
-        # 💻 HOST 2: ROBERTA (Uses Defaults)
+        # 💻 HOST 2: ROBERTA
         "MacBook-Air-di-Roberta" = mkSystem {
           hostname = "MacBook-Air-di-Roberta";
           user = "krit";
@@ -140,9 +131,6 @@
           catppuccinAccent = "sky"; # Custom accent
           gitUserName = "nicolkrit999";
           gitUserEmail = "githubgitlabmain.hu5b7@passfwd.com";
-
-          wallpaperURL = "https://raw.githubusercontent.com/HyDE-Project/hyde-themes/Catppuccin-Mocha/Configs/.config/hyde/themes/Catppuccin%20Mocha/wallpapers/2%20rain_world.png";
-          wallpaperSHA256 = "0z03f4kwqc6w830pw1mlgrbpn30ljqg2m1lzrwclnd7giak2arpm";
         };
       };
     };

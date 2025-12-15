@@ -1,4 +1,9 @@
 { config, pkgs, ... }:
+
+let
+  # 📂 Define your Flake directory once for cleaner aliases
+  flakeDir = "~/nix-darwin-macOS";
+in
 {
   programs.zsh = {
     enable = true;
@@ -21,6 +26,16 @@
       brew-inst-cask = "brew install --cask";
       brew-search = "brew search";
       brew-clean = "brew cleanup";
+      sw = "nh darwin switch ${flakeDir}";
+      upd = "cd ${flakeDir} && nix flake update && darwin-rebuild switch --flake ${flakeDir}";
+
+      hms = "home-manager switch --flake ${flakeDir}";
+
+      pkgs = "nvim ${flakeDir}/home-manager/modules/default.nix";
+
+      # 🧹 FORMATTING
+      fmt = "cd ${flakeDir} && nix fmt";
+      fmt-dry = "cd ${flakeDir} && nix fmt -- --check";
 
       # Utilities
       caff = "caffeinate";
