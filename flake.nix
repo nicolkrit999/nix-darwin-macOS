@@ -42,22 +42,32 @@
           catppuccinEnable,
           catppuccinFlavor,
           catppuccinAccent,
-          gitUserName, # <--- 🆕 Added
-          gitUserEmail, # <--- 🆕 Added
+          gitUserName,
+          gitUserEmail,
+          # 🆕 WALLPAPER ARGUMENTS
+          wallpaperUrl,
+          wallpaperSha256,
         }:
-
         nix-darwin.lib.darwinSystem {
           specialArgs = {
             inherit inputs user;
+            # Pass theme variables to System modules (if needed later)
             base16Theme = base16Theme;
             polarity = polarity;
             catppuccin = catppuccinEnable;
           };
           modules = [
-            ./hosts/${hostname}/local-packages.nix
+            # 1. Platform & Host Specifics
             { nixpkgs.hostPlatform = "aarch64-darwin"; }
+            ./hosts/${hostname}/local-packages.nix
+
+            # 2. Stylix System Module (Required for System Fonts/Colors)
+            inputs.stylix.darwinModules.stylix
+
+            # 3. System Configuration (Your Clean Path)
             ./nixDarwin/modules
 
+            # 4. Inline System Settings
             (
               { pkgs, ... }:
               {
@@ -67,10 +77,12 @@
                 system.stateVersion = 4;
                 system.primaryUser = user;
 
+                # Fix for Determinate Systems Installer
                 nix.enable = false;
               }
             )
 
+            # 5. Home Manager Configuration
             home-manager.darwinModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
@@ -84,20 +96,20 @@
                 catppuccin = catppuccinEnable;
                 inherit catppuccinFlavor catppuccinAccent;
                 monitors = monitorConfig;
-
-                # 🆕 Pass these to Home Manager
                 inherit gitUserName gitUserEmail;
+                # 🆕 Pass wallpaper info to Home Manager (where stylix.nix is)
+                inherit wallpaperUrl wallpaperSha256;
               };
 
               home-manager.users.${user} = {
                 imports = [
+                  # 🟢 Import User Modules
                   ./home-manager/modules
 
-                  # 🟢 Import Modules (The "Schema")
+                  # 🟢 Import Plugins
                   inputs.catppuccin.homeModules.catppuccin
-                  inputs.stylix.homeModules.stylix # <--- FIXED: Explicit import here
+                  inputs.stylix.homeModules.stylix
                   inputs.nix-index-database.homeModules.nix-index
-
                 ];
                 home.stateVersion = "24.05";
               };
@@ -117,9 +129,12 @@
           catppuccinEnable = true;
           catppuccinFlavor = "macchiato";
           catppuccinAccent = "mauve";
-          # 🆕 Git Config
           gitUserName = "nicolkrit999";
           gitUserEmail = "githubgitlabmain.hu5b7@passfwd.com";
+
+          # 🖼️ WALLPAPER
+          wallpaperURL = "https://raw.githubusercontent.com/HyDE-Project/hyde-themes/Catppuccin-Mocha/Configs/.config/hyde/themes/Catppuccin%20Mocha/wallpapers/2%20rain_world.png";
+          wallpaperSHA256 = "0z03f4kwqc6w830pw1mlgrbpn30ljqg2m1lzrwclnd7giak2arpm";
         };
 
         # 💻 Configuration 2: MacBook Air (Roberta)
@@ -132,9 +147,12 @@
           catppuccinEnable = true;
           catppuccinFlavor = "macchiato";
           catppuccinAccent = "sky";
-          # 🆕 Git Config
           gitUserName = "nicolkrit999";
           gitUserEmail = "githubgitlabmain.hu5b7@passfwd.com";
+
+          # 🖼️ WALLPAPER
+          wallpaperURL = "https://raw.githubusercontent.com/HyDE-Project/hyde-themes/Catppuccin-Mocha/Configs/.config/hyde/themes/Catppuccin%20Mocha/wallpapers/2%20rain_world.png";
+          wallpaperSHA256 = "0z03f4kwqc6w830pw1mlgrbpn30ljqg2m1lzrwclnd7giak2arpm";
         };
       };
     };

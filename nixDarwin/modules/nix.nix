@@ -6,11 +6,10 @@
 
   nix = {
     # ⚠️ Note: Since you use Determinate Systems installer (nix.enable = false),
-    # these settings are currently ignored by the daemon but kept here for
-    # consistency and future-proofing.
+    # these settings are technically ignored by the daemon. We keep them here
+    # so the file structure mirrors your NixOS config.
 
     settings = {
-      # Enable Flakes (Standard practice)
       experimental-features = [
         "nix-command"
         "flakes"
@@ -18,19 +17,21 @@
     };
 
     # ♻️ GARBAGE COLLECTION
+    # 🔴 MUST BE FALSE because 'nix.enable = false'
     gc = {
-      automatic = true;
+      automatic = false;
 
-      # ⚠️ Mac Specific: Use 'interval' (dictionaries)
+      # We keep these settings here for reference,
+      # but they won't run automatically on this system.
       interval = {
         Weekday = 0;
         Hour = 0;
         Minute = 0;
-      }; # Runs every Sunday at midnight
-
+      };
       options = "--delete-older-than 7d";
     };
 
-    optimise.automatic = true;
+    # 🔴 MUST BE FALSE because 'nix.enable = false'
+    optimise.automatic = false;
   };
 }
