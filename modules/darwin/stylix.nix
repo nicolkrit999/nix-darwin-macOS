@@ -1,28 +1,24 @@
 {
   pkgs,
   lib,
-  config,
+  base16Theme, # Passed from flake.nix
+  polarity, # Passed from flake.nix
+  catppuccin, # Passed from flake.nix (bool)
+  user,
   ...
 }:
-let
-  # Hardcoded for now, or you can pass these via specialArgs if you prefer
-  # But usually, these are static per host logic.
-  base16Theme = "catppuccin-macchiato";
-  polarity = "dark";
-in
 {
   stylix = {
     enable = true;
 
     # 🎨 Base16 Scheme
-    # Automatically fetches the yaml scheme from tinted-theming
+    # Uses the dynamic variable passed from your host config
     base16Scheme = "${pkgs.base16-schemes}/share/themes/${base16Theme}.yaml";
 
-    polarity = polarity;
+    image = ./wallpaper.jpg; # Ensure this file exists!
 
-    # 🖼️ Wallpaper
-    # Ensure this file exists at this path!
-    image = ./wallpaper.jpg;
+    # 🌗 Polarity (dark/light)
+    polarity = polarity;
 
     # 🅰️ Fonts
     fonts = {
@@ -48,12 +44,22 @@ in
     };
 
     # 🎯 Targets
-    # Disable targets that conflict with your manual "Catppuccin" modules
-    # For example, if you manage Neovim manually with Catppuccin, disable Stylix for it.
+    # LOGIC: If 'catppuccin' is true, disable Stylix for these apps
+    # so the official Catppuccin module can theme them instead.
     targets = {
-      neovim.enable = false; # You use your own neovim.nix
-      bat.enable = false; # You use your own bat.nix
-      fzf.enable = true; # Let Stylix handle generic FZF
+      # Neovim: You usually manage this manually, so always disable Stylix
+      neovim.enable = false;
+
+      # Bat: If catppuccin module is ON, turn Stylix OFF.
+      bat.enable = !catppuccin;
+
+      # FZF: If catppuccin module is ON, turn Stylix OFF.
+      fzf.enable = !catppuccin;
+
+      # Lazygit: Same logic
+      lazygit.enable = !catppuccin;
+
+      firefox.profileNames = [ user ];
     };
   };
 }

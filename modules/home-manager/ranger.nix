@@ -1,12 +1,12 @@
 {
   pkgs,
+  lib, # 🟢 1. ADDED LIB HERE
   ...
 }:
 {
 
   programs.ranger = {
     enable = true;
-
     # -----------------------------------------------------
     # ⌨️ KEY MAPPINGS
     # -----------------------------------------------------
@@ -29,7 +29,6 @@
       draw_borders = true; # Draws borders between columns
       w3m_delay = 0; # Instant rendering for w3m previews
     };
-
     # -----------------------------------------------------
     # 🎨 THEMING & ICONS
     # -----------------------------------------------------
@@ -37,7 +36,6 @@
       # Enables devicons2 to show Nerd Font icons next to filenames
       default_linemode devicons2
     '';
-
     # -----------------------------------------------------
     # 🧩 PLUGINS
     # -----------------------------------------------------
@@ -77,17 +75,20 @@
   # Custom python command to enable udisk mounting support
   home.file.".config/ranger/commands.py".text = "from plugins.ranger_udisk_menu.mounter import mount";
 
+  # 🟢 2. WRAPPED THIS IN LINUX CHECK
   # This overwrites the system shortcut to ensure Ranger always opens in Alacritty
-  xdg.desktopEntries.ranger = {
-    name = "Ranger";
-    genericName = "File Manager";
-    exec = "alacritty -e ranger";
-    terminal = false;
-    categories = [
-      "System"
-      "FileTools"
-      "FileManager"
-    ];
-    mimeType = [ "inode/directory" ];
+  xdg.desktopEntries = lib.mkIf pkgs.stdenv.isLinux {
+    ranger = {
+      name = "Ranger";
+      genericName = "File Manager";
+      exec = "alacritty -e ranger";
+      terminal = false;
+      categories = [
+        "System"
+        "FileTools"
+        "FileManager"
+      ];
+      mimeType = [ "inode/directory" ];
+    };
   };
 }

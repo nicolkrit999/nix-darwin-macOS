@@ -15,6 +15,8 @@
   # Build users group ID (from your old config)
   ids.gids.nixbld = 350;
 
+  nix.enable = false;
+
   # ---------------------------------------------------
   # 2. SYSTEM PACKAGES (Restored your Full List)
   # ---------------------------------------------------
