@@ -46,7 +46,7 @@
           gitUserEmail,
 
           wallpaperURL,
-          wallpaperHA256,
+          wallpaperSHA256,
         }:
         nix-darwin.lib.darwinSystem {
           specialArgs = {
