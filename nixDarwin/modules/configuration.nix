@@ -138,7 +138,6 @@
     ];
 
     casks = [
-      "firefox"
       "alacritty"
       "pearcleaner"
       "only-switch"

@@ -41,7 +41,7 @@
           monitorConfig ? [ ], # Default to empty list
           base16Theme ? "catppuccin-macchiato",
           polarity ? "dark",
-          catppuccin ? true,
+          catppuccin ? false,
           catppuccinFlavor ? "macchiato",
           catppuccinAccent ? "mauve",
           gitUserName ? "",
@@ -117,7 +117,7 @@
         "Krits-MacBook-Pro" = mkSystem {
           hostname = "Krits-MacBook-Pro";
           user = "krit";
-          monitorConfig = [ "eDP-1,3024x1964,1" ];
+          monitorConfig = [ "eDP-1,3024x1964,1" ]; # The identifier is always eDP-1 on MacBooks (at least i think)
           gitUserName = "nicolkrit999";
           gitUserEmail = "githubgitlabmain.hu5b7@passfwd.com";
 
@@ -127,7 +127,7 @@
         "MacBook-Air-di-Roberta" = mkSystem {
           hostname = "MacBook-Air-di-Roberta";
           user = "krit";
-          monitorConfig = [ "eDP-1,2560x1664,1" ];
+          monitorConfig = [ "eDP-1,2560x1664,1" ]; # The identifier is always eDP-1 on MacBooks (at least i think)
           catppuccinAccent = "sky"; # Custom accent
           gitUserName = "nicolkrit999";
           gitUserEmail = "githubgitlabmain.hu5b7@passfwd.com";

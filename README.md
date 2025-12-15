@@ -1,158 +1,140 @@
-Here is the updated `README.md`. I have corrected the formatting issues (removed the literal asterisks), polished the language for better readability, and added a detailed section dedicated to the NixOS Virtual Machine workflow.
+#  Personal Nix-Darwin Config
 
-```markdown
-# Personal Nix-Darwin Configuration
+- [ Personal Nix-Darwin Config](#-personal-nix-darwin-config)
+  - [✨ Features](#-features)
+    - [🖥️ Adaptive Host Support](#️-adaptive-host-support)
+    - [🎨 Unified Theming (Stylix)](#-unified-theming-stylix)
+    - [🏠 Home Manager Integration](#-home-manager-integration)
+    - [🍎 macOS System Defaults](#-macos-system-defaults)
+    - [⚡ Zsh + Starship](#-zsh--starship)
+  - [🚀 Installation](#-installation)
+    - [1. Install Nix](#1-install-nix)
+  - [2. Clone the Repository](#2-clone-the-repository)
+  - [3. Create Your Host Configuration](#3-create-your-host-configuration)
+  - [4. Configure flake.nix](#4-configure-flakenix)
+  - [5. First Time Build](#5-first-time-build)
+  - [🔄 Daily Usage](#-daily-usage)
+  - [❓ Troubleshooting](#-troubleshooting)
 
-A declarative macOS system configuration using **Nix-Darwin**, **Home Manager**, and **Nix Flakes**.
+---
 
-### Version Compatibility
-- **Nixpkgs & nix-darwin**: Must match versions. Currently using **25.11 (Stable)**.
-- **Home Manager**: Should ideally match, currently using **25.11**.
+## ✨ Features
 
-## 📍 Repository Location
-**Important:** This repository is designed to be cloned into the main user folder at the following specific path:
+### 🖥️ Adaptive Host Support
+Define unique parameters (monitor resolutions for wallpaper scaling, usernames, git credentials) per MacBook while keeping the core environment identical.
+
+### 🎨 Unified Theming (Stylix)
+A central theme engine that controls the look of the entire system.
+* **Modes:** Switch between a generated **Base16** theme or the official **Catppuccin** implementation.
+* **Scope:** Controls Terminal colors (Alacritty), Shell prompts (Starship), and application themes (Bat, Lazygit, Firefox).
+
+### 🏠 Home Manager Integration
+Fully declarative management of user dotfiles and applications. It defines terminal, shell, browser, and git settings, whihc are reproducible across any Mac.
+
+### 🍎 macOS System Defaults
+Declarative configuration of macOS behavior:
+* **Dock:** Auto-hide, icon size, and orientation.
+* **Finder:** Show all file extensions, default view modes.
+* **TouchID:** Enabled for `sudo` commands (no more typing passwords for admin tasks).
+
+### ⚡ Zsh + Starship
+A hybrid shell setup. It provides a robust default environment managed by Nix but respects a local `.zshrc_custom` for machine-specific aliases or work-related configs that shouldn't be committed to Git.
+
+---
+
+## 🚀 Installation
+
+### 1. Install Nix
+This configuration is built for the **Determinate Systems** Nix installer (which allows `nix.enable = false` in the config).
+
+Run the installer:
+```bash
+curl --proto '=https' --tlsv1.2 -sSf -L [https://install.determinate.systems/nix](https://install.determinate.systems/nix) | sh -s -- install
+```
+
+
+---
+
+## 2. Clone the Repository
+
+Clone this repository to your home directory (usually `~/nix-darwin-macOS` or similar).
 
 ```bash
-~/nix-darwin-macOS/
+git clone https://github.com/nicolkrit999/nix-darwin-macOS.git
+cd nix-darwin-macOS
 ```
 
-The system update aliases and VM scripts rely on this specific path to function correctly.
+---
 
-## 🍎 macOS Specific Design
+## 3. Create Your Host Configuration
 
-This configuration is strictly for macOS. It manages system settings, package installations, and application preferences specifically for Apple Silicon (`aarch64-darwin`) machines.
+If your machine is not `Krits-MacBook-Pro`, you need to create a host folder for it.
 
-## 🚀 Key Features & Architecture
-
-### 1. Hybrid Zsh Configuration
-
-Unlike standard Nix setups that completely override your shell configuration, this setup is designed to work **alongside** a cross-platform dotfiles repository.
-
-*   **No Override:** It uses `initExtra` to append configuration rather than replacing `~/.zshrc` entirely.
-*   **Sourcing Strategy:** It sources a general, OS-agnostic `zshrc` located at `~/dotfiles/general-zshrc/.zshrc`.
-*   **Mac-Specific Additions:** After sourcing the general file, it adds macOS-specific environment variables and integrations inside `home.nix`.
-*   **Aliases:** Mac-specific aliases (like `xcodeaccept` or `cleardns`) are defined in `home.nix`, while general aliases remain in the cross-platform `dotfiles` repo.
-
-**The Init Logic:**
-The configuration injects the following logic into Zsh:
-1.  **Source General Zshrc:** Loads your shared Linux/Mac config.
-2.  **Environment Variables:** Sets `CASE_SENSITIVE` and adds Homebrew binary paths.
-3.  **SSH Agent:** Automatically starts the agent and adds the Apple Keychain identity.
-4.  **iTerm2 Integration:** Sources shell integration if present.
-5.  **VM Functions:** Loads the `vmup` logic.
-
-### 2. Multi-Host Support
-
-You can manage multiple Macs with this single repository.
-
-*   **Supported Machines:** Add your machine names to the `supportedMachines` list in `flake.nix`.
-*   **Dynamic Generation:** The configuration automatically generates system definitions for every hostname in that list.
-
-### 3. Home Manager Integration
-
-**Home Manager** is integrated directly into the flake. It handles user-specific configurations (like dotfiles, aliases, and specific tool settings) separate from the system-level settings.
-
-## 🐧 NixOS Virtual Machine (Development Environment)
-
-This configuration includes a built-in **NixOS Virtual Machine**. This allows you to develop, test, and build your NixOS configurations directly on your Mac without needing a separate PC.
-
-### Architecture
-The VM runs `aarch64-linux` using QEMU with Apple's Hypervisor Framework (`hvf`) for near-native performance. It is a **headless** VM (CLI/TTY only), making it lightweight and fast.
-
-### Hardware Profiles (Host Specific)
-The VM hardware resources are automatically adjusted based on the physical Mac running the command:
-
-| Hostname                   | VM RAM | VM Cores | Disk Limit (Max) |
-| :------------------------- | :----- | :------- | :--------------- |
-| **MacBook-Air-di-Roberta** | 3 GB   | 2 Cores  | 64 GB            |
-| **Krits-MacBook-Pro**      | 12 GB  | 6 Cores  | 128 GB           |
-
-*Note: The disk size is "sparse" (QCOW2). It starts small (~1-2GB) and only grows as you fill it with data, up to the limit listed above.*
-
-### Data Storage
-To keep this repository clean, VM data is stored externally:
-*   **Location:** `~/nixos-vm-data/`
-*   **File:** `nixos.qcow2`
-
-*Tip: To factory reset the VM, simply delete the `nixos.qcow2` file and run `vmup` again.*
-
-### Managing the VM
-
-#### 1. Start the VM
-Open your terminal and run:
-```bash
-vmup
-```
-*This command automatically detects your host, creates the data directory if needed, and boots the correct VM configuration.*
-
-#### 2. Log In
-When the login prompt appears:
-*   **User:** `nixos`
-*   **Password:** `nixos`
-
-#### 3. Post-Login (First Run)
-Once inside the VM, your environment is ready. You should now clone your actual NixOS configuration repository to begin development:
+**Find your Hostname:**
+Run this command to see what macOS calls your computer:
 
 ```bash
-# Example
-git clone https://github.com/YOUR_USERNAME/YOUR_NIXOS_REPO.git
-cd YOUR_NIXOS_REPO
-# ... proceed with your standard NixOS workflow
+scutil --get LocalHostName
 ```
 
-#### 4. Stop the VM
-From inside the VM:
-```bash
-sudo poweroff
-```
-Or from your Mac terminal (if the window hangs):
-```bash
-vmstop
-```
-
-## 🛠 System Configuration (`flake.nix`)
-
-### Environment & Java
-*   **Nix Settings:** Flakes and `nix-command` are enabled. `allowUnfree` is true.
-*   **Java:** `JAVA_HOME` is explicitly set to `jdk25`.
-*   **JDTLS:** `JDTLS_BIN` is exported globally. The binary is linked to `~/tools/jdtls`.
-
-### Python Environment
-Python packages are bundled into a single environment rather than installed globally. This wrapper includes `pip`, `black`, `ruff`, `pynvim`, and language servers to ensure a cohesive development environment.
-
-### Security
-**Touch ID for Sudo** is enabled via `security.pam.services.sudo_local`. You can authenticate `sudo` commands using your fingerprint.
-
-### Homebrew Management
-Managed declaratively through Nix.
-*   **Cleanup:** `uninstall` (Removes packages not listed in the flake).
-*   **Behavior:** Auto-update is disabled during builds for speed.
-*   **Separation:**
-    *   *Taps:* Repositories.
-    *   *Brews:* CLI tools.
-    *   *Casks:* GUI Apps & Fonts.
-
-## 🧩 Home Manager & Nix Index (`home.nix`)
-
-### Nix-Index Database
-The configuration imports `nix-index-database` to provide a comprehensive package list for tools like `comma` or `pay-respects`.
-*   **Prompt Disabled:** `enableZshIntegration` is `false` to prevent Nix from hijacking "command not found" errors.
-
-### JDTLS Linking
-A symlink is created at `~/tools/jdtls` pointing to the Nix store path. This allows the shared/general `.zshrc` to rely on a stable path for the Java Language Server across different operating systems.
-
-## 🔄 The Update Mechanism (`nixpush`)
-
-To update your system, use the alias `nixpush`.
+**Duplicate the Template:**
+Copy the existing template folder to a new folder named exactly like your Hostname.
 
 ```bash
-nixpush
+cd hosts
+cp -r Krits-MacBook-Pro <Your-Hostname>
 ```
 
-**How it works:**
-1.  Navigates to `~/nix-darwin-macOS/`.
-2.  Dynamically fetches the Mac's `LocalHostName`.
-3.  Matches the name against the `supportedMachines` list.
-4.  Builds and switches to the new configuration using `sudo`.
+**(Optional) Edit Local Packages:**
+Open `hosts/<Your-Hostname>/local-packages.nix` to add or remove software specific to this machine (e.g., if you don't need gaming tools on a work laptop).
+
+
+
+## 4. Configure flake.nix
+
+Edit `flake.nix` to define your host.
+
+
+**Customize Variables:**
+*   **hostname** Needs to match the one found
+*   **user:** needs to match the mac user.
+*   **monitorConfig** 
+*   **wallpaperURL / wallpaperSHA256:** The wallpaper specific to this Mac.
+*   **monitorConfig:** Used for font scaling logic in Alacritty.
+*   
+
+
+## 5. First Time Build
+
+Build the flake to switch your system to the Nix configuration. Replace `<hostname>` with the name defined in your flake.
+
+```bash
+nix run nix-darwin -- switch --flake .#<hostname>
 ```
+
+---
+
+## 🔄 Daily Usage
+
+Once installed, use the convenient aliases configured in `zsh.nix` to manage your system.
+
+| Command | Description                                                               |
+| :------ | :------------------------------------------------------------------------ |
+| `sw`    | **Switch**. Rebuilds the System and Home Manager configuration.           |
+| `upd`   | **Update**. Updates `flake.lock` (packages) and then rebuilds the system. |
+| `pkgs`  | **Edit**. Opens the Home Manager modules folder in Neovim.                |
+| `fmt`   | **Format**. Formats all `.nix` files in the repo using `nixfmt`.          |
+
+---
+
+## ❓ Troubleshooting
+
+**Error: experimental-features 'flakes' is disabled**
+*   **Fix:** The installer should handle this, but if not, ensure `~/.config/nix/nix.conf` contains:
+    `experimental-features = nix-command flakes`
+
+**Error: home-manager options not found**
+*   **Cause:** You might be mixing up system-level options with Home Manager options.
+*   **Fix:** Ensure app-specific settings (like `programs.zsh`) are inside `home-manager/modules`, not `nixDarwin/modules`.
+
 
