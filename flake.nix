@@ -93,8 +93,8 @@
               home-manager.extraSpecialArgs = {
                 inherit inputs user;
                 inherit base16Theme polarity;
-                # Map catppuccinEnable to catppuccin for modules
-                catppuccin = catppuccinEnable;
+                # Map catppuccin to catppuccin for modules
+                catppuccin = catppuccin;
                 inherit catppuccinFlavor catppuccinAccent;
                 inherit gitUserName gitUserEmail;
                 monitors = monitorConfig;
