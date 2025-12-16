@@ -39,6 +39,7 @@
       htop # Interactive process viewer
       pay-respects # Typo correction tool
       pokemon-colorscripts # Terminal styling
+      nh # CLI help for Nix package management
 
       ripgrep # Fast search tool
       stow # Symlink manager
