@@ -116,7 +116,6 @@
       "pipes-sh"
       "nixfmt"
       "cava" # Audio visualizer (Better via Brew on Mac)
-      "ntfs-3g" # NTFS Driver (Requires MacFUSE to write, usually)
 
     ];
 
@@ -132,8 +131,6 @@
       "microsoft-teams" # Teams (Official)
       "signal" # Signal Desktop
       "vlc" # VLC Media Player
-      "github" # GitHub Desktop
-
     ];
   };
 }

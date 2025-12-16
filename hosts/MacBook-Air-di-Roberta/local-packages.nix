@@ -21,6 +21,7 @@
     glow # Markdown renderer for the terminal
     grex # Command-line tool for generating regular expressions
     mediainfo # Display technical info about media files
+    ntfs3g # NTFS read/write support
     tree # Display directory structure as a tree
     yt-dlp # Media downloader for YouTube and other sites
     fastfetch # Fast system information fetcher
@@ -36,6 +37,7 @@
     tectonic # Modernized, complete, self-contained TeX/LaTeX engine
     texliveFull # The complete TeX Live distribution (Note: Large download)
     universal-ctags # Tool to generate index (tags) files of source code
+    github-desktop # GitHub's official desktop client
     maven # Java build tool
     jetbrains.pycharm-community # Python IDE
     jetbrains.clion # C/C++ IDE
