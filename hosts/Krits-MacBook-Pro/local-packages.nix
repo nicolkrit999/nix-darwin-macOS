@@ -37,7 +37,6 @@
     tectonic # Modernized, complete, self-contained TeX/LaTeX engine
     texliveFull # The complete TeX Live distribution (Note: Large download)
     universal-ctags # Tool to generate index (tags) files of source code
-    github-desktop # GitHub's official desktop client
     maven # Java build tool
     jetbrains.pycharm-community # Python IDE
     jetbrains.clion # C/C++ IDE
