@@ -34,25 +34,16 @@
       vscode # Code editor
 
       # 🖥️ CLI UTILITIES
-      brightnessctl # Control device backlight
-      cliphist # Wayland clipboard history
       ffmpegthumbnailer # Lightweight video thumbnailer
       fzf # Command-line fuzzy finder
-      grimblast # Wayland screenshot helper
       htop # Interactive process viewer
-      hyprpicker # Wayland color picker
       pay-respects # Typo correction tool
-      playerctl # Control media players
       pokemon-colorscripts # Terminal styling
 
       ripgrep # Fast search tool
-      showmethekey # Keyboard visualizer
       stow # Symlink manager
-      ueberzugpp # Image previews
       unzip # Extraction utility
       wget # File retrieval
-      wl-clipboard # Wayland copy/paste
-      wtype # Wayland xdotool
       zip # Compression utility
       zlib # Compression utility
 
@@ -69,9 +60,6 @@
       ))
 
       # 🪟 WINDOW MANAGER (WM) INFRASTRUCTURE
-      libnotify # Notifications
-      xdg-desktop-portal-gtk # File pickers
-      xdg-desktop-portal-hyprland # Screen sharing
 
       # ❓ OTHER
       bemoji # Emoji picker
@@ -85,7 +73,6 @@
       # -----------------------------------------------------------------------------------
 
       # 🖥️ DESKTOP APPLICATIONS
-      kdePackages.audiotube # Youtube music
       wakeonlan # Magic packets
 
       # 🖥️ CLI UTILITIES
@@ -103,10 +90,7 @@
       # ---------------------------------------------------
       # 🐬 KDE PACKAGES
       # ---------------------------------------------------
-      dolphin # File manager
       qtsvg # SVG Icon support
-      kio-fuse # Mount remote filesystems
-      kio-extras # Extra protocols
 
       # Fonts support (Using pkgs because they are not in kdePackages)
       pkgs.inter
@@ -139,6 +123,13 @@
       "pearcleaner"
       "only-switch"
       "font-jetbrains-mono-nerd-font"
+      "obs" # OBS Studio
+      "telegram" # Telegram Desktop
+      "microsoft-teams" # Teams (Official)
+      "signal" # Signal Desktop
+      "vlc" # VLC Media Player
+      "github" # GitHub Desktop
+
     ];
   };
 }

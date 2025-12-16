@@ -10,14 +10,6 @@
     # -----------------------------------------------------------------------
     # 🖥️ DESKTOP APPLICATIONS
     # -----------------------------------------------------------------------
-    kdePackages.kate # Text editor from the kde theme
-    obs-studio # Streaming/Recording
-    telegram-desktop # Messaging
-    teams-for-linux # Unofficial Microsoft Teams client
-    signal-desktop # Encrypted messaging application
-    vlc # Media player
-    proton-pass # Password manager by Proton
-    protonvpn-gui # VPN client by Proton
 
     # -----------------------------------------------------------------------------------
     # 🖥️ CLI UTILITIES
@@ -29,13 +21,10 @@
     glow # Markdown renderer for the terminal
     grex # Command-line tool for generating regular expressions
     mediainfo # Display technical info about media files
-    ntfs3g # NTFS read/write support
     tree # Display directory structure as a tree
     yt-dlp # Media downloader for YouTube and other sites
-    cava # Console-based audio visualizer
     fastfetch # Fast system information fetcher
     pokemon-colorscripts # Print pokemon sprites in terminal with colors
-    unixtools.netstat # Network statistics
     lsof # List open files
     cloudflared # Cloudflare's command-line tool and daemon
     # -----------------------------------------------------------------------------------
@@ -47,7 +36,6 @@
     tectonic # Modernized, complete, self-contained TeX/LaTeX engine
     texliveFull # The complete TeX Live distribution (Note: Large download)
     universal-ctags # Tool to generate index (tags) files of source code
-    github-desktop # GitHub's official desktop client
     maven # Java build tool
     jetbrains.pycharm-community # Python IDE
     jetbrains.clion # C/C++ IDE
@@ -60,7 +48,6 @@
         pylint # Source code analyzer
         pyright # Static type checker
         faker # Generate fake data
-        proton-keyring-linux # Proton keyring for Linux
       ]
     ))
 
