@@ -67,6 +67,8 @@
             # 2. Stylix System Module
             inputs.stylix.darwinModules.stylix
 
+            inputs.nix-index-database.homeModules.nix-index
+
             # 3. System Configuration
             ./nixDarwin/modules
 
@@ -105,7 +107,6 @@
                   ./home-manager/modules
                   inputs.catppuccin.homeModules.catppuccin
                   inputs.stylix.homeModules.stylix
-                  inputs.nix-index-database.homeModules.nix-index
                 ];
                 home.stateVersion = "24.05";
               };
