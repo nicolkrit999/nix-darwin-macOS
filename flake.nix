@@ -61,13 +61,15 @@
               # 🟢 ALLOW UNFREE GLOBALLY
               # This ensures VS Code, Discord, and others work on ALL hosts.
               nixpkgs.config.allowUnfree = true;
+
+              nixpkgs.overlays = [
+                inputs.nix-index-database.overlays.nix-index
+              ];
             }
             ./hosts/${hostname}/local-packages.nix
 
             # 2. Stylix System Module
             inputs.stylix.darwinModules.stylix
-
-            inputs.nix-index-database.homeModules.nix-index
 
             # 3. System Configuration
             ./nixDarwin/modules
