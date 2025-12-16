@@ -20,104 +20,99 @@
   # ---------------------------------------------------
   # 2. SYSTEM PACKAGES (Restored your Full List)
   # ---------------------------------------------------
-  environment.systemPackages = with pkgs; [
-    # Core & Shell
-    starship
-    eza
-    btop
-    ripgrep
-    fd
-    fzf
-    bat
-    unzip
-    which
-    tree
-    stow
-    ranger
-    tealdeer
-    xclip
-    wakeonlan
-    zlib
-    nh
+  environment.systemPackages =
+    (with pkgs; [
+      # Packages in each category are sorted alphabetically
 
-    # Dev Tools
-    git
-    lazygit
-    cmake
-    docker
-    universal-ctags
-    jq
-    glow
-    grex
+      # -----------------------------------------------------------------------------------
+      #  ⚠️ START APPLICATIONS TO KEEP HERE BLOCK ⚠️
+      # -----------------------------------------------------------------------------------
 
-    # Editors
-    neovim
-    # Note: Vim plugins are usually better managed in home-manager/neovim.nix,
-    # but we keep them here if you prefer system-wide availability.
+      # 🖥️ DESKTOP APPLICATIONS
+      mpv # Video player
+      vesktop # Discord client
+      vscode # Code editor
 
-    # Languages & Runtimes
-    jdk25
-    maven
-    gradle
-    jdt-language-server
-    nodejs
-    glew
-    glfw # C/C++ libs
-    rbenv
-    postgresql_14
-    redis
+      # 🖥️ CLI UTILITIES
+      brightnessctl # Control device backlight
+      cliphist # Wayland clipboard history
+      ffmpegthumbnailer # Lightweight video thumbnailer
+      fzf # Command-line fuzzy finder
+      grimblast # Wayland screenshot helper
+      htop # Interactive process viewer
+      hyprpicker # Wayland color picker
+      pay-respects # Typo correction tool
+      playerctl # Control media players
+      pokemon-colorscripts # Terminal styling
 
-    # Python Bundle (Restored your specific list)
-    (python313.withPackages (
-      ps: with ps; [
-        pip
-        setuptools
-        pynvim
-        python-lsp-server
-        python-lsp-black
-        pylsp-mypy
-        isort
-        pylint
-        flake8
-        black
-        ruff
-        faker
-      ]
-    ))
+      ripgrep # Fast search tool
+      showmethekey # Keyboard visualizer
+      stow # Symlink manager
+      ueberzugpp # Image previews
+      unzip # Extraction utility
+      wget # File retrieval
+      wl-clipboard # Wayland copy/paste
+      wtype # Wayland xdotool
+      zip # Compression utility
+      zlib # Compression utility
 
-    # Documents & Media
-    pandoc
-    tectonic
-    texliveFull # Warning: Huge download!
-    mermaid-cli
-    ghostscript
-    imagemagick
-    sox
-    yt-dlp
-    viu
-    chafa
-    ueberzugpp
+      # 🧑🏽‍💻 CODING
+      jdk25 # Java Development Kit
+      nodejs # JavaScript runtime
+      (pkgs.python313.withPackages (
+        ps: with ps; [
+          pip
+          flake8
+          black
+          ruff
+        ]
+      ))
 
-    # Networking
-    cloudflared
-    speedtest-cli
-    croc
-    ttyd
+      # 🪟 WINDOW MANAGER (WM) INFRASTRUCTURE
+      libnotify # Notifications
+      xdg-desktop-portal-gtk # File pickers
+      xdg-desktop-portal-hyprland # Screen sharing
 
-    # Fun
-    pay-respects
-    fastfetch
-    pokemon-colorscripts
-    neo-cowsay
-    cbonsai
-    asciinema
+      # ❓ OTHER
+      bemoji # Emoji picker
+      nix-prefetch-scripts # Nix dev tools
 
-    # Fonts support
-    pkgs.inter
-    pkgs.noto-fonts
-    pkgs.nerd-fonts.jetbrains-mono
+      #  ⚠️ END APPLICATIONS TO KEEP HERE BLOCK ⚠️
+      # -----------------------------------------------------------------------------------
 
-  ];
+      # -----------------------------------------------------------------------------------
+      #  ⭐ START OF OTHER APPLICATION ⭐
+      # -----------------------------------------------------------------------------------
+
+      # 🖥️ DESKTOP APPLICATIONS
+      kdePackages.audiotube # Youtube music
+      wakeonlan # Magic packets
+
+      # 🖥️ CLI UTILITIES
+      croc # File transfer
+      tealdeer # tldr implementation
+      ttyd # Terminal over web
+      nixfmt-rfc-style # Nix formatter
+      killall # Process killer
+
+      #  ⭐ END OF OTHER APPLICATION ⭐
+      # -----------------------------------------------------------------------------------
+    ])
+    # 2. 🔗 Connect the second list using ++
+    ++ (with pkgs.kdePackages; [
+      # ---------------------------------------------------
+      # 🐬 KDE PACKAGES
+      # ---------------------------------------------------
+      dolphin # File manager
+      qtsvg # SVG Icon support
+      kio-fuse # Mount remote filesystems
+      kio-extras # Extra protocols
+
+      # Fonts support (Using pkgs because they are not in kdePackages)
+      pkgs.inter
+      pkgs.noto-fonts
+      pkgs.nerd-fonts.jetbrains-mono
+    ]);
 
   # ---------------------------------------------------
   # 3. HOMEBREW CONFIGURATION
@@ -139,6 +134,8 @@
 
     casks = [
       "alacritty"
+      "kitty"
+      "iterm2"
       "pearcleaner"
       "only-switch"
       "font-jetbrains-mono-nerd-font"

@@ -55,7 +55,13 @@
           };
           modules = [
             # 1. Platform & Host Specifics
-            { nixpkgs.hostPlatform = "aarch64-darwin"; }
+            {
+              nixpkgs.hostPlatform = "aarch64-darwin";
+
+              # 🟢 ALLOW UNFREE GLOBALLY
+              # This ensures VS Code, Discord, and others work on ALL hosts.
+              nixpkgs.config.allowUnfree = true;
+            }
             ./hosts/${hostname}/local-packages.nix
 
             # 2. Stylix System Module
@@ -86,16 +92,13 @@
 
               home-manager.extraSpecialArgs = {
                 inherit inputs user;
-                # Pass all variables (including defaults) to Home Manager
-                inherit
-                  base16Theme
-                  polarity
-                  catppuccin
-                  catppuccinFlavor
-                  catppuccinAccent
-                  ;
+                inherit base16Theme polarity;
+                # Map catppuccinEnable to catppuccin for modules
+                catppuccin = catppuccinEnable;
+                inherit catppuccinFlavor catppuccinAccent;
                 inherit gitUserName gitUserEmail;
                 monitors = monitorConfig;
+                inherit wallpaperURL wallpaperSHA256;
               };
 
               home-manager.users.${user} = {
