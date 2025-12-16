@@ -99,7 +99,6 @@ Edit `flake.nix` to define your host.
 *   **hostname** Needs to match the one found
 *   **user:** needs to match the mac user.
 *   **monitorConfig** 
-*   **wallpaperURL / wallpaperSHA256:** The wallpaper specific to this Mac.
 *   **monitorConfig:** Used for font scaling logic in Alacritty.
 *   
 

@@ -98,7 +98,6 @@
                 inherit catppuccinFlavor catppuccinAccent;
                 inherit gitUserName gitUserEmail;
                 monitors = monitorConfig;
-                inherit wallpaperURL wallpaperSHA256;
               };
 
               home-manager.users.${user} = {
