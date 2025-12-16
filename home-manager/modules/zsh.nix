@@ -34,7 +34,7 @@ in
       pkgs = "nvim ${flakeDir}/home-manager/modules/default.nix";
 
       # 🧹 FORMATTING
-      fmt = "cd ${flakeDir} && nix fmt";
+      fmt = "cd ${flakeDir} && nix fmt -- **/*.nix"; # Format Nix files using nixfmt (a regular nix fmt hangs on zed theme)
       fmt-dry = "cd ${flakeDir} && nix fmt -- --check";
 
       # Utilities
