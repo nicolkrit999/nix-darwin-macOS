@@ -42,6 +42,7 @@
 
       ripgrep # Fast search tool
       stow # Symlink manager
+      ueberzugpp
       unzip # Extraction utility
       wget # File retrieval
       zip # Compression utility
@@ -114,6 +115,9 @@
     brews = [
       "pipes-sh"
       "nixfmt"
+      "cava" # Audio visualizer (Better via Brew on Mac)
+      "ntfs-3g" # NTFS Driver (Requires MacFUSE to write, usually)
+
     ];
 
     casks = [
