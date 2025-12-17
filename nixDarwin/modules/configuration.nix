@@ -132,6 +132,7 @@
       "microsoft-teams" # Teams (Official)
       "signal" # Signal Desktop
       "vlc" # VLC Media Player
+      "github"
     ];
   };
 }

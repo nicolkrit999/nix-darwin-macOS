@@ -28,6 +28,7 @@
     pokemon-colorscripts # Print pokemon sprites in terminal with colors
     lsof # List open files
     cloudflared # Cloudflare's command-line tool and daemon
+    pay-respects # Shell commands suggestion
     # -----------------------------------------------------------------------------------
     # 🧑🏽‍💻 CODING
     # -----------------------------------------------------------------------------------
