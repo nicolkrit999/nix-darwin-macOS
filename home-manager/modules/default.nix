@@ -2,6 +2,7 @@
   imports = [
     ./alacritty.nix
     ./bat.nix
+    ./cava.nix
     ./eza.nix
     ./firefox.nix
     ./git.nix

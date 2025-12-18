@@ -4,16 +4,16 @@ This repository separates the **System Configuration** (macOS settings/Daemons) 
 
 Categories can be navigated with the links below:
 
-* **[❄️ Core Configuration](./Core.md)**: Entry point (`flake.nix`), inputs, and host definitions.
-* **[⚙️ System Modules (NixDarwin)](./NixDarwin.md)**: macOS defaults, Nix daemon, and system packages.
-* **[🏠 User Modules (Home Manager)](./HomeManager.md)**: Applications, themes, shells, and browsers.
+* **[❄️ Core Configuration](./sections/Core.md)**: Entry point (`flake.nix`), inputs, and host definitions.
+* **[⚙️ System Modules (NixDarwin)](./sections/NixDarwin.md)**: macOS defaults, Nix daemon, and system packages.
+* **[🏠 User Modules (Home Manager)](./sections/HomeManager.md)**: Applications, themes, shells, and browsers.
 
 ## 🌳 File Tree
 
 ```text
 .
-├── flake.nix                        # ❄️ Entry point: Inputs, hosts, and global variables
-├── flake.lock                       # 🔒 Dependency lockfile
+├── flake.nix                         # ❄️ Entry point: Inputs, hosts, and global variables
+├── flake.lock                        # 🔒 Dependency lockfile
 │
 ├── home-manager/                    # 🏠 User-specific configuration
 │   └── modules/
@@ -21,7 +21,7 @@ Categories can be navigated with the links below:
 │       ├── bat.nix                  # 'cat' clone theming
 │       ├── default.nix              # Module importer
 │       ├── eza.nix                  # 'ls' clone settings
-│       ├── firefox.nix              # Browser profiles & hardening
+│       ├── firefox.nix               # Browser profiles & hardening
 │       ├── git.nix                  # Git credentials
 │       ├── lazygit.nix              # Git TUI settings
 │       ├── maintenance.nix          # Custom maintenance scripts/aliases
