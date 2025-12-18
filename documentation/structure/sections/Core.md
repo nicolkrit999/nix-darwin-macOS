@@ -12,10 +12,10 @@ The brain of the operation. It defines the inputs (Nixpkgs source, Home Manager,
 ## 🖥️ Hosts (`hosts/`)
 This directory contains the configurations for specific machines. Each folder name need to match the name of a `hostname` defined in `flake.nix`.
 
-Each hosts folder should contain this file
+### A note about hardware-configuration.nix
+In this setup it is not needed because telling that the architecture is `aarch64-darwin` is enough
 
-
-
+Each hosts folder should contain this file:
 * ### `local-packages.nix` ###
 * Some packages may not be needed in all the machines. For example why installing developing tools when not programming
   * When the package contains -> ⚠️ KEEP it means that for me they are necessary. Another person if it does not need that specific package it is free to remove it
