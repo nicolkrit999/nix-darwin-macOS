@@ -1,13 +1,7 @@
 { pkgs, lib, ... }:
 {
-  # -----------------------------------------------------------------------
-  # ⚙️ SYSTEM: NIX SETTINGS
-  # -----------------------------------------------------------------------
 
   nix = {
-    # ⚠️ Note: Since you use Determinate Systems installer (nix.enable = false),
-    # these settings are technically ignored by the daemon. We keep them here
-    # so the file structure mirrors your NixOS config.
 
     settings = {
       experimental-features = [

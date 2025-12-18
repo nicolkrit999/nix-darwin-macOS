@@ -8,7 +8,6 @@
 
   # -----------------------------------------------------------------------
   # 🎨 CATPPUCCIN THEME (official module)
-  # -----------------------------------------------------------------------
   catppuccin.bat.enable = catppuccin;
   catppuccin.bat.flavor = catppuccinFlavor;
   # -----------------------------------------------------------------------
@@ -17,7 +16,6 @@
     enable = true;
 
     config = {
-      # Optional: any other bat config options (like --style)
     };
   };
 }

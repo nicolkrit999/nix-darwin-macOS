@@ -10,6 +10,8 @@
     # -----------------------------------------------------------------------
     # 🖥️ DESKTOP APPLICATIONS
     # -----------------------------------------------------------------------
+    mpv # Video player
+    vesktop # Discord client
 
     # -----------------------------------------------------------------------------------
     # 🖥️ CLI UTILITIES
@@ -28,6 +30,13 @@
     pokemon-colorscripts # Print pokemon sprites in terminal with colors
     lsof # List open files
     cloudflared # Cloudflare's command-line tool and daemon
+    pay-respects # Typo correction tool
+    stow # Symlink farm manager (used for dotfiles)
+    wakeonlan # Magic packets
+    croc # File transfer
+    tealdeer # tldr implementation
+    ttyd # Terminal over web
+
     # -----------------------------------------------------------------------------------
     # 🧑🏽‍💻 CODING
     # -----------------------------------------------------------------------------------
@@ -63,6 +72,7 @@
     # -----------------------------------------------------------------------
     # ❓ OTHER
     # -----------------------------------------------------------------------
+    bemoji # Emoji picker
 
   ];
 }
