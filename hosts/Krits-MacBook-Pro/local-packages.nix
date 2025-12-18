@@ -39,9 +39,9 @@
     texliveFull # The complete TeX Live distribution (Note: Large download)
     universal-ctags # Tool to generate index (tags) files of source code
     maven # Java build tool
-    jetbrains.pycharm-community # Python IDE
+    jetbrains.pycharm-oss # Python IDE
     jetbrains.clion # C/C++ IDE
-    jetbrains.idea-community # Java IDE
+    jetbrains.idea-oss # Java IDE
     zeal # Offline documentation browser
     (pkgs.python313.withPackages (
       ps: with ps; [

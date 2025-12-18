@@ -21,51 +21,75 @@ An audio visualizer in the terminal. It contains configurable graph stiles bars 
 * **Theming:** Uses the base16 themes or catppuccin official nix repo based on the user choice in `flake.nix`
 
 ### `eza.nix`
-Configuration for `eza` (a modern `ls` replacement).
-*   Ensures the tool shares the same color scheme and icons across machines.
+Configuration for `eza` (a modern `ls` clone).
+* **Theming:** Uses the base16 themes or catppuccin official nix repo based on the user choice in `flake.nix`
 
 ### `firefox.nix`
-Browser configuration.
-*   **Profiles:** Creates a persistent profile for the user.
-*   **Extensions:** Manages browser add-ons declaratively.
-*   **Styling:** Uses Stylix/Catppuccin to theme the browser UI.
+The primary browser configuration.
+* **Hardening:** Includes privacy tweaks (disabling telemetry, sponsored tiles).
+* **Configuration:** Includes a profile (with the same name as the hosts username) with extensions and bookmarks and homepage
+  * The homepage needs to be changed. It's a url that only krit has access to 
+* **Theming:** Uses the base16 themes or catppuccin official nix repo based on the user choice in `flake.nix`
+  * To alllow theming to work it is necessary to force the `firefox-color` extensions
+  * For now there is a `force = true` meaning all extensions are forced to be installed
 
 ### `git.nix`
-Core Version Control configuration.
-*   **Identity:** Injects the `gitUserName` and `gitUserEmail` defined in `flake.nix` directly into the Git config.
+Git version control settings.
+* **User-identity:** It takes the github username and e-mail from `flake.nix` (hosts-specific)
 
 ### `lazygit.nix`
-Terminal UI for Git.
-*   **Theming:** Configured and themed via Stylix to match the system palette.
+Configuration for the terminal UI for Git.
+* **Theming:** Uses the base16 themes or catppuccin official nix repo based on the user choice in `flake.nix`
+
 
 ### `maintenance.nix`
 System maintenance scripts.
 *   **Garbage Collection:** A dedicated module for defining system cleanup rules and generation management.
 
 ### `neovim.nix`
-Text editor configuration.
-*   Ensures Neovim shares the system-wide color scheme and keybindings.
+Wrapper for the Neovim text editor.
+* **Note:** This module only defines a few nix-specific behaviour. The remaining of the config is taken from the regular `~/.config/nvim` folder
+* Since neovim is highly customizable it is better to let lua files handle the main configuration
+* Stylix is explicitly disabled here to allow for complex, manual Lua-based theming.
 
 ### `ranger.nix`
-Terminal file manager configuration.
-*   Ensures the file manager shares the system-wide color scheme and keybindings.
+Terminal file manager configuration. Styled via global Stylix Base16 rules.
 
 ### `starship.nix`
 Shell prompt configuration.
-*   **Theming:** Shows different palette colors (Red/Green) based on the success/failure of the previous command.
-*   **Logic:** Disabled in Stylix if Catppuccin is active to allow the official Catppuccin preset to load.
+* **Theming:** Uses the base16 themes or catppuccin official nix repo based on the user choice in `flake.nix` 
+* **Features** It configures the prompt to show specific symbols for SSH sessions, Git status, and errors.
 
 ### `stylix.nix`
-The central theming engine. It unifies system-wide theming into a single file.
-*   **Fonts:** Installs and configures JetBrains Mono (Monospace) and Inter (Sans-Serif).
-*   **Targets:** Conditionally enables/disables theming for specific apps. For example, if `catppuccin` is enabled, Stylix is told to ignore Starship and Bat so the official Catppuccin modules can take over.
+The central theming engine for the system.
+* **Theming:** Acts as a "switch" between two modes based on the user's choice in `flake.nix`:
+    * **Stylix Mode (`catppuccin = false`):** Automatically generates themes for GTK, Wallpapers, and apps using a specific **Base16 scheme** (e.g., `gruvbox`, `dracula`)
+  
+    * **Catppuccin Mode (`catppuccin = true`):** Disables Stylix's automation for specific apps (like GTK, Alacritty, Hyprland) and manually injects the official **Catppuccin** theme with the user's chosen flavor and accent
+      * if `catppuccin` is true then stylix targets should be disabled. This means `*.enable = !catppuccin`
+  
+* **Features:**
+    * **Conditional Logic:** Uses `lib.mkIf` to dynamically enable or disable Stylix targets to prevent conflicts with manual theme modules.
+    * 
+    * **GTK Overrides:** Manually forces GTK themes and icons when Catppuccin mode is active to ensure deep system integration
+    * 
+    * **Font Management:** Installs and configures a comprehensive suite of fonts (JetBrains Mono, Noto, FontAwesome) for consistent typography across the OS
+    * 
+    * **Dark/Light Mode:** Forces the system-wide "prefer-dark" or "prefer-light" signal via `dconf` to ensure GTK4 apps respect the global polarity
 
 ### `tmux.nix`
-Terminal multiplexer configuration.
-*   Ensures standard configuration and consistent color schemes across sessions.
+Terminal multiplexer configuration. Includes behaviour and keybindings
+* **Theming:** Uses the base16 themes or catppuccin official nix repo based on the user choice in `flake.nix`
+* 
+* **Features:**
+    * **Navigation:** Configures a `keybindings + Arrow keys` to switch panes and a `keybindings + Number keys` to switch windows instantly
+    * 
+    * **Workflow Shortcuts:** Includes custom bindings to launch specific workspaces like the system configuration or notes directly in Neovim
+    * **Window Management:** Sets custom split bindings and resizing shortcuts (`Alt+Shift+Arrows`) for rapid layout control
+    * **Vim Mode:** Enables standard Vim keybindings for efficient scrolling and copy-paste operations
 
 ### `zsh.nix`
 Shell configuration.
-*   **Aliases:** Defines the `sw` (switch), `upd` (update), and `pkgs` (edit) shortcuts.
-*   **Integration:** Sources `~/.zshrc_custom` to allow for non-declarative, local configuration.
+* **Function:** Adds Nix-specific aliases (like `hms` for Home Manager Switch) and integrates with an existing `~/.zshrc_custom` file
+  * This allow an hybrid setup where one can configure `~/.zshrc_custom` to be valid regardless of os, basically using globally valid aliases and options
 

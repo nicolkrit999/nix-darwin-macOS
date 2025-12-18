@@ -15,6 +15,10 @@
   - [5. First Time Build](#5-first-time-build)
   - [🔄 Daily Usage](#-daily-usage)
   - [❓ Troubleshooting](#-troubleshooting)
+  - [Other resources](#other-resources)
+    - [Structure](#structure)
+    - [Issues](#issues)
+    - [Ideas](#ideas)
 
 ---
 
@@ -135,5 +139,19 @@ Once installed, use the convenient aliases configured in `zsh.nix` to manage you
 **Error: home-manager options not found**
 *   **Cause:** You might be mixing up system-level options with Home Manager options.
 *   **Fix:** Ensure app-specific settings (like `programs.zsh`) are inside `home-manager/modules`, not `nixDarwin/modules`.
+*   
+
+
+
+## Other resources
+### [Structure](./Documentation/structure/Structure.md)
+These files contains the entire structure of the project, with an explanation of every single file
+
+### [Issues](./Documentation/issues/issues.md)
+These file contains issues that i noticed that should be resolved
+- Issues include both warnings than critical one
+
+### [Ideas](./Documentation/ideas/ideas.md)
+These file contains ideas that i think may benefit the project
 
 

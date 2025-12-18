@@ -1,7 +1,7 @@
 { pkgs, user, ... }:
 {
   # ------------------------------------------------------
-  # 🖥️ HOST-SPECIFIC PACKAGES (Krits-MacBook-Pro)
+  # 🖥️ HOST-SPECIFIC PACKAGES (MacBook-Air-di-Roberta)
   # ------------------------------------------------------
   users.users.${user}.packages = with pkgs; [
     # This allow guest user to not have this packages installed
@@ -10,8 +10,6 @@
     # -----------------------------------------------------------------------
     # 🖥️ DESKTOP APPLICATIONS
     # -----------------------------------------------------------------------
-    mpv # Video player
-    vesktop # Discord client
 
     # -----------------------------------------------------------------------------------
     # 🖥️ CLI UTILITIES
@@ -28,11 +26,9 @@
     yt-dlp # Media downloader for YouTube and other sites
     fastfetch # Fast system information fetcher
     pokemon-colorscripts # Print pokemon sprites in terminal with colors
-    stow # Symlink manager
     lsof # List open files
     cloudflared # Cloudflare's command-line tool and daemon
     pay-respects # Shell commands suggestion
-
     # -----------------------------------------------------------------------------------
     # 🧑🏽‍💻 CODING
     # -----------------------------------------------------------------------------------
@@ -43,9 +39,9 @@
     texliveFull # The complete TeX Live distribution (Note: Large download)
     universal-ctags # Tool to generate index (tags) files of source code
     maven # Java build tool
-    jetbrains.pycharm-community # Python IDE
+    jetbrains.pycharm-oss # Python IDE
     jetbrains.clion # C/C++ IDE
-    jetbrains.idea-community # Java IDE
+    jetbrains.idea-oss # Java IDE
     zeal # Offline documentation browser
     (pkgs.python313.withPackages (
       ps: with ps; [

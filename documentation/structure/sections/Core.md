@@ -12,15 +12,9 @@ The brain of the operation. It defines the inputs (Nixpkgs source, Home Manager,
 ## 🖥️ Hosts (`hosts/`)
 This directory contains the configurations for specific machines. Each folder name need to match the name of a `hostname` defined in `flake.nix`.
 
-Each hosts folder should contain these 3 files
+Each hosts folder should contain this file
 
 
-* ### `configuration.nix` ###
-* The machine-specific entry point. It imports the hardware scan and any host-specific module overrides.
-
-* ### `hardware'configuration.nix` ###
-* An auto-generated file which contains optimization based on the hardware of that specific machine.
-* This file should not be changed unless the user is confident
 
 * ### `local-packages.nix` ###
 * Some packages may not be needed in all the machines. For example why installing developing tools when not programming
