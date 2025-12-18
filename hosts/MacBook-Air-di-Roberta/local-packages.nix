@@ -10,6 +10,8 @@
     # -----------------------------------------------------------------------
     # 🖥️ DESKTOP APPLICATIONS
     # -----------------------------------------------------------------------
+    mpv # Video player
+    vesktop # Discord client
 
     # -----------------------------------------------------------------------------------
     # 🖥️ CLI UTILITIES
@@ -26,9 +28,11 @@
     yt-dlp # Media downloader for YouTube and other sites
     fastfetch # Fast system information fetcher
     pokemon-colorscripts # Print pokemon sprites in terminal with colors
+    stow # Symlink manager
     lsof # List open files
     cloudflared # Cloudflare's command-line tool and daemon
     pay-respects # Shell commands suggestion
+
     # -----------------------------------------------------------------------------------
     # 🧑🏽‍💻 CODING
     # -----------------------------------------------------------------------------------
