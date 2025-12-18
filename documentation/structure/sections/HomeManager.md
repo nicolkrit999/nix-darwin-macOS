@@ -16,7 +16,9 @@ Configuration for `bat` (a modern `cat` clone).
 
 * **Theming:** Uses the base16 themes or catppuccin official nix repo based on the user choice in `flake.nix`
 
-### `cava.nix`
+### (unused) `cava.nix`
+- Currently the nixpkgs version is broken. It is currently installed using brew, but this means that for now it is not configured
+
 An audio visualizer in the terminal. It contains configurable graph stiles bars that follow the audio if the hosts is playing somethihng
 * **Theming:** Uses the base16 themes or catppuccin official nix repo based on the user choice in `flake.nix`
 

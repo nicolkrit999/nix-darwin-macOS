@@ -139,8 +139,8 @@
     ];
 
     casks = [
-      #"pycharm-ce"
-      #"intellij-idea-ce"
+      "pycharm-ce"
+      "intellij-idea-ce"
       "alacritty"
       "kitty"
       "iterm2"
