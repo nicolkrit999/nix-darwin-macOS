@@ -16,37 +16,40 @@
     # -----------------------------------------------------------------------------------
     bc # Arbitrary precision calculator
     carbon-now-cli # Create beautiful images of your code (carbon.now.sh CLI)
+    cloudflared # Cloudflare's command-line tool and daemon
+    fastfetch # Fast system information fetcher
     fd # User-friendly replacement for 'find'
     ffmpeg # Multimedia framework for audio/video processing
+    gh # GitHub CLI tool
     glow # Markdown renderer for the terminal
     grex # Command-line tool for generating regular expressions
+    lsof # List open files
     mediainfo # Display technical info about media files
     ntfs3g # NTFS read/write support
+    pass # Simple password manager
+    pay-respects # Shell commands suggestion
+    pokemon-colorscripts # Print pokemon sprites in terminal with colors
     tree # Display directory structure as a tree
     yt-dlp # Media downloader for YouTube and other sites
-    fastfetch # Fast system information fetcher
-    pokemon-colorscripts # Print pokemon sprites in terminal with colors
-    lsof # List open files
-    cloudflared # Cloudflare's command-line tool and daemon
-    pay-respects # Shell commands suggestion
+    zoxide # Fast, lightweight alternative to 'cd'
     # -----------------------------------------------------------------------------------
     # 🧑🏽‍💻 CODING
     # -----------------------------------------------------------------------------------
     cmake # Cross-platform build system
     docker # Containerization platform
     jq # Command-line JSON processor
+    maven # Java build tool
     tectonic # Modernized, complete, self-contained TeX/LaTeX engine
     texliveFull # The complete TeX Live distribution (Note: Large download)
     universal-ctags # Tool to generate index (tags) files of source code
-    maven # Java build tool
     zeal # Offline documentation browser
     (pkgs.python313.withPackages (
       ps: with ps; [
-        setuptools # Library for packaging Python projectsS
-        isort # Sort imports alphabetically
-        pylint # Source code analyzer
-        pyright # Static type checker
         faker # Generate fake data
+        isort # Sort imports alphabetically
+        pyright # Static type checker
+        pylint # Source code analyzer
+        setuptools # Library for packaging Python projects
       ]
     ))
 

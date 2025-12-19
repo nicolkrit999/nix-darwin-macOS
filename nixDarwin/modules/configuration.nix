@@ -107,12 +107,7 @@
     ])
     # 2. 🔗 Connect the second list using ++
     ++ (with pkgs.kdePackages; [
-      # ---------------------------------------------------
-      # 🐬 KDE PACKAGES
-      # ---------------------------------------------------
       qtsvg # SVG Icon support
-
-      # Fonts support (Using pkgs because they are not in kdePackages)
       pkgs.inter # Used in stylix.nix -> ⚠️ KEEP
       pkgs.noto-fonts # Used in configuration.nix -> ⚠️ KEEP
       pkgs.nerd-fonts.jetbrains-mono # Used in various places -> ⚠️ KEEP
@@ -132,27 +127,28 @@
     taps = [ ];
 
     brews = [
-      "pipes-sh"
-      "nixfmt"
-      "cava"
+      "cava" # Terminal audio visualizer
+      "nixfmt" # Nix code formatter
+      "pipes-sh" # Terminal pipes animation
 
     ];
 
     casks = [
-      "pycharm-ce"
-      "intellij-idea-ce"
-      "alacritty"
-      "kitty"
-      "iterm2"
-      "pearcleaner"
-      "only-switch"
-      "font-jetbrains-mono-nerd-font"
-      "obs"
-      "telegram"
-      "microsoft-teams"
-      "signal"
-      "vlc"
-      "github"
+      "alacritty" # Terminal emulator
+      "font-jetbrains-mono-nerd-font" # Nerd font for coding
+      "github" # GitHub desktop client
+      "intellij-idea-ce" # Community edition of IntelliJ IDEA
+      "iterm2" # Terminal emulator
+      "kitty" # Terminal emulator
+      "microsoft-teams" # Communication platform
+      "obs" # Open Broadcaster Software
+      "only-switch" # System tray icons manager
+      "pearcleaner" # App cleaner for macOS
+      "pycharm-ce" # Community edition of PyCharm
+      "signal" # Encrypted messaging app
+      "telegram" # Messaging app
+      "vlc" # Media player
+
     ];
   };
 }
