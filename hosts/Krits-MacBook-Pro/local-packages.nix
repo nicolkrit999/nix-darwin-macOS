@@ -20,6 +20,7 @@
     ffmpeg # Multimedia framework for audio/video processing
     glow # Markdown renderer for the terminal
     grex # Command-line tool for generating regular expressions
+    stow # Manage symlinks for dotfiles
     mediainfo # Display technical info about media files
     ntfs3g # NTFS read/write support
     tree # Display directory structure as a tree
