@@ -40,7 +40,7 @@
         "/System/Applications/Music.app"
         "/Applications/Proton Pass.app"
         "/Applications/Discord.app"
-        "/Applications/Visual Studio Code.app"
+        "/Applications/Nix Apps/Visual Studio Code.app"
         "/Applications/GitHub Desktop.app"
         "/System/Applications/Calendar.app"
       ];
