@@ -6,6 +6,7 @@
     ./eza.nix
     ./firefox.nix
     ./git.nix
+    ./kitty.nix
     ./lazygit.nix
     ./maintenance.nix
     ./neovim.nix

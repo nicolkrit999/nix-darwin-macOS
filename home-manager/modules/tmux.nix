@@ -8,17 +8,14 @@
 }:
 {
   # -----------------------------------------------------------------------
-  # 🎨 CATPPUCCIN THEME (Official Module)
+  # 🎨 CATPPUCCIN THEME
   # -----------------------------------------------------------------------
   catppuccin.tmux.enable = catppuccin;
   catppuccin.tmux.flavor = catppuccinFlavor;
 
-  # Only apply the "Rounded" status bar if using Catppuccin
   catppuccin.tmux.extraConfig = lib.mkIf catppuccin ''
     set -g @catppuccin_window_status_style "rounded"
     set -g @catppuccin_status_modules_right "directory session user host"
-
-    # Optional: Use the accent color for the active window pill
     set -g @catppuccin_window_current_fill "${catppuccinAccent}"
   '';
 
@@ -27,7 +24,6 @@
   # -----------------------------------------------------------------------
   programs.tmux = {
     enable = true;
-
     baseIndex = 1;
     mouse = true;
     escapeTime = 0;
@@ -35,14 +31,14 @@
     terminal = "screen-256color";
 
     extraConfig = ''
-      # True-color support for Alacritty
       set -as terminal-features ",alacritty*:RGB"
+      set -as terminal-features ",xterm-kitty:RGB"
+      set -as terminal-features ",xterm-256color:RGB"
+
+      bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel "wl-copy"
 
       # --- CUSTOM BINDINGS (Alt/Meta based) ---
-      # "C" is "CTRL"
-      # "M" is "ALT"
-      # "S" is "SHIFT"
-      bind -n M-r source-file ~/.config/tmux/tmux.conf \; display "Reloaded!" # Reload config
+      bind -n M-r source-file ~/.config/tmux/tmux.conf \; display "Reloaded!"
       bind C-p previous-window 
       bind C-n next-window
 
@@ -64,14 +60,14 @@
       bind -n M-Down select-pane -D
 
       # Resizing Panes
-      bind -n M-S-Left resize-pane -L 5 # Left by 5 steps
-      bind -n M-S-Right resize-pane -R 5 # Right by 5 steps
-      bind -n M-S-Up resize-pane -U 3 # Up by 3 steps
-      bind -n M-S-Down resize-pane -D 3 # Down by 3 steps
+      bind -n M-S-Left resize-pane -L 5
+      bind -n M-S-Right resize-pane -R 5
+      bind -n M-S-Up resize-pane -U 3
+      bind -n M-S-Down resize-pane -D 3
 
       # Splitting
-      bind -n M-s split-window -v # Vertical split
-      bind -n M-v split-window -h # Horizontal split
+      bind -n M-s split-window -v
+      bind -n M-v split-window -h
 
       # --- PRODUCTIVITY SHORTCUTS ---
       bind -n M-o new-window -c ~/para "nvim -c 'Telescope find_files' '0 Inbox/todolist.md'"
@@ -82,7 +78,6 @@
       bind -n M-q kill-window
       bind -n M-Q kill-session
     '';
-
     plugins = with pkgs; [
       # plugins...
     ];

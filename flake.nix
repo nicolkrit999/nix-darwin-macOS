@@ -44,11 +44,12 @@
           catppuccinAccent ? "mauve",
           gitUserName ? "",
           gitUserEmail ? "",
+	  term ? "kitty",
         }:
         nix-darwin.lib.darwinSystem {
           specialArgs = {
             inherit inputs user;
-            inherit base16Theme polarity catppuccin;
+            inherit base16Theme polarity catppuccin term;
           };
           modules = [
             # 1. Platform & Host Specifics
