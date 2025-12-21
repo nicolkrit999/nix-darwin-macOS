@@ -55,7 +55,6 @@
       ShowRemovableMediaOnDesktop = true; # Show USB drives, cameras, etc. on desktop
       _FXSortFoldersFirst = true; # Keeps folders at the top when sorting by name
       FXDefaultSearchScope = "SCcf"; # "SCcf" = Search Current Folder.      NewWindowTarget = "PfDe"; # Desktop
-      NewWindowTargetPath = "file://$\{HOME\}/Desktop/"; # Explicit path. Cmd+N opens Desktop instead of Recents.
       AppleShowAllExtensions = true; # Show all file extensions
       FXEnableExtensionChangeWarning = true; # Disable warning when changing file extensions
       ShowStatusBar = true; # Show status bar at bottom of Finder windows
