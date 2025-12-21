@@ -10,11 +10,13 @@
     # -----------------------------------------------------------------------
     # 🖥️ DESKTOP APPLICATIONS
     # -----------------------------------------------------------------------
+    notion-app # All-in-one workspace app
 
     # -----------------------------------------------------------------------------------
     # 🖥️ CLI UTILITIES
     # -----------------------------------------------------------------------------------
-    bc # Arbitrary precision calculator
+    # Arbitrary precision calculator
+    bc
     carbon-now-cli # Create beautiful images of your code (carbon.now.sh CLI)
     cloudflared # Cloudflare's command-line tool and daemon
     fastfetch # Fast system information fetcher
@@ -66,4 +68,42 @@
     # -----------------------------------------------------------------------
 
   ];
+
+  # 3. HOMEBREW CONFIGURATION
+  # ---------------------------------------------------
+  homebrew = {
+    enable = true;
+    onActivation = {
+      autoUpdate = true;
+      upgrade = true;
+      cleanup = "uninstall";
+    };
+
+    taps = [ ];
+
+    brews = [
+      "pipes-sh"
+      "nixfmt"
+      "cava"
+
+    ];
+
+    casks = [
+      "pycharm-ce"
+      "intellij-idea-ce"
+      "alacritty"
+      "discord"
+      "kitty"
+      "iterm2"
+      "pearcleaner"
+      "only-switch"
+      "font-jetbrains-mono-nerd-font"
+      "obs"
+      "telegram"
+      "microsoft-teams"
+      "signal"
+      "vlc"
+      "github"
+    ];
+  };
 }

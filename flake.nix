@@ -32,12 +32,10 @@
       ...
     }@inputs:
     let
-      # 🛠️ SYSTEM BUILDER (with Fallbacks)
       mkSystem =
         {
           hostname,
           user,
-          # 🟢 OPTIONAL ARGUMENTS (With Defaults/Fallbacks)
           monitorConfig ? [ ], # Default to empty list
           base16Theme ? "catppuccin-macchiato",
           polarity ? "dark",
@@ -50,7 +48,6 @@
         nix-darwin.lib.darwinSystem {
           specialArgs = {
             inherit inputs user;
-            # Pass variables to System modules
             inherit base16Theme polarity catppuccin;
           };
           modules = [
@@ -58,8 +55,6 @@
             {
               nixpkgs.hostPlatform = "aarch64-darwin";
 
-              # 🟢 ALLOW UNFREE GLOBALLY
-              # This ensures VS Code, Discord, and others work on ALL hosts.
               nixpkgs.config.allowUnfree = true;
 
               nixpkgs.overlays = [
@@ -67,6 +62,14 @@
               ];
             }
             ./hosts/${hostname}/local-packages.nix
+
+            # Import smart if the host-specific settings file exists
+            (
+              if builtins.pathExists ./hosts/${hostname}/host-settings.nix then
+                ./hosts/${hostname}/host-settings.nix
+              else
+                { }
+            )
 
             # 2. Stylix System Module
             inputs.stylix.darwinModules.stylix
@@ -123,9 +126,13 @@
           hostname = "Krits-MacBook-Pro";
           user = "krit";
           monitorConfig = [ "eDP-1,3024x1964,1" ]; # The identifier is always eDP-1 on MacBooks (at least i think)
+          base16Theme = "nord";
+          polarity = "dark";
+          catppuccin = false;
+          catppuccinFlavor = "macchiato";
+          catppuccinAccent = "mauve";
           gitUserName = "nicolkrit999";
           gitUserEmail = "githubgitlabmain.hu5b7@passfwd.com";
-
         };
 
         # 💻 HOST 2: ROBERTA
@@ -133,7 +140,11 @@
           hostname = "MacBook-Air-di-Roberta";
           user = "krit";
           monitorConfig = [ "eDP-1,2560x1664,1" ]; # The identifier is always eDP-1 on MacBooks (at least i think)
-          catppuccinAccent = "sky"; # Custom accent
+          base16Theme = "nord";
+          polarity = "dark";
+          catppuccin = false;
+          catppuccinFlavor = "macchiato";
+          catppuccinAccent = "mauve";
           gitUserName = "nicolkrit999";
           gitUserEmail = "githubgitlabmain.hu5b7@passfwd.com";
         };

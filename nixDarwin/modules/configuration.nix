@@ -112,43 +112,4 @@
       pkgs.noto-fonts # Used in configuration.nix -> ⚠️ KEEP
       pkgs.nerd-fonts.jetbrains-mono # Used in various places -> ⚠️ KEEP
     ]);
-
-  # ---------------------------------------------------
-  # 3. HOMEBREW CONFIGURATION
-  # ---------------------------------------------------
-  homebrew = {
-    enable = true;
-    onActivation = {
-      autoUpdate = true;
-      upgrade = true;
-      cleanup = "uninstall";
-    };
-
-    taps = [ ];
-
-    brews = [
-      "cava" # Terminal audio visualizer
-      "nixfmt" # Nix code formatter
-      "pipes-sh" # Terminal pipes animation
-
-    ];
-
-    casks = [
-      "alacritty" # Terminal emulator
-      "font-jetbrains-mono-nerd-font" # Nerd font for coding
-      "github" # GitHub desktop client
-      "intellij-idea-ce" # Community edition of IntelliJ IDEA
-      "iterm2" # Terminal emulator
-      "kitty" # Terminal emulator
-      "microsoft-teams" # Communication platform
-      "obs" # Open Broadcaster Software
-      "only-switch" # System tray icons manager
-      "pearcleaner" # App cleaner for macOS
-      "pycharm-ce" # Community edition of PyCharm
-      "signal" # Encrypted messaging app
-      "telegram" # Messaging app
-      "vlc" # Media player
-
-    ];
-  };
 }
