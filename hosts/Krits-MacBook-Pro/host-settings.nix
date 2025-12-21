@@ -60,7 +60,6 @@
       FXEnableExtensionChangeWarning = true; # Disable warning when changing file extensions
       ShowStatusBar = true; # Show status bar at bottom of Finder windows
       ShowPathbar = true; # Show path bar at bottom of Finder windows
-      WarnOnEmptyTrash = true; # Toggle warning before emptying trash
 
       # Preferred view style in Finder windows
       # "icnv" = Icon View
