@@ -10,7 +10,6 @@
     "Microsoft PowerPoint" = 462062816;
     "Microsoft Excel" = 462058435;
     "HP Print" = 1474276998;
-    "Grammarly" = 1462114288;
     "DaVinci Resolve" = 571213070;
     "Keynote" = 409183694;
     "Numbers" = 409203825;
