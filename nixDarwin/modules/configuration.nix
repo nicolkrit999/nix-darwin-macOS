@@ -107,12 +107,7 @@
     ])
     # 2. 🔗 Connect the second list using ++
     ++ (with pkgs.kdePackages; [
-      # ---------------------------------------------------
-      # 🐬 KDE PACKAGES
-      # ---------------------------------------------------
       qtsvg # SVG Icon support
-
-      # Fonts support (Using pkgs because they are not in kdePackages)
       pkgs.inter # Used in stylix.nix -> ⚠️ KEEP
       pkgs.noto-fonts # Used in configuration.nix -> ⚠️ KEEP
       pkgs.nerd-fonts.jetbrains-mono # Used in various places -> ⚠️ KEEP
