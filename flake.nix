@@ -68,6 +68,14 @@
             }
             ./hosts/${hostname}/local-packages.nix
 
+            # Import smart if the host-specific settings file exists
+            (
+              if builtins.pathExists ./hosts/${hostname}/host-settings.nix then
+                ./hosts/${hostname}/host-settings.nix
+              else
+                { }
+            )
+
             # 2. Stylix System Module
             inputs.stylix.darwinModules.stylix
 

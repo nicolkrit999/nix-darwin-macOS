@@ -10,6 +10,7 @@
     # -----------------------------------------------------------------------
     # 🖥️ DESKTOP APPLICATIONS
     # -----------------------------------------------------------------------
+    notion-app # All-in-one workspace app
 
     # -----------------------------------------------------------------------------------
     # 🖥️ CLI UTILITIES
@@ -64,4 +65,42 @@
     # -----------------------------------------------------------------------
 
   ];
+
+  # 3. HOMEBREW CONFIGURATION
+  # ---------------------------------------------------
+  homebrew = {
+    enable = true;
+    onActivation = {
+      autoUpdate = true;
+      upgrade = true;
+      cleanup = "uninstall";
+    };
+
+    taps = [ ];
+
+    brews = [
+      "pipes-sh"
+      "nixfmt"
+      "cava"
+
+    ];
+
+    casks = [
+      "pycharm-ce"
+      "intellij-idea-ce"
+      "alacritty"
+      "discord"
+      "kitty"
+      "iterm2"
+      "pearcleaner"
+      "only-switch"
+      "font-jetbrains-mono-nerd-font"
+      "obs"
+      "telegram"
+      "microsoft-teams"
+      "signal"
+      "vlc"
+      "github"
+    ];
+  };
 }
