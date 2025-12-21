@@ -106,10 +106,6 @@
         SortColumn = "CPUUsage"; # Sorts processes by CPU usage by default.
         SortDirection = 0; # Sorts 0 = descending, 1 = ascending
       };
-      "com.apple.Safari" = {
-        UniversalSearchEnabled = false; # Disables sending search queries to Apple for "Siri Suggestions".
-        SuppressSearchSuggestions = true; # Stops Safari from suggesting search terms (privacy/cleanliness).
-      };
       "com.apple.AdLib" = {
         allowApplePersonalizedAdvertising = false; # Toggle targeted ads in Apple News/App Store.
       };
