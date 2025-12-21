@@ -36,6 +36,7 @@
       fzf # Command-line fuzzy finder (ls zhs aliases depend on this) -> ⚠️ KEEP
       htop # Interactive process viewer (keep to kill processes easily) -> ⚠️ KEEP
       nh # CLI help for Nix package management (used in zsh.nix) -> ⚠️ KEEP
+      stow # Dotfile symlikn manager -> ⚠️ KEEP
       ueberzugpp # Image previews for terminal (used by Ranger backend) -> ⚠️ KEEP
       nixfmt-rfc-style # Nix code formatter with RFC style (used in flake.nix) -> ⚠️ KEEP
 
