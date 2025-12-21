@@ -3,6 +3,7 @@
   # -----------------------------------------------------------------------
   # 🍎 MAC APP STORE APPS (Host Specific)
   # -----------------------------------------------------------------------
+  # The app can only be installed if they are purchased/downloaded once manually from the app store
   homebrew.masApps = {
     "Whatsapp" = 310633997;
     "Microsoft Word" = 462054704;
