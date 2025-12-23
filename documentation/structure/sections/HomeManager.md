@@ -39,6 +39,14 @@ The primary browser configuration.
 Git version control settings.
 * **User-identity:** It takes the github username and e-mail from `flake.nix` (hosts-specific)
 
+
+### `kitty.nix`
+Terminal emulator configuration.
+* **Theming:** Uses the base16 themes or catppuccin official nix repo based on the user choice in `flake.nix`
+* **Font:** Set the font weight (regular/bold, etc) and it chooses the font size in a smart way based on the size of the user monitors
+  * In a multi-monitor setup it takes the first one of the monitors list  
+
+
 ### `lazygit.nix`
 Configuration for the terminal UI for Git.
 * **Theming:** Uses the base16 themes or catppuccin official nix repo based on the user choice in `flake.nix`

@@ -34,9 +34,14 @@ Categories can be navigated with the links below:
 │
 ├── hosts/                           # 🖥️ Host-specific data
 │   ├── Krits-MacBook-Pro/
-│   │   └── local-packages.nix       # Packages specific to this Pro
+│   │    ├── host-settings.nix       # Various settings
+│   │    ├── local-packages.nix      # Packages specific to this Pro
+│   │    └── variables.nix           # Host-specific variables
+│   │
 │   └── MacBook-Air-di-Roberta/
-│       └── local-packages.nix       # Packages specific to this Air
+│        ├── host-settings.nix       # Various settings
+│        ├── local-packages.nix      # Packages specific to this Pro
+│        └── variables.nix           # Host-specific variables
 │
 └── nixDarwin/                       # ⚙️ System-wide Modules (Root)
     └── modules/

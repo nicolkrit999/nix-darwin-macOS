@@ -11,7 +11,9 @@
     - [1. Install Nix](#1-install-nix)
   - [2. Clone the Repository](#2-clone-the-repository)
   - [3. Create Your Host Configuration](#3-create-your-host-configuration)
-  - [4. Configure flake.nix](#4-configure-flakenix)
+  - [4. Configure the host-specific aspects](#4-configure-the-host-specific-aspects)
+    - [local-packages.nix](#local-packagesnix)
+    - [variables.nix](#variablesnix)
   - [5. First Time Build](#5-first-time-build)
   - [🔄 Daily Usage](#-daily-usage)
   - [❓ Troubleshooting](#-troubleshooting)
@@ -94,17 +96,58 @@ Open `hosts/<Your-Hostname>/local-packages.nix` to add or remove software specif
 
 
 
-## 4. Configure flake.nix
+## 4. Configure the host-specific aspects
 
-Edit `flake.nix` to define your host.
+### local-packages.nix
+This file contains packages that are installed only for that specific hosts.
+- Change accordingly
 
 
-**Customize Variables:**
-*   **hostname** Needs to match the one found
-*   **user:** needs to match the mac user.
-*   **monitorConfig** 
-*   **monitorConfig:** Used for font scaling logic in Alacritty.
-*   
+### variables.nix
+This file contains aspects that can change between hosts, such as theming
+- Make sure to define every variable otherwise the build would fail
+
+
+**Variables to customize:**
+*   **hostname**: Needs to match the one found
+*   **user:**: needs to match the mac user.
+*   **monitorConfig:**: Used for font scaling logic in Alacritty.
+*   **base16Theme**: The general theming, it will be applied to all modules enabled in `stylix.nix`
+*   **polarity**: Whatever the general theme should be light/dark. It should make sense with the chosen base16Theme
+*   **catppuccin**: Whatever to enable catppuccin or not
+*   **catppuccinFlavor**: Which flavor to choose
+    * latte/frappe/macchiato/mocha
+*  **catppuccinAccent**:** Refer to [palette](https://catppuccin.com/palette/)
+*  **gitUserName**: Username of github account
+*  **gitUserEmail**: E-Mail of github account   
+
+An example:
+```nix
+{
+  # 💻 HOST IDENTITY
+  hostname = "Krits-MacBook-Pro";
+  user = "krit";
+  system = "aarch64-darwin";
+
+  # ⚙️ SYSTEM SETTINGS
+  monitorConfig = [ "eDP-1,3024x1964,1" ];
+
+  # 🎨 THEMING
+  base16Theme = "nord";
+  polarity = "dark";
+
+  # Catppuccin Logic (Disable if using Nord)
+  catppuccin = false;
+  catppuccinFlavor = "macchiato"; # Unused if false
+  catppuccinAccent = "mauve";
+
+  # 🐙 GIT CONFIG
+  gitUserName = "nicolkrit999";
+  gitUserEmail = "githubgitlabmain.hu5b7@passfwd.com";
+}
+
+```
+
 
 
 ## 5. First Time Build

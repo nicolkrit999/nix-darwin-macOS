@@ -15,7 +15,26 @@ This directory contains the configurations for specific machines. Each folder na
 ### A note about hardware-configuration.nix
 In this setup it is not needed because telling that the architecture is `aarch64-darwin` is enough
 
-Each hosts folder should contain this file:
+Each hosts folder should contain these 3 files:
+
+* ### `host-settings.nix` ###
+This file is a centralized place for settings that are unique to a specific machine (e.g., `Krits-MacBook-Pro`).
+
+* **Mac App Store Apps (`masApps`):** Lists applications to be installed from the Mac App Store. These are defined by their App Store ID.
+* *Note:* You must be signed into the App Store for these to install.
+
+
+* **System Defaults:** Customizes macOS behavior specifically for this machine.
+* **Dock:** Settings like position, size, auto-hide, and persistent app icons.
+* **Finder:** Settings like showing file extensions, default search scope, and desktop icons.
+* **Global Settings:** Keyboard repeat rate, scroll bars, and window behavior.
+* **Custom Preferences:** Advanced tweaks for specific apps or system behaviors that aren't exposed as top-level Nix options.
+
+
 * ### `local-packages.nix` ###
 * Some packages may not be needed in all the machines. For example why installing developing tools when not programming
   * When the package contains -> ⚠️ KEEP it means that for me they are necessary. Another person if it does not need that specific package it is free to remove it
+
+
+* ### `variables.nix` ###
+* It defines the specific variables for that certain host
