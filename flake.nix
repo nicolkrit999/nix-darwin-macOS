@@ -27,44 +27,47 @@
       nixpkgs,
       nix-darwin,
       home-manager,
-      stylix,
-      catppuccin,
       ...
     }@inputs:
     let
+      # 📝 LIST OF HOSTNAMES TO BUILD
+      # Add new machines here. Ensure they have a matching folder in ./hosts/
+      hostNames = [
+        "Krits-MacBook-Pro"
+        "MacBook-Air-di-Roberta"
+      ];
+
+      # 🛠️ SYSTEM BUILDER FUNCTION
       mkSystem =
-        {
-          hostname,
-          user,
-          monitorConfig ? [ ], # Default to empty list
-          base16Theme ? "catppuccin-macchiato",
-          polarity ? "dark",
-          catppuccin ? false,
-          catppuccinFlavor ? "macchiato",
-          catppuccinAccent ? "mauve",
-          gitUserName ? "",
-          gitUserEmail ? "",
-	  term ? "kitty",
-        }:
+        hostname:
+        let
+          # 1. Import variables from the host folder
+          vars = import ./hosts/${hostname}/variables.nix;
+        in
         nix-darwin.lib.darwinSystem {
+          # Pass variables to modules via specialArgs
           specialArgs = {
-            inherit inputs user;
-            inherit base16Theme polarity catppuccin term;
+            inherit inputs;
+            inherit (vars)
+              user
+              base16Theme
+              polarity
+              catppuccin
+              ;
           };
+
           modules = [
-            # 1. Platform & Host Specifics
+            # 🟢 Platform Definition (From variables)
             {
-              nixpkgs.hostPlatform = "aarch64-darwin";
-
+              nixpkgs.hostPlatform = vars.system;
               nixpkgs.config.allowUnfree = true;
-
-              nixpkgs.overlays = [
-                inputs.nix-index-database.overlays.nix-index
-              ];
+              nixpkgs.overlays = [ inputs.nix-index-database.overlays.nix-index ];
             }
+
+            # 🟢 Host Specific Packages
             ./hosts/${hostname}/local-packages.nix
 
-            # Import smart if the host-specific settings file exists
+            # 🟢 Host Specific Settings (Import if file exists)
             (
               if builtins.pathExists ./hosts/${hostname}/host-settings.nix then
                 ./hosts/${hostname}/host-settings.nix
@@ -72,47 +75,56 @@
                 { }
             )
 
-            # 2. Stylix System Module
+            # 🟢 System Modules
             inputs.stylix.darwinModules.stylix
-
-            # 3. System Configuration
             ./nixDarwin/modules
 
-            # 4. Inline System Settings
+            # 🟢 User Configuration (Darwin System User)
             (
               { pkgs, ... }:
               {
                 networking.hostName = hostname;
                 networking.computerName = hostname;
-                users.users.${user}.home = "/Users/${user}";
+                users.users.${vars.user}.home = "/Users/${vars.user}";
                 system.stateVersion = 4;
-                system.primaryUser = user;
+                system.primaryUser = vars.user;
                 nix.enable = false;
               }
             )
 
-            # 5. Home Manager Configuration
+            # 🟢 Home Manager Configuration
             home-manager.darwinModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = "backup";
 
+              # Pass variables to Home Manager modules
               home-manager.extraSpecialArgs = {
-                inherit inputs user;
-                inherit base16Theme polarity;
-                # Map catppuccin to catppuccin for modules
-                catppuccin = catppuccin;
-                inherit catppuccinFlavor catppuccinAccent;
-                inherit gitUserName gitUserEmail;
-                monitors = monitorConfig;
+                inherit inputs;
+                inherit (vars)
+                  user
+                  base16Theme
+                  polarity
+                  catppuccin
+                  catppuccinFlavor
+                  catppuccinAccent
+                  ;
+                inherit (vars)
+                  gitUserName
+                  gitUserEmail
+                  wallpaperURL
+                  wallpaperSHA256
+                  ;
+                monitors = vars.monitorConfig;
               };
 
-              home-manager.users.${user} = {
+              home-manager.users.${vars.user} = {
                 imports = [
                   ./home-manager/modules
                   inputs.catppuccin.homeModules.catppuccin
                   inputs.stylix.homeModules.stylix
+                  inputs.nix-index-database.homeModules.nix-index
                 ];
                 home.stateVersion = "24.05";
               };
@@ -121,36 +133,11 @@
         };
     in
     {
-      darwinConfigurations = {
-        # 💻 HOST 1: KRIT
-        "Krits-MacBook-Pro" = mkSystem {
-          hostname = "Krits-MacBook-Pro";
-          user = "krit";
-          monitorConfig = [ "eDP-1,3024x1964,1" ]; # The identifier is always eDP-1 on MacBooks (at least i think)
-          base16Theme = "nord";
-          polarity = "dark";
-          catppuccin = false;
-          catppuccinFlavor = "macchiato";
-          catppuccinAccent = "mauve";
-          gitUserName = "nicolkrit999";
-          gitUserEmail = "githubgitlabmain.hu5b7@passfwd.com";
-        };
+      # 🚀 Generate Configurations Automatically
+      # This loops over 'hostNames' and calls mkSystem for each one.
+      darwinConfigurations = nixpkgs.lib.genAttrs hostNames mkSystem;
 
-        # 💻 HOST 2: ROBERTA
-        "MacBook-Air-di-Roberta" = mkSystem {
-          hostname = "MacBook-Air-di-Roberta";
-          user = "krit";
-          monitorConfig = [ "eDP-1,2560x1664,1" ]; # The identifier is always eDP-1 on MacBooks (at least i think)
-          base16Theme = "nord";
-          polarity = "dark";
-          catppuccin = false;
-          catppuccinFlavor = "macchiato";
-          catppuccinAccent = "mauve";
-          gitUserName = "nicolkrit999";
-          gitUserEmail = "githubgitlabmain.hu5b7@passfwd.com";
-        };
-      };
-
+      # Formatter definition
       formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.nixfmt-rfc-style;
     };
 }
