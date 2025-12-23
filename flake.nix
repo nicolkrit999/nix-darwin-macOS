@@ -109,8 +109,6 @@
                   catppuccin
                   catppuccinFlavor
                   catppuccinAccent
-                  ;
-                inherit (vars)
                   gitUserName
                   gitUserEmail
                   ;
