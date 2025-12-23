@@ -113,8 +113,6 @@
                 inherit (vars)
                   gitUserName
                   gitUserEmail
-                  wallpaperURL
-                  wallpaperSHA256
                   ;
                 monitors = vars.monitorConfig;
               };
