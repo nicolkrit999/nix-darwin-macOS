@@ -37,6 +37,7 @@
         "/Applications/WhatsApp.app"
         "/Applications/kitty.app"
         "/System/Applications/Music.app"
+        "/Applications/UGREEN NAS.app"
         "/Applications/Proton Pass.app"
         "/Applications/Discord.app"
         "/Applications/Nix Apps/Visual Studio Code.app"
