@@ -99,6 +99,7 @@
       "only-switch"
       "font-jetbrains-mono-nerd-font"
       "obs"
+      "tailscale"
       "telegram"
       "microsoft-teams"
       "signal"

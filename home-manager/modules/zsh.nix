@@ -17,9 +17,6 @@ in
     };
 
     shellAliases = {
-      # -----------------------------------------------------
-      # 🍎 MAC SPECIFIC ALIASES (Moved from home.nix)
-      # -----------------------------------------------------
       brew-upd = "brew update && brew upgrade";
       brew-upd-res = "brew update-reset";
       brew-inst = "brew install";
@@ -49,11 +46,12 @@ in
 
       # Modern Replacements
       cat = "bat";
+      pcat = "bat -p";
       ls = "eza";
     };
 
     # -----------------------------------------------------
-    # ⚙️ INIT SCRIPT (Your Exact Logic)
+    # ⚙️ INIT SCRIPT
     # -----------------------------------------------------
     initContent = ''
       # 1. Source the GENERAL ZSHRC (The one you use on Linux)

@@ -31,7 +31,6 @@
     }@inputs:
     let
       # 📝 LIST OF HOSTNAMES TO BUILD
-      # Add new machines here. Ensure they have a matching folder in ./hosts/
       hostNames = [
         "Krits-MacBook-Pro"
         "MacBook-Air-di-Roberta"
@@ -45,7 +44,6 @@
           vars = import ./hosts/${hostname}/variables.nix;
         in
         nix-darwin.lib.darwinSystem {
-          # Pass variables to modules via specialArgs
           specialArgs = {
             inherit inputs;
             inherit (vars)
@@ -71,6 +69,14 @@
             (
               if builtins.pathExists ./hosts/${hostname}/host-settings.nix then
                 ./hosts/${hostname}/host-settings.nix
+              else
+                { }
+            )
+
+            # 🟢 Host Specific Borg Backup Configuration (Import if file exists)
+            (
+              if builtins.pathExists ./hosts/${hostname}/borg-backup.nix then
+                ./hosts/${hostname}/borg-backup.nix
               else
                 { }
             )
@@ -130,7 +136,6 @@
     in
     {
       # 🚀 Generate Configurations Automatically
-      # This loops over 'hostNames' and calls mkSystem for each one.
       darwinConfigurations = nixpkgs.lib.genAttrs hostNames mkSystem;
 
       # Formatter definition

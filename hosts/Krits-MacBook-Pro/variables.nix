@@ -8,7 +8,7 @@
   monitorConfig = [ "eDP-1,3024x1964,1" ];
 
   # 🎨 THEMING
-  base16Theme = "nord";
+  base16Theme = "kanagawa-dragon";
   polarity = "dark";
 
   # Catppuccin Logic (Disable if using Nord)
