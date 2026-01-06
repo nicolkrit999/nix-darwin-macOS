@@ -31,6 +31,13 @@
     terminal = "screen-256color";
 
     extraConfig = ''
+      # 🖼️ YAZI IMAGE PREVIEW SUPPORT
+      set -g allow-passthrough on
+      set -ga update-environment TERM
+      set -ga update-environment TERM_PROGRAM
+
+
+
       set -as terminal-features ",alacritty*:RGB"
       set -as terminal-features ",xterm-kitty:RGB"
       set -as terminal-features ",xterm-256color:RGB"

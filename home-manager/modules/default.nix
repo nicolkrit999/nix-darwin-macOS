@@ -15,5 +15,6 @@
     ./stylix.nix
     ./tmux.nix
     ./zsh.nix
+    ./yazi
   ];
 }

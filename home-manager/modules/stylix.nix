@@ -47,6 +47,7 @@
       lazygit.enable = !catppuccin;
       starship.enable = !catppuccin;
       firefox.profileNames = [ user ];
+      yazi.enable = false;
     };
   };
 }
