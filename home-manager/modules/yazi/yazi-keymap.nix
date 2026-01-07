@@ -6,11 +6,16 @@
     # ⌨️ KEYMAP.TOML CONFIGURATION
     # -----------------------------------------------------------------------
 
+    # S = shift, C = control, A = alt
     mgr.prepend_keymap = [
       {
         on = [ "<Esc>" ];
-        run = "escape";
-        desc = "Exit visual mode, clear selection, or cancel search";
+        run = [
+          "unyank"
+          "toggle_all --state=off"
+          "escape"
+        ];
+        desc = "Clear selection, clipboard, and cancel search";
       }
       {
         on = [ "q" ];
@@ -40,19 +45,43 @@
         desc = "Previous file";
       }
       {
+        on = [ "K" ];
+        run = "arrow -5";
+        desc = "Move up five files";
+      }
+
+      {
         on = [ "j" ];
         run = "arrow 1";
         desc = "Next file";
       }
       {
+        on = [ "J" ];
+        run = "arrow 6";
+        desc = "Move down six files";
+      }
+
+      {
         on = [ "<Up>" ];
         run = "arrow -1";
         desc = "Previous file";
       }
+
+      {
+        on = [ "<S-Up>" ];
+        run = "arrow -5";
+        desc = "Move up five files";
+      }
+
       {
         on = [ "<Down>" ];
         run = "arrow 1";
         desc = "Next file";
+      }
+      {
+        on = [ "<S-Down>" ];
+        run = "arrow 5";
+        desc = "Move down five files";
       }
       {
         on = [
@@ -124,7 +153,7 @@
       {
         on = [ "<Enter>" ];
         run = "open";
-        desc = "Open selected files";
+        desc = "Enter file or directory";
       }
       {
         on = [ "y" ];
@@ -148,9 +177,10 @@
       }
       {
         on = [ "d" ];
-        run = "remove";
-        desc = "Trash selected files";
+        run = "shell 'trash-put \"$@\"'";
+        desc = "Move to Trash";
       }
+
       {
         on = [ "D" ];
         run = "remove --permanently";
@@ -192,6 +222,47 @@
         desc = "Jump to a directory via zoxide";
       }
 
+      # Plugin: ouch
+      {
+        on = [ "c" ];
+        run = "plugin ouch";
+        desc = "Compress with ouch";
+      }
+
+      # Plugin: recycle-bin
+      {
+        on = [
+          "R"
+          "b"
+        ];
+        run = "plugin recycle-bin";
+        desc = "Recycle Bin Menu";
+      }
+      {
+        on = [
+          "R"
+          "r"
+        ];
+        run = "plugin recycle-bin -- restore";
+        desc = "Trash: Restore selected";
+      }
+      {
+        on = [
+          "R"
+          "d"
+        ];
+        run = "plugin recycle-bin -- delete";
+        desc = "Trash: Delete permanently";
+      }
+      {
+        on = [
+          "R"
+          "e"
+        ];
+        run = "plugin recycle-bin -- empty";
+        desc = "Trash: Empty all";
+      }
+
       # Goto
       {
         on = [
@@ -216,6 +287,54 @@
         ];
         run = "cd ~/Downloads";
         desc = "Go ~/Downloads";
+      }
+      {
+        on = [
+          "g"
+          "D"
+        ];
+        run = "cd ~/Documents";
+        desc = "Go ~/Documents";
+      }
+      {
+        on = [
+          "g"
+          "n"
+        ];
+        run = "cd ~/nixOS";
+        desc = "Go ~/nixOS";
+      }
+      {
+        on = [
+          "g"
+          "p"
+        ];
+        run = "cd ~/Pictures";
+        desc = "Go ~/Pictures";
+      }
+      {
+        on = [
+          "g"
+          "v"
+        ];
+        run = "cd ~/Videos";
+        desc = "Go ~/Videos";
+      }
+      {
+        on = [
+          "g"
+          "."
+        ];
+        run = "cd ~/dotfiles";
+        desc = "Go ~/dotfiles";
+      }
+      {
+        on = [
+          "g"
+          "t"
+        ];
+        run = "cd ~/.local/share/Trash/files";
+        desc = "Go to Trash";
       }
       {
         on = [

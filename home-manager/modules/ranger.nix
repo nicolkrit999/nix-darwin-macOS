@@ -1,6 +1,6 @@
 {
   pkgs,
-  lib, # 🟢 1. ADDED LIB HERE
+  lib,
   ...
 }:
 {

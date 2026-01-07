@@ -4,6 +4,8 @@
   user = "krit";
   system = "aarch64-darwin";
 
+  term = "kitty";
+
   # ⚙️ SYSTEM SETTINGS
   monitorConfig = [ "eDP-1,3024x1964,1" ];
 

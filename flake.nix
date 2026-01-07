@@ -51,6 +51,7 @@
               base16Theme
               polarity
               catppuccin
+              term
               ;
           };
 
@@ -117,6 +118,7 @@
                   catppuccinAccent
                   gitUserName
                   gitUserEmail
+                  term
                   ;
                 monitors = vars.monitorConfig;
               };

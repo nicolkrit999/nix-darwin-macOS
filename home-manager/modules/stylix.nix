@@ -1,5 +1,6 @@
 {
   pkgs,
+  lib,
   base16Theme,
   polarity,
   catppuccin,
@@ -47,7 +48,7 @@
       lazygit.enable = !catppuccin;
       starship.enable = !catppuccin;
       firefox.profileNames = [ user ];
-      yazi.enable = false;
+      yazi.enable = lib.mkForce false;
     };
   };
 }

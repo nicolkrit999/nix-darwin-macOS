@@ -1,11 +1,37 @@
-{ pkgs, ... }:
 {
+  pkgs,
+  lib,
+  term,
+  ...
+}:
+{
+  imports = [
+    ./init-lua.nix
+  ];
+
   programs.yazi = {
     enable = true;
     enableZshIntegration = true;
 
+    # 🛠️ WRAP YAZI TO FIX PATH ISSUES (Error 127)
+    # This forces Yazi to see 'trash-cli' without manual Lua edits.
+    package = pkgs.symlinkJoin {
+      name = "yazi";
+      paths = [ pkgs.yazi ];
+      buildInputs = [ pkgs.makeWrapper ];
+      postBuild = ''
+        wrapProgram $out/bin/yazi \
+          --prefix PATH : "${
+            lib.makeBinPath [
+              pkgs.trash-cli
+              pkgs.exiftool
+            ]
+          }"
+      '';
+    };
+
     # -----------------------------------------------------------------------
-    # ⚙️ YAZI.TOML CONFIGURATION
+    # ⚙️ SETTINGS
     # -----------------------------------------------------------------------
     settings = {
       mgr = {
@@ -18,14 +44,14 @@
         sort_sensitive = false;
         sort_reverse = false;
         sort_dir_first = true;
-        sort_translit = false;
-        linemode = "none";
+        linemode = "custom_metadata";
         show_hidden = false;
         show_symlink = true;
-        scrolloff = 5;
+        scrolloff = 20;
         mouse_events = [
           "click"
           "scroll"
+          "drag"
         ];
         title_format = "Yazi: {cwd}";
       };
@@ -33,13 +59,32 @@
       preview = {
         wrap = "no";
         tab_size = 2;
-        max_width = 600;
-        max_height = 900;
-        cache_dir = "";
-        image_delay = 30;
-        image_filter = "triangle";
-        image_quality = 75;
-        ueberzug_scale = 1;
+        max_width = 1920;
+        max_height = 1080;
+        cache_dir = ""; # Use default macOS cache
+        image_delay = 5;
+        image_filter = "lanczos3";
+        image_quality = 90;
+        image_preview_method =
+          if
+            builtins.elem term [
+              "kitty"
+              "ghostty"
+              "wezterm"
+              "iterm2"
+            ]
+          then
+            "kitty"
+          else if
+            builtins.elem term [
+              "foot"
+              "blackbox"
+            ]
+          then
+            "sixel"
+          else
+            "ueberzug";
+        ueberzug_scale = 0.66;
         ueberzug_offset = [
           0
           0
@@ -51,87 +96,37 @@
       opener = {
         edit = [
           {
-            run = ''''${EDITOR:-vi} "$@"'';
-            desc = "$EDITOR";
+            run = ''$EDITOR "$@"'';
+            desc = "Edit";
             block = true;
-            for = "unix";
-          }
-          {
-            run = ''code "%*"'';
-            desc = "code";
-            orphan = true;
-            for = "windows";
-          }
-          {
-            run = ''code -w "%*"'';
-            desc = "code (block)";
-            block = true;
-            for = "windows";
           }
         ];
         play = [
           {
-            run = ''xdg-open "$@"'';
-            desc = "Play";
-            for = "linux";
-          }
-          {
             run = ''open "$@"'';
             desc = "Play";
-            for = "macos";
-          }
-          {
-            run = ''start "" "%1"'';
-            desc = "Play";
-            orphan = true;
-            for = "windows";
           }
         ];
         open = [
           {
-            run = ''xdg-open "$@"'';
-            desc = "Open";
-            for = "linux";
-          }
-          {
             run = ''open "$@"'';
             desc = "Open";
-            for = "macos";
-          }
-          {
-            run = ''start "" "%1"'';
-            desc = "Open";
-            orphan = true;
-            for = "windows";
           }
         ];
         reveal = [
           {
-            run = ''xdg-open "''$(dirname "''$1")"'';
-            desc = "Reveal";
-            for = "linux";
-          }
-          {
             run = ''open -R "''$1"'';
             desc = "Reveal";
-            for = "macos";
-          }
-          {
-            run = ''explorer /select,"%1"'';
-            desc = "Reveal";
-            orphan = true;
-            for = "windows";
           }
           {
             run = ''clear; exiftool "''$1"; echo "Press enter to exit"; read _'';
             desc = "Show EXIF";
             block = true;
-            for = "unix";
           }
         ];
         extract = [
           {
-            run = ''ya pub extract --list "$@"'';
+            run = ''ouch d -y "$@"'';
             desc = "Extract here";
           }
         ];
@@ -152,7 +147,6 @@
           {
             name = "*/";
             use = [
-              "edit"
               "open"
               "reveal"
             ];
@@ -221,13 +215,13 @@
       };
 
       tasks = {
-        micro_workers = 10;
-        macro_workers = 10;
+        micro_workers = 20;
+        macro_workers = 20;
         bizarre_retry = 3;
-        image_alloc = 536870912;
+        image_alloc = 1073741824;
         image_bound = [
-          10000
-          10000
+          20000
+          20000
         ];
         suppress_preload = false;
       };
@@ -253,6 +247,27 @@
     };
   };
 
+  # 📦 INSTALL PLUGINS (Nix Way)
+  xdg.configFile."yazi/plugins/ouch".source = pkgs.fetchFromGitHub {
+    owner = "ndtoan96";
+    repo = "ouch.yazi";
+    rev = "v0.7.0";
+    sha256 = "03fjnga97bvrblvf53w7lp0k9ikkd81pa49qc0np7fg3fc8nlhyn";
+  };
+
+  xdg.configFile."yazi/plugins/recycle-bin".source = pkgs.fetchFromGitHub {
+    owner = "uhs-robert";
+    repo = "recycle-bin.yazi";
+    rev = "main";
+    sha256 = "00yh6w3f088dvhcb2464l86wxq7202bzgxjdnwi0i9cc1apgc54z";
+  };
+
+  # 🛠️ CREATE TRASH FOLDERS
+  home.activation.createXdgTrash = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    mkdir -p ~/.local/share/Trash/files
+    mkdir -p ~/.local/share/Trash/info
+  '';
+
   home.packages = with pkgs; [
     fzf
     zoxide
@@ -261,8 +276,15 @@
     ffmpeg
     poppler
     jq
+    zip
+    unzip
     p7zip
+    gnutar
     ueberzugpp
     chafa
+    xdg-utils
+    exiftool
+    ouch
+    trash-cli
   ];
 }
