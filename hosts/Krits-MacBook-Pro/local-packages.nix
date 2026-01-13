@@ -85,7 +85,6 @@
       "pipes-sh"
       "nixfmt"
       "cava"
-
     ];
 
     casks = [
@@ -99,7 +98,7 @@
       "only-switch"
       "font-jetbrains-mono-nerd-font"
       "obs"
-      "tailscale"
+      "tailscale-app"
       "telegram"
       "microsoft-teams"
       "signal"
