@@ -1,0 +1,34 @@
+
+# Main sops config
+keys:
+  # ---------------------------------------------------------------
+  # 👤 Users (Admins)
+  # ---------------------------------------------------------------
+  - &krit age1qxyp5wzwhjs4tq633gtg2d25czdgwf6rxuppasshgf4mhlu37etq909x6t
+
+  # ---------------------------------------------------------------
+  # 🖥️ Hosts (Machines)
+  # ---------------------------------------------------------------
+  - &Krits-MacBook-Pro age14q0q9ulmz3shshr7vqfh37w0udz74uyv6xf6uywgavgsqfnf2yhqtyzkcj
+
+creation_rules:
+  # ---------------------------------------------------------------
+  # 🔒 Secrets for "Krits-MacBook-Pro"
+  # Any file inside hosts/Krits-MacBook-Pro/ ending in secrets-sops.yaml will use these keys
+  # ---------------------------------------------------------------
+  - path_regex: hosts/Krits-MacBook-Pro/.*secrets-sops\.yaml$
+    key_groups:
+      - age:
+          - *krit # You can decrypt (user "krit")
+          - *Krits-MacBook-Pro # The machine can decrypt (hostname "Krits-MacBook-Pro")
+
+  # ---------------------------------------------------------------
+  # 🔒 Common rules for user "krit"
+  # Matches any "krit-common-secrets-sops.yaml" inside the "common" folder
+  # ---------------------------------------------------------------
+  - path_regex: common/krit-common-secrets-sops.yaml$
+    key_groups:
+      - age:
+          - *krit # You can decrypt (user krit)
+          - *Krits-MacBook-Pro # Desktop (Krits-MacBook-Pro)
+

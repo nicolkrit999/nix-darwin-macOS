@@ -1,17 +1,14 @@
 {
   pkgs,
   lib,
-  base16Theme,
-  polarity,
-  catppuccin,
-  user,
+  vars,
   ...
 }:
 {
   stylix = {
     enable = true;
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/${base16Theme}.yaml";
-    polarity = polarity;
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/${vars.base16Theme}.yaml";
+    polarity = vars.polarity;
 
     opacity = {
       applications = 1.0;
@@ -20,7 +17,6 @@
       popups = 1.0;
     };
 
-    # ... fonts and targets ...
     fonts = {
       monospace = {
         package = pkgs.nerd-fonts.jetbrains-mono;
@@ -44,11 +40,12 @@
 
     targets = {
       neovim.enable = false;
-      bat.enable = !catppuccin;
-      lazygit.enable = !catppuccin;
-      starship.enable = !catppuccin;
-      firefox.profileNames = [ user ];
-      yazi.enable = lib.mkForce false;
-    };
+
+      bat.enable = !vars.catppuccin;
+      lazygit.enable = !vars.catppuccin;
+      starship.enable = !vars.catppuccin;
+    }
+    // (lib.optionalAttrs (vars.stylixExclusions != null) vars.stylixExclusions);
+
   };
 }

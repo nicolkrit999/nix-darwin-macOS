@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
   imports = [
-    ./configuration.nix
+    ./common-configuration.nix
     ./nix.nix
   ];
 }

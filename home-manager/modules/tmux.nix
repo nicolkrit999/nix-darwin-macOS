@@ -1,27 +1,22 @@
 {
   pkgs,
   lib,
-  catppuccin,
-  catppuccinFlavor,
-  catppuccinAccent,
+  vars,
   ...
 }:
 {
   # -----------------------------------------------------------------------
   # 🎨 CATPPUCCIN THEME
   # -----------------------------------------------------------------------
-  catppuccin.tmux.enable = catppuccin;
-  catppuccin.tmux.flavor = catppuccinFlavor;
+  catppuccin.tmux.enable = vars.catppuccin;
+  catppuccin.tmux.flavor = vars.catppuccinFlavor;
 
-  catppuccin.tmux.extraConfig = lib.mkIf catppuccin ''
+  catppuccin.tmux.extraConfig = lib.mkIf vars.catppuccin ''
     set -g @catppuccin_window_status_style "rounded"
     set -g @catppuccin_status_modules_right "directory session user host"
-    set -g @catppuccin_window_current_fill "${catppuccinAccent}"
+    set -g @catppuccin_window_current_fill "${vars.catppuccinAccent}"
   '';
 
-  # -----------------------------------------------------------------------
-  # 🧇 PROGRAM: TMUX
-  # -----------------------------------------------------------------------
   programs.tmux = {
     enable = true;
     baseIndex = 1;
@@ -31,13 +26,12 @@
     terminal = "screen-256color";
 
     extraConfig = ''
-      # 🖼️ YAZI IMAGE PREVIEW SUPPORT
+      # YAZI IMAGE PREVIEW SUPPORT
       set -g allow-passthrough on
       set -ga update-environment TERM
       set -ga update-environment TERM_PROGRAM
 
-
-
+      # Enable RGB colors in terminal emulators that support it
       set -as terminal-features ",alacritty*:RGB"
       set -as terminal-features ",xterm-kitty:RGB"
       set -as terminal-features ",xterm-256color:RGB"
@@ -45,7 +39,7 @@
       bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel "wl-copy"
 
       # --- CUSTOM BINDINGS (Alt/Meta based) ---
-      bind -n M-r source-file ~/.config/tmux/tmux.conf \; display "Reloaded!"
+      bind -n M-R source-file ~/.config/tmux/tmux.conf \; display "Reloaded!"
       bind C-p previous-window 
       bind C-n next-window
 
@@ -73,13 +67,14 @@
       bind -n M-S-Down resize-pane -D 3
 
       # Splitting
-      bind -n M-s split-window -v
-      bind -n M-v split-window -h
+      bind -n M-v split-window -h -c "#{pane_current_path}"
+      bind -n M-h split-window -v -c "#{pane_current_path}"
+
+      # Sessions management
+      bind -n M-d detach-client
+      bind -n M-S command-prompt -p "New Session Name:" "new-session -s '%%'"
 
       # --- PRODUCTIVITY SHORTCUTS ---
-      bind -n M-o new-window -c ~/para "nvim -c 'Telescope find_files' '0 Inbox/todolist.md'"
-      bind -n M-f new-window -c ~/flake "nvim -c 'Telescope find_files' flake.nix"
-      bind -n M-n new-window -c ~/.config/nvim "nvim -c 'Telescope find_files' init.lua"
       bind -n M-Enter new-window
       bind -n M-c kill-pane
       bind -n M-q kill-window

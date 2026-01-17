@@ -3,14 +3,19 @@
   hostname = "Krits-MacBook-Pro";
   user = "krit";
   system = "aarch64-darwin";
+  darwinStateVersion = 4; # Do not change unless it's a new pc. Keep it as integer
+  homeStateVersion = "25.11"; # Do not change unless it's a new pc
+
+  shell = "fish";
 
   term = "kitty";
-
-  # ⚙️ SYSTEM SETTINGS
-  monitorConfig = [ "eDP-1,3024x1964,1" ];
+  editor = "neovim";
+  browser = "firefox";
+  fileManager = "yazi";
+  uid = 501;
 
   # 🎨 THEMING
-  base16Theme = "kanagawa-dragon";
+  base16Theme = "rose-pine-moon";
   polarity = "dark";
 
   # Catppuccin Logic (Disable if using Nord)
