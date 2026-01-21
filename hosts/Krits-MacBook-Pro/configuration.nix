@@ -85,6 +85,7 @@
     "Numbers" = 409203825;
     "Pages" = 409201541;
     "Kindle" = 302584613;
+    "geogebra" = 1182481622;
   };
 
   # -----------------------------------------------------------------------
@@ -104,6 +105,7 @@
       # Persistent Apps (Your common dock file logic goes here)
       persistent-apps = [
         "/Applications/Comet.app"
+        "/Applications/Firefox.app"
         "/Applications/WhatsApp.app"
         "/Applications/kitty.app"
         "/System/Applications/Music.app"

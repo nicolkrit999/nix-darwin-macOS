@@ -14,7 +14,6 @@ with pkgs;
   cppcheck
   doxygen
   gtest
-  jetbrains.clion
   lcov
   vcpkg
   vcpkg-tool

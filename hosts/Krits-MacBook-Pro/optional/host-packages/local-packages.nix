@@ -83,7 +83,6 @@
 
     brews = [
       "pipes-sh"
-      "nixfmt"
       "cava"
     ];
 
@@ -98,6 +97,7 @@
       "only-switch"
       "font-jetbrains-mono-nerd-font"
       "obs"
+      "firefox"
       "tailscale-app"
       "telegram"
       "microsoft-teams"

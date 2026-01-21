@@ -18,5 +18,4 @@ with python.pkgs;
 
   # 3. TOOLS (static)
   pkgs.pyright
-  pkgs.jetbrains.pycharm-oss
 ]
