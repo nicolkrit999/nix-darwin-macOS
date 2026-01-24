@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 let
   # ---------------------------------------------------------
@@ -72,7 +67,7 @@ let
 
     # Dev & Repos
     "/Users/krit/nixOS"
-    "/Users/krit/nix-darwin-macOS"
+    "/Users/krit/nicolkrit999"
     "/Users/krit/dotfiles"
     "/Users/krit/developing-projects"
     "/Users/krit/tools"
@@ -125,8 +120,7 @@ let
     "/Users/krit/.CFUserTextEncoding"
     "/Users/krit/com.visualstudio.code.tunnel.plist"
   ];
-in
-{
+in {
   # 1. Install Borgmatic
   environment.systemPackages = [ pkgs.borgmatic ];
 
@@ -142,7 +136,10 @@ in
           label: nas-repo
 
       exclude_patterns:
-        ${builtins.concatStringsSep "\n        " (map (x: "- \"${x}\"") excludes)}
+        ${
+          builtins.concatStringsSep "\n        "
+          (map (x: ''- "${x}"'') excludes)
+        }
 
     storage:
       compression: auto,zstd
@@ -180,12 +177,8 @@ in
         BORG_PASSCOMMAND = "cat ${passphraseFile}";
         # Explicitly set PATH so it finds ssh, cat, etc.
         PATH = "${
-          lib.makeBinPath [
-            pkgs.borgmatic
-            pkgs.openssh
-            pkgs.coreutils
-          ]
-        }:/usr/bin:/bin:/usr/sbin:/sbin";
+            lib.makeBinPath [ pkgs.borgmatic pkgs.openssh pkgs.coreutils ]
+          }:/usr/bin:/bin:/usr/sbin:/sbin";
       };
 
       # The Command
@@ -220,10 +213,6 @@ in
 
   services.tailscale.enable = lib.mkForce true;
 
-  sops.secrets.borg-passphrase = {
-    owner = "krit";
-  };
-  sops.secrets.borg-private-key = {
-    owner = "krit";
-  };
+  sops.secrets.borg-passphrase = { owner = "krit"; };
+  sops.secrets.borg-private-key = { owner = "krit"; };
 }

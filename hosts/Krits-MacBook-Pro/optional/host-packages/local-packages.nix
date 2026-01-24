@@ -1,5 +1,4 @@
-{ pkgs, vars, ... }:
-{
+{ pkgs, vars, ... }: {
   # ------------------------------------------------------
   # 🖥️ HOST-SPECIFIC PACKAGES (Krits-MacBook-Pro)
   # ------------------------------------------------------
@@ -45,15 +44,14 @@
     texliveFull # The complete TeX Live distribution (Note: Large download)
     universal-ctags # Tool to generate index (tags) files of source code
     zeal # Offline documentation browser
-    (pkgs.python313.withPackages (
-      ps: with ps; [
+    (pkgs.python313.withPackages (ps:
+      with ps; [
         faker # Generate fake data
         isort # Sort imports alphabetically
         pyright # Static type checker
         pylint # Source code analyzer
         setuptools # Library for packaging Python projects
-      ]
-    ))
+      ]))
 
     # -----------------------------------------------------------------------------------
     # 😂 FUN PACKAGES
@@ -81,10 +79,7 @@
 
     taps = [ ];
 
-    brews = [
-      "pipes-sh"
-      "cava"
-    ];
+    brews = [ "pipes-sh" "cava" ];
 
     casks = [
       "pycharm-ce"
@@ -97,6 +92,7 @@
       "only-switch"
       "font-jetbrains-mono-nerd-font"
       "obs"
+      "utm"
       "firefox"
       "tailscale-app"
       "telegram"

@@ -1,10 +1,4 @@
-{
-  lib,
-  pkgs,
-  vars,
-  ...
-}:
-{
+{ lib, pkgs, vars, ... }: {
   catppuccin.kitty.enable = vars.catppuccin;
   catppuccin.kitty.flavor = vars.catppuccinFlavor;
 
@@ -12,6 +6,8 @@
     enable = true;
 
     settings = {
+
+      macos_option_as_alt = "yes";
 
       background_opacity = lib.mkForce "1.0";
 
@@ -23,7 +19,8 @@
 
       enable_audio_bell = false;
 
-      mouse_hide_wait = "3.0"; # seconds of inactivity before hiding mouse cursor
+      mouse_hide_wait =
+        "3.0"; # seconds of inactivity before hiding mouse cursor
     };
   };
 }
