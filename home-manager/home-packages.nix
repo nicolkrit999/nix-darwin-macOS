@@ -1,19 +1,29 @@
-{ pkgs, pkgs-unstable, vars, ... }:
+{
+  pkgs,
+  pkgs-unstable,
+  vars,
+  lib,
+  config,
+  ...
+}:
 let
   # 🔄 TRANSLATION LAYER
-  translatedEditor = let e = vars.editor or "vscode";
-  in if e == "nvim" then "neovim" else e;
+  # Ensure these names match the 'programs.<name>' module in Home Manager
+  translatedEditor =
+    let
+      e = vars.editor or "vscode";
+    in
+    if e == "nvim" then "neovim" else e;
 
-  # 🛡️ SAFE FALLBACKS for browser, fileManager, editor
-  # If the user's choice is invalid or missing, these are installed.
+  # 🛡️ SAFE FALLBACKS
   fallbackTerm = pkgs.alacritty;
   fallbackBrowser = pkgs.brave;
   fallbackFileManager = pkgs.kdePackages.dolphin;
   fallbackEditor = pkgs.vscode;
 
-  # 🔍 PACKAGE LOOKUP FUNCTION
-  # Tries to find 'pkgs.userInput'. If not found, returns the fallback.
-  getPkg = name: fallback:
+  # 🔍 PACKAGE LOOKUP
+  getPkg =
+    name: fallback:
     if builtins.hasAttr name pkgs then
       pkgs.${name}
     else if builtins.hasAttr name pkgs.kdePackages then
@@ -21,34 +31,54 @@ let
     else
       fallback;
 
-  myTermPkg = getPkg (vars.term or "alacritty") fallbackTerm;
-  myBrowserPkg = getPkg (vars.browser or "brave") fallbackBrowser;
-  myFileManagerPkg = getPkg (vars.fileManager or "dolphin") fallbackFileManager;
-  myEditorPkg = getPkg translatedEditor fallbackEditor;
-in {
+  termName = vars.term or "alacritty";
+  myTermPkg = getPkg termName fallbackTerm;
+
+  browserName = vars.browser or "brave";
+  myBrowserPkg = getPkg browserName fallbackBrowser;
+
+  fileManagerName = vars.fileManager or "dolphin";
+  myFileManagerPkg = getPkg fileManagerName fallbackFileManager;
+
+  editorName = translatedEditor;
+  myEditorPkg = getPkg editorName fallbackEditor;
+
+  # If a program is installed with a module it's skipped to avoid build problems
+  isModuleEnabled = name: lib.attrByPath [ "programs" name "enable" ] false config;
+
+in
+{
   home.packages =
     # 1. DYNAMIC INSTALLATION
     # These are installed based on user choices in variables.nix: browser, fileManager, editor
-    [ myTermPkg myBrowserPkg myFileManagerPkg myEditorPkg ] ++ (with pkgs;
-      [
-        # 🖥️ DESKTOP APPLICATIONS
-        # -----------------------------------------------------------------------------------
+    (lib.optional (!isModuleEnabled termName) myTermPkg)
+    ++ (lib.optional (!isModuleEnabled browserName) myBrowserPkg)
+    ++ (lib.optional (!isModuleEnabled fileManagerName) myFileManagerPkg)
+    ++ (lib.optional (!isModuleEnabled editorName) myEditorPkg)
 
-        # -----------------------------------------------------------------------------------
-        # 🖥️ CLI UTILITIES
-        # -----------------------------------------------------------------------------------
+    # 2. STATIC INSTALLATION
+    # These are always installed, regardless of user choices
+    # Packages in each category are sorted alphabetically
+    # ⚠️ All these packages should be kept. The reason is indicated next to each package.
+    # If a package does not need/can't be configured with home-manager then it can be in common-configuration.nix or a host-specific configuration.nix
+    ++ (with pkgs; [
+      # 🖥️ DESKTOP APPLICATIONS
+      # -----------------------------------------------------------------------------------
 
-        # -----------------------------------------------------------------------
-        # 🪟 WINDOW MANAGER (WM) INFRASTRUCTURE
-        # -----------------------------------------------------------------------
+      # -----------------------------------------------------------------------------------
+      # 🖥️ CLI UTILITIES
+      # -----------------------------------------------------------------------------------
 
-        # -----------------------------------------------------------------------
-        # ❓ OTHER
-        # -----------------------------------------------------------------------
-      ])
+      # -----------------------------------------------------------------------
+      # 🪟 WINDOW MANAGER (WM) INFRASTRUCTURE
+      # -----------------------------------------------------------------------
+
+      # -----------------------------------------------------------------------
+      # ❓ OTHER
+      # -----------------------------------------------------------------------
+    ])
     # 4. UNSTABLE PACKAGES
-    ++ (with pkgs-unstable;
-      [
+    ++ (with pkgs-unstable; [
 
-      ]);
+    ]);
 }
