@@ -1,9 +1,1 @@
-{
-  imports = [
-    ./cli-programs
-    ./file-managers
-    ./gui-programs
-    ./terminal-emulators
-    ./utilities
-  ];
-}
+{ imports = [ ./gui-programs ./terminal-emulators ./utilities ]; }

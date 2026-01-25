@@ -21,7 +21,7 @@ in {
 
   networking.hostName = vars.hostname;
   networking.computerName = vars.hostname;
-  system.stateVersion = vars.darwinStateVersion;
+  system.stateVersion = vars.darwinStateVersion or 4;
 
   home-manager.backupFileExtension = "hm-backup";
 

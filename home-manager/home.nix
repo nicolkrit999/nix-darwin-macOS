@@ -1,25 +1,16 @@
-{
-  inputs,
-  pkgs,
-  lib,
-  vars,
-  ...
-}:
-{
+{ inputs, pkgs, lib, vars, ... }: {
   # -----------------------------------------------------------------------
   # 🔗 IMPORTS
   # -----------------------------------------------------------------------
   # Pulls in all individual program modules
-  imports = [
-    ./modules/default.nix
-    ./home-packages.nix
-  ];
+  imports = [ ./modules/default.nix ./home-packages.nix ];
 
   # -----------------------------------------------------------------------
   # 👤 USER IDENTITY
   # -----------------------------------------------------------------------
   home = {
-    stateVersion = vars.homeStateVersion; # Controls backwards compatibility logic
+    stateVersion =
+      vars.homeStateVersion or "25.11"; # Controls backwards compatibility logic
   };
 
   # -----------------------------------------------------------------------
