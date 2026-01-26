@@ -186,6 +186,10 @@ in
         "media.gmp-widevinecdm.enabled" = true;
         "media.gmp-widevinecdm.visible" = true;
 
+        # JetKVM tweaks
+        "media.peerconnection.enabled" = true;
+        "media.webrtc.hw.h264.enabled" = true;
+
         # Audio normalization
         "accessibility.typeaheadfind.enablesound" = false;
         "media.getusermedia.screensharing.allow_is_screen_content_sales" = false;
