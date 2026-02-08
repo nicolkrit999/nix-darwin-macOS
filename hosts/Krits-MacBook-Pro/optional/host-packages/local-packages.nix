@@ -1,4 +1,5 @@
-{ pkgs, vars, ... }: {
+{ pkgs, vars, ... }:
+{
   # ------------------------------------------------------
   # 🖥️ HOST-SPECIFIC PACKAGES (Krits-MacBook-Pro)
   # ------------------------------------------------------
@@ -32,6 +33,7 @@
     tree # Display directory structure as a tree
     yt-dlp # Media downloader for YouTube and other sites
     wakeonlan # Send magic packets to wake up computers remotely
+    xcodegen # Generate Xcode projects from templates
     zoxide # Fast, lightweight alternative to 'cd'
     # -----------------------------------------------------------------------------------
     # 🧑🏽‍💻 CODING
@@ -44,14 +46,15 @@
     texliveFull # The complete TeX Live distribution (Note: Large download)
     universal-ctags # Tool to generate index (tags) files of source code
     zeal # Offline documentation browser
-    (pkgs.python313.withPackages (ps:
-      with ps; [
+    (pkgs.python313.withPackages (
+      ps: with ps; [
         faker # Generate fake data
         isort # Sort imports alphabetically
         pyright # Static type checker
         pylint # Source code analyzer
         setuptools # Library for packaging Python projects
-      ]))
+      ]
+    ))
 
     # -----------------------------------------------------------------------------------
     # 😂 FUN PACKAGES
@@ -79,7 +82,10 @@
 
     taps = [ ];
 
-    brews = [ "pipes-sh" "cava" ];
+    brews = [
+      "pipes-sh"
+      "cava"
+    ];
 
     casks = [
       "pycharm-ce"
