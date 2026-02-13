@@ -113,6 +113,7 @@ in
         # Disable irritating first-run stuff
         "browser.disableResetPrompt" = true;
         "browser.download.panel.shown" = true;
+        "browser.download.autohideButton" = false;
         "browser.feeds.showFirstRunUI" = false;
         "browser.messaging-system.whatsNewPanel.enabled" = false;
         "browser.rights.3.shown" = true;
