@@ -27,35 +27,43 @@
   };
 
   outputs =
-    { self, nixpkgs, nixpkgs-unstable, nix-darwin, home-manager, ... }@inputs:
+    {
+      self,
+      nixpkgs,
+      nixpkgs-unstable,
+      nix-darwin,
+      home-manager,
+      ...
+    }@inputs:
     let
-      hostNames = nixpkgs.lib.attrNames (nixpkgs.lib.filterAttrs (name: type:
-        type == "directory"
-        && builtins.pathExists (./hosts + "/${name}/configuration.nix"))
-        (builtins.readDir ./hosts));
+      hostNames = nixpkgs.lib.attrNames (
+        nixpkgs.lib.filterAttrs (
+          name: type: type == "directory" && builtins.pathExists (./hosts + "/${name}/configuration.nix")
+        ) (builtins.readDir ./hosts)
+      );
 
       # 🛠️ SYSTEM BUILDER (Nix-Darwin)
-      makeSystem = hostname:
+      makeSystem =
+        hostname:
         let
           baseVars = import ./hosts/${hostname}/variables.nix;
           hostPath = ./hosts/${hostname};
           optionalPath = hostPath + "/optional";
           modulesPath = optionalPath + "/general-hm-modules/modules.nix";
 
-          extraVars = if builtins.pathExists modulesPath then
-            builtins.trace
-            "✅ [${hostname} System] Loading host HM Variables from: ${
-              toString modulesPath
-            }" (import modulesPath {
-              vars = baseVars;
-              lib = nixpkgs.lib;
-              pkgs = nixpkgs.pkgs;
-            })
-          else
-            builtins.trace
-            "ℹ️ [${hostname} System] No host HM Variables module found at ${
-              toString modulesPath
-            }" { };
+          extraVars =
+            if builtins.pathExists modulesPath then
+              builtins.trace "✅ [${hostname} System] Loading host HM Variables from: ${toString modulesPath}" (
+                import modulesPath {
+                  vars = baseVars;
+                  lib = nixpkgs.lib;
+                  pkgs = nixpkgs.pkgs;
+                }
+              )
+            else
+              builtins.trace
+                "ℹ️ [${hostname} System] No host HM Variables module found at ${toString modulesPath}"
+                { };
 
           hostVars = baseVars // extraVars // { inherit hostname; };
           hostHomeFile = ./hosts/${hostname}/home.nix;
@@ -65,7 +73,8 @@
             system = hostVars.system;
             config.allowUnfree = true;
           };
-        in nix-darwin.lib.darwinSystem {
+        in
+        nix-darwin.lib.darwinSystem {
           specialArgs = {
             inherit inputs pkgs-unstable;
             vars = hostVars;
@@ -75,15 +84,13 @@
             {
               nixpkgs.hostPlatform = hostVars.system;
               nixpkgs.config.allowUnfree = true;
-              nixpkgs.overlays =
-                [ inputs.nix-index-database.overlays.nix-index ];
+              nixpkgs.overlays = [ inputs.nix-index-database.overlays.nix-index ];
 
               networking.hostName = hostname;
               networking.computerName = hostname;
 
               # 🆕 DYNAMIC VARIABLES
-              system.stateVersion =
-                hostVars.darwinStateVersion; # Using variable
+              system.stateVersion = hostVars.darwinStateVersion; # Using variable
               system.primaryUser = hostVars.user;
 
               users.users.${hostVars.user} = {
@@ -94,14 +101,12 @@
 
             ./hosts/${hostname}/configuration.nix
 
-            (if builtins.pathExists optionalPath then
-              builtins.trace
-              "✅ [${hostname} System] Importing Host Optional Dir: ${
-                toString optionalPath
-              }" optionalPath
-            else
-              builtins.trace "ℹ️ [${hostname} System] No Optional Dir found."
-              { })
+            (
+              if builtins.pathExists optionalPath then
+                builtins.trace "✅ [${hostname} System] Importing Host Optional Dir: ${toString optionalPath}" optionalPath
+              else
+                builtins.trace "ℹ️ [${hostname} System] No Optional Dir found." { }
+            )
 
             inputs.stylix.darwinModules.stylix
             inputs.nix-index-database.darwinModules.nix-index
@@ -111,7 +116,7 @@
 
             home-manager.darwinModules.home-manager
             {
-              home-manager.useGlobalPkgs = true;
+              home-manager.useGlobalPkgs = false; # This solves the evaluation warning related to nixpkgs.config and/or nixpkgs.overlay in home-manager modules
               home-manager.useUserPackages = true;
 
               home-manager.sharedModules = [
@@ -125,14 +130,19 @@
               };
 
               home-manager.users.${hostVars.user} = {
-                imports = [ ./home-manager/home.nix ./home-manager/modules ]
-                  ++ (if hostHomeExists then
-                    builtins.trace
-                    "✅ [${hostname} System] Importing Host Home: ${
-                      toString hostHomeFile
-                    }" [ hostHomeFile ]
+                nixpkgs.config.allowUnfree = true; # Necessary if home-manager.userGlobalPkgs is false
+                imports = [
+                  ./home-manager/home.nix
+                  ./home-manager/modules
+                ]
+                ++ (
+                  if hostHomeExists then
+                    builtins.trace "✅ [${hostname} System] Importing Host Home: ${toString hostHomeFile}" [
+                      hostHomeFile
+                    ]
                   else
-                    [ ]);
+                    [ ]
+                );
 
                 # 🆕 DYNAMIC HOME STATE VERSION
                 home.stateVersion = hostVars.homeStateVersion;
@@ -142,39 +152,39 @@
         };
 
       # 🏠 HOME BUILDER (Standalone)
-      makeHome = hostname:
+      makeHome =
+        hostname:
         let
           baseVars = import ./hosts/${hostname}/variables.nix;
           hostPath = ./hosts/${hostname};
           optionalPath = hostPath + "/optional";
           modulesPath = optionalPath + "/general-hm-modules/modules.nix";
 
-          extraVars = if builtins.pathExists modulesPath then
-            builtins.trace
-            "✅ [${hostname} Home] Loading host HM Variables from: ${
-              toString modulesPath
-            }" (import modulesPath {
-              vars = baseVars;
-              lib = nixpkgs.lib;
-              pkgs = nixpkgs.pkgs;
-            })
-          else
-            builtins.trace
-            "ℹ️ [${hostname} Home] No host HM Variables module found." { };
+          extraVars =
+            if builtins.pathExists modulesPath then
+              builtins.trace "✅ [${hostname} Home] Loading host HM Variables from: ${toString modulesPath}" (
+                import modulesPath {
+                  vars = baseVars;
+                  lib = nixpkgs.lib;
+                  pkgs = nixpkgs.pkgs;
+                }
+              )
+            else
+              builtins.trace "ℹ️ [${hostname} Home] No host HM Variables module found." { };
 
           hostVars = baseVars // extraVars // { inherit hostname; };
           hostHomeFile = ./hosts/${hostname}/home.nix;
 
-          extraModules = nixpkgs.lib.optional (builtins.pathExists hostHomeFile)
-            (builtins.trace
-              "✅ [${hostname} Home] Adding Host Home: ${toString hostHomeFile}"
-              hostHomeFile);
+          extraModules = nixpkgs.lib.optional (builtins.pathExists hostHomeFile) (
+            builtins.trace "✅ [${hostname} Home] Adding Host Home: ${toString hostHomeFile}" hostHomeFile
+          );
 
           pkgs-unstable = import nixpkgs-unstable {
             system = hostVars.system;
             config.allowUnfree = true;
           };
-        in home-manager.lib.homeManagerConfiguration {
+        in
+        home-manager.lib.homeManagerConfiguration {
           pkgs = import nixpkgs {
             inherit (hostVars) system;
             config.allowUnfree = true;
@@ -198,13 +208,14 @@
 
             inputs.catppuccin.homeModules.catppuccin
             inputs.stylix.homeModules.stylix
-          ] ++ extraModules;
+          ]
+          ++ extraModules;
         };
-    in {
+    in
+    {
       darwinConfigurations = nixpkgs.lib.genAttrs hostNames makeSystem;
       homeConfigurations = nixpkgs.lib.genAttrs hostNames makeHome;
 
-      formatter.aarch64-darwin =
-        nixpkgs.legacyPackages.aarch64-darwin.nixfmt-rfc-style;
+      formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.nixfmt-rfc-style;
     };
 }

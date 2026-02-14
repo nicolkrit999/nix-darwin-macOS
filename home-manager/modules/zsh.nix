@@ -19,7 +19,7 @@ in
       brew-search = "brew search";
       brew-clean = "brew cleanup";
       sw = "nh darwin switch ${flakeDir}";
-      upd = "cd ${flakeDir} && nix flake update && darwin-rebuild switch --flake ${flakeDir}";
+      upd = "cd ${flakeDir} && nix flake update && sudo -H darwin-rebuild switch --flake ${flakeDir}";
 
       hms = "home-manager switch --flake ${flakeDir}";
 
