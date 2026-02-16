@@ -15,7 +15,6 @@
     enable = true;
 
     settings = {
-      # Visuals
       gui.showIcons = true; # Enables Nerd Font icons to match your terminal style
       gui.quitOnTopLevelReturn = false;
       gui.skipNoPasswordPrompt = true;
