@@ -126,7 +126,7 @@
         "/Applications/Discord.app"
         "/Users/krit/Applications/Home Manager Apps/Visual Studio Code.app"
         "/Applications/GitHub Desktop.app"
-        "/Applications/JetKVM.app"
+        "/Users/krit/Applications/JetKVM.app"
         "/System/Applications/Calendar.app"
       ];
     };
