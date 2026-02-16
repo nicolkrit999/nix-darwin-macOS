@@ -25,6 +25,7 @@ lib.mkIf ((vars.shell or "zsh") == "fish") {
       brew-search = "brew search";
       brew-clean = "brew cleanup";
       sw = "nh darwin switch ${flakeDir}";
+      gsw = "git add -A && nh darwin switch ${flakeDir}";
       upd = "cd ${flakeDir} && nix flake update && sudo -H darwin-rebuild switch --flake ${flakeDir}";
 
       hms = "home-manager switch --flake ${flakeDir}";
@@ -47,6 +48,7 @@ lib.mkIf ((vars.shell or "zsh") == "fish") {
       nixpush = "cd ~/nix-darwin-macOS/ && sudo darwin-rebuild switch --flake .#$(scutil --get LocalHostName)";
       cdnix = "cd ~/nix-darwin-macOS/";
       nfc = "cd ${flakeDir} && nix flake check"; # Check flake for errors
+      nfcall = "cd ${flakeDir} && nix flake check --all-systems"; # Check flake for errors
       swdry = "cd ${flakeDir} && nh os test --dry --ask"; # Dry run of nixos-rebuild switch
 
     };

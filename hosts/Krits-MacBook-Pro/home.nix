@@ -52,7 +52,7 @@
 
   programs.ssh = {
     enable = true;
-
+    enableDefaultConfig = false;
     matchBlocks."github.com" = {
       identityFile = "/Users/${vars.user}/.ssh/id_github";
     };
@@ -67,7 +67,7 @@
       key = "D93A24D8E063EECF";
       signByDefault = true;
     };
-    extraConfig = {
+    settings = {
       gpg.program = "/etc/profiles/per-user/${vars.user}/bin/gpg";
     };
   };
@@ -80,7 +80,7 @@
     enable = true;
     enableZshIntegration = true;
     # specific to macOS
-    pinentryPackage = pkgs.pinentry_mac;
+    pinentry.package = pkgs.pinentry_mac;
   };
 
 }
