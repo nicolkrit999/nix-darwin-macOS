@@ -17,7 +17,9 @@
     settings = {
       # Visuals
       gui.showIcons = true; # Enables Nerd Font icons to match your terminal style
-      gui.quitOnTopLevelReturn = false; # Prevents asking to go back into it after quitting
+      gui.quitOnTopLevelReturn = false;
+      gui.skipNoPasswordPrompt = true;
+      confirmOnQuit = false;
     };
   };
 }
