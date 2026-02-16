@@ -70,11 +70,10 @@ let
     "/Users/krit/Pictures/Photo Booth Library"
     "/Users/krit/Documents/Actual"
 
-    # Dev & Repos
-    "/Users/krit/nixOS"
-    "/Users/krit/nicolkrit999"
-    "/Users/krit/dotfiles"
-    "/Users/krit/developing-projects"
+    # Repos
+    "/Users/krit/github-repos"
+
+    # Dev
     "/Users/krit/tools"
     "/Users/krit/.nix-defexpr"
     "/Users/krit/.nix-profile"
