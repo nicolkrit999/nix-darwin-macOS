@@ -1,4 +1,10 @@
-{ config, pkgs, vars, lib, ... }:
+{
+  config,
+  pkgs,
+  vars,
+  lib,
+  ...
+}:
 
 let
   nasUser = "root";
@@ -8,7 +14,8 @@ let
   mountPoint = "/Volumes/nicol_nas/ssh/system_root";
 
   identityFile = config.sops.secrets.nas_ssh_key.path;
-in {
+in
+{
   environment.systemPackages = [ pkgs.sshfs ];
   services.tailscale.enable = lib.mkForce true;
 
@@ -34,7 +41,12 @@ in {
 
       # Environment variables for the script
       EnvironmentVariables = {
-        PATH = "${lib.makeBinPath [ pkgs.sshfs pkgs.coreutils ]}:/usr/bin:/bin";
+        PATH = "${
+          lib.makeBinPath [
+            pkgs.sshfs
+            pkgs.coreutils
+          ]
+        }:/usr/bin:/bin";
       };
     };
 

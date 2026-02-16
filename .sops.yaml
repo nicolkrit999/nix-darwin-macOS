@@ -1,4 +1,3 @@
-
 # Main sops config
 keys:
   # ---------------------------------------------------------------
@@ -26,7 +25,7 @@ creation_rules:
   # 🔒 Common rules for user "krit"
   # Matches any "krit-common-secrets-sops.yaml" inside the "common" folder
   # ---------------------------------------------------------------
-  - path_regex: common/krit-common-secrets-sops.yaml$
+  - path_regex: common/krit/sops/krit-common-secrets-sops.yaml$
     key_groups:
       - age:
           - *krit # You can decrypt (user krit)

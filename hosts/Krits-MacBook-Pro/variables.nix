@@ -3,8 +3,7 @@
   hostname = "Krits-MacBook-Pro";
   user = "krit";
   system = "aarch64-darwin";
-  darwinStateVersion =
-    4; # Do not change unless it's a new pc. Keep it as integer
+  darwinStateVersion = 4; # Do not change unless it's a new pc. Keep it as integer
   homeStateVersion = "25.11"; # Do not change unless it's a new pc
 
   shell = "fish";

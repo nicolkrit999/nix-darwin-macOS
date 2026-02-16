@@ -1,11 +1,18 @@
-{ config, lib, pkgs, vars, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  vars,
+  ...
+}:
 
 let
   mountPoint = "/Volumes/nicol_nas/webdav/owncloud";
 
   # Rclone Config Name
   remoteName = "nas_owncloud";
-in {
+in
+{
   environment.systemPackages = [ pkgs.rclone ];
   services.tailscale.enable = lib.mkForce true;
 
@@ -13,12 +20,9 @@ in {
   # 1. SOPS: Secrets
   # ---------------------------------------------------------
   sops.secrets = {
-    nas_owncloud_user.sopsFile =
-      ../../../../../common/krit/sops/krit-common-secrets-sops.yaml;
-    nas_owncloud_pass.sopsFile =
-      ../../../../../common/krit/sops/krit-common-secrets-sops.yaml;
-    nas_owncloud_url.sopsFile =
-      ../../../../../common/krit/sops/krit-common-secrets-sops.yaml;
+    nas_owncloud_user.sopsFile = ../../../../../common/krit/sops/krit-common-secrets-sops.yaml;
+    nas_owncloud_pass.sopsFile = ../../../../../common/krit/sops/krit-common-secrets-sops.yaml;
+    nas_owncloud_url.sopsFile = ../../../../../common/krit/sops/krit-common-secrets-sops.yaml;
   };
 
   # ---------------------------------------------------------
@@ -33,11 +37,14 @@ in {
       RunAtLoad = true;
       KeepAlive = true;
       StandardOutPath = "/Users/${vars.user}/Library/Logs/rclone-owncloud.log";
-      StandardErrorPath =
-        "/Users/${vars.user}/Library/Logs/rclone-owncloud.err";
+      StandardErrorPath = "/Users/${vars.user}/Library/Logs/rclone-owncloud.err";
       EnvironmentVariables = {
-        PATH =
-          "${lib.makeBinPath [ pkgs.rclone pkgs.coreutils ]}:/usr/bin:/bin";
+        PATH = "${
+          lib.makeBinPath [
+            pkgs.rclone
+            pkgs.coreutils
+          ]
+        }:/usr/bin:/bin";
       };
     };
 

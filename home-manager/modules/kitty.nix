@@ -1,4 +1,10 @@
-{ lib, pkgs, vars, ... }: {
+{
+  lib,
+  pkgs,
+  vars,
+  ...
+}:
+{
   catppuccin.kitty.enable = vars.catppuccin;
   catppuccin.kitty.flavor = vars.catppuccinFlavor;
 
@@ -19,8 +25,7 @@
 
       enable_audio_bell = false;
 
-      mouse_hide_wait =
-        "3.0"; # seconds of inactivity before hiding mouse cursor
+      mouse_hide_wait = "3.0"; # seconds of inactivity before hiding mouse cursor
     };
   };
 }

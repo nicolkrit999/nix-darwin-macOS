@@ -63,21 +63,23 @@
       Nicol_2Ghz_pass = {
         sopsFile = commonSecrets;
       };
+      # Comm-7. PGP signing key (git)
+
+      commit_signing_key = {
+        sopsFile = commonSecrets;
+        mode = "0444";
+      };
     };
 
   # Tell Nix to read the Github token
   nix.extraOptions = ''
     !include ${config.sops.secrets.github_fg_pat_token_nix.path}
   '';
-  # ---------------------------------------------------------
-  # 🔧 CONFIGURE SSH TO USE THE KEY
-  # ---------------------------------------------------------
-  programs.ssh = {
-    extraConfig = ''
-      Host github.com
-        IdentityFile ${config.sops.secrets.github_general_ssh_key.path}
-    '';
-  };
+
+  environment.systemPackages = with pkgs; [
+    gnupg
+    pinentry_mac
+  ];
 
   # -----------------------------------------------------------------------
   # 🍎 MAC APP STORE APPS (Host Specific)

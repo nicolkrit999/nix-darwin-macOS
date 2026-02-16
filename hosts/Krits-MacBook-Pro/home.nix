@@ -49,4 +49,35 @@
       mkdir -p $HOME/Pictures/wallpapers
     '';
   };
+
+  programs.ssh = {
+    enable = true;
+
+    matchBlocks."github.com" = {
+      identityFile = "/Users/${vars.user}/.ssh/id_github";
+    };
+  };
+
+  # 6. PGP agent configuration
+  programs.git = {
+    enable = true;
+
+    # Configure signing specifically using Home Manager's options
+    signing = {
+      key = "D93A24D8E063EECF";
+      signByDefault = true;
+    };
+  };
+
+  programs.gpg = {
+    enable = true;
+  };
+
+  services.gpg-agent = {
+    enable = true;
+    enableZshIntegration = true;
+    # specific to macOS
+    pinentryPackage = pkgs.pinentry_mac;
+  };
+
 }

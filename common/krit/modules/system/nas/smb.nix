@@ -1,4 +1,10 @@
-{ config, pkgs, vars, lib, ... }:
+{
+  config,
+  pkgs,
+  vars,
+  lib,
+  ...
+}:
 
 let
   nasIP = "100.101.189.91";
@@ -51,7 +57,8 @@ let
     ${builtins.concatStringsSep "\n" (map (s: ''do_mount "${s}"'') shares)}
   '';
 
-in {
+in
+{
   # ---------------------------------------------------------
   # 1. TAILSCALE
   # ---------------------------------------------------------
