@@ -3,7 +3,7 @@
   # ------------------------------------------------------
   # 🖥️ HOST-SPECIFIC PACKAGES (Krits-MacBook-Pro)
   # ------------------------------------------------------
-  environment.systemPackages = with pkgs; [
+environment.systemPackages = with pkgs; [
     # This allow guest user to not have this packages installed
     # Packages in each category are sorted alphabetically
 
