@@ -115,6 +115,7 @@
       mineffect = "scale";
       # Persistent Apps (Your common dock file logic goes here)
       persistent-apps = [
+        "/System/Applications/Apps.app"
         "/Applications/Comet.app"
         "/Applications/Firefox.app"
         "/Applications/WhatsApp.app"

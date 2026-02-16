@@ -67,6 +67,9 @@
       key = "D93A24D8E063EECF";
       signByDefault = true;
     };
+    extraConfig = {
+      gpg.program = "/etc/profiles/per-user/${vars.user}/bin/gpg";
+    };
   };
 
   programs.gpg = {
