@@ -25,12 +25,6 @@ in
     nas_owncloud_url.sopsFile = ../../../../../common/krit/sops/krit-common-secrets-sops.yaml;
   };
 
-  # ---------------------------------------------------------
-  # 2. GENERATE RCLONE CONFIG
-  # ---------------------------------------------------------
-  # We generate a wrapper script that builds the config on the fly to avoid
-  # storing the cleartext config on disk permanently in the store.
-
   launchd.user.agents.owncloud-rclone = {
     serviceConfig = {
       Label = "com.krit.owncloud-rclone";

@@ -19,7 +19,6 @@
       # -----------------------------------------------------------------------------------
       vscode # IDE
       ranger # Terminal file manager
-      alacritty # Terminal emulator
 
       # -----------------------------------------------------------------------------------
       # 🖥️ CLI UTILITIES
@@ -34,7 +33,6 @@
     ])
 
     ++ (with pkgs-unstable; [
-      #fresh-editor # Lightweight terminal text editor
     ]);
 
   home.sessionVariables = {
@@ -51,6 +49,7 @@
   home.activation = {
     createHostDirs = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       mkdir -p $HOME/Pictures/wallpapers
+      mkdir -p $HOME/Pictures/momentary
     '';
   };
 

@@ -23,10 +23,8 @@ let
     "personal_folder"
   ];
 
-  # macOS Read-Only Root workaround: Mount to user home
   mountBase = "/Volumes/nicol_nas/smb";
 
-  # Helper script to mount a single share
   mountScript = ''
     # 1. Load Credentials (parse standard smb credentials file)
     # Expects format: username=x \n password=y
@@ -59,34 +57,10 @@ let
 
 in
 {
-  # ---------------------------------------------------------
-  # 1. TAILSCALE
-  # ---------------------------------------------------------
   services.tailscale.enable = lib.mkForce true;
 
-  # ---------------------------------------------------------
-  # 2. SOPS SECRETS
-  # ---------------------------------------------------------
   sops.secrets.nas-krit-credentials = {
     sopsFile = ../../../../../common/krit/sops/krit-common-secrets-sops.yaml;
-    owner = vars.user; # Ensure user can read it to source it
+    owner = vars.user;
   };
-
-  # ---------------------------------------------------------
-  # 3. LAUNCHD AGENT (Replaces systemd mount + warmer)
-  # ---------------------------------------------------------
-  launchd.user.agents.smb-mounter = {
-    serviceConfig = {
-      Label = "com.krit.smb-mounter";
-      RunAtLoad = true;
-      # Run every 5 minutes to ensure mounts stay up (Auto-healing)
-      StartInterval = 300;
-      StandardOutPath = "/Users/${vars.user}/Library/Logs/smb-mounter.log";
-      StandardErrorPath = "/Users/${vars.user}/Library/Logs/smb-mounter.err";
-    };
-    script = mountScript;
-  };
-
-  # Note: The "Warmer" logic is implicitly handled by macOS Spotlight/Finder
-  # if you browse the folders, but you can add a separate script if strict caching is needed.
 }

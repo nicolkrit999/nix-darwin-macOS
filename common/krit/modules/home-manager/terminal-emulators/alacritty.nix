@@ -32,7 +32,7 @@ in
   # -----------------------------------------------------------------------
 
   programs.alacritty = {
-    enable = true;
+    enable = false;
     settings = {
       window.opacity = 1.0;
       font = {

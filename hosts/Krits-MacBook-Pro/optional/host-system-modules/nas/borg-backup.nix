@@ -12,7 +12,6 @@ let
   nasUser = "krit";
   nasHost = "nicol-nas"; # Tailscale MagicDNS
 
-  # Ensure hostname is set, otherwise default to a placeholder
   hostName = config.networking.hostName;
 
   # Path on the NAS
@@ -60,7 +59,7 @@ let
     "*.vmwarevm"
 
     # Heavy Folders
-    "/Users/krit/Library" # Be careful excluding entire Library on macOS!
+    "/Users/krit/Library"
     "/Users/krit/Applications"
     "/Users/krit/Downloads"
     "/Users/krit/Public"
@@ -126,11 +125,8 @@ let
   ];
 in
 {
-  # 1. Install Borgmatic
   environment.systemPackages = [ pkgs.borgmatic ];
 
-  # 2. Generate Configuration File
-  # On macOS, this links to /etc/borgmatic/config.yaml
   environment.etc."borgmatic/config.yaml".text = ''
     location:
       source_directories:
@@ -162,22 +158,18 @@ in
     ssh_command: ssh -i ${sshKeyPath} -o StrictHostKeyChecking=accept-new -o ConnectTimeout=30
   '';
 
-  # 3. Define the Launchd Service (The Mac equivalent of Systemd)
   launchd.user.agents.borgmatic-backup = {
     serviceConfig = {
       Label = "com.borgmatic.backup";
 
-      # Run on load? Yes, to catch up.
       RunAtLoad = true;
 
-      # Performance settings
       LowPriorityIO = true;
       Nice = 5;
 
       # Env vars
       EnvironmentVariables = {
         BORG_PASSCOMMAND = "cat ${passphraseFile}";
-        # Explicitly set PATH so it finds ssh, cat, etc.
         PATH = "${
           lib.makeBinPath [
             pkgs.borgmatic
@@ -187,7 +179,6 @@ in
         }:/usr/bin:/bin:/usr/sbin:/sbin";
       };
 
-      # The Command
       ProgramArguments = [
         "${pkgs.borgmatic}/bin/borgmatic"
         "--config"
@@ -196,7 +187,6 @@ in
         "1"
       ];
 
-      # Schedule: 10am, 2pm, 10pm
       StartCalendarInterval = [
         {
           Hour = 10;
