@@ -7,6 +7,11 @@
 }:
 
 {
+
+  imports = [
+    ../../common/krit/modules/home-manager/cli-programs/direnv.nix
+  ];
+
   home.packages =
     (with pkgs; [
 
