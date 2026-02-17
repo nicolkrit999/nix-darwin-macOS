@@ -11,13 +11,13 @@
     stdlib = ''
         use_dev_env() {
           # This dynamically inserts your home directory!
-          # It resolves to: /home/krit/nixOS/hosts/...
-          use flake ${config.home.homeDirectory}/nix-darwin-macOS/common/krit/modules/system/dev-environments/language-specific/$1
+          # It resolves to: /home/krit/nix-darwin-macOS/common/...
+          use flake /Users/krit/nix-darwin-macOS/common/krit/modules/system/dev-environments/language-specific/$1
         }
 
         use_combined_env() {
         # $1 automatically accepts "deep" paths like "category/subdirectory"
-        use flake ${config.home.homeDirectory}/nix-darwin-macOS/common/krit/modules/system/dev-environments/language-combined/$1
+        use flake /Users/krit/nix-darwin-macOS/common/krit/modules/system/dev-environments/language-combined/$1
       }
     '';
   };
