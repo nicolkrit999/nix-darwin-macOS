@@ -79,6 +79,7 @@
   environment.systemPackages = with pkgs; [
     gnupg
     pinentry_mac
+    stow
   ];
 
   # -----------------------------------------------------------------------

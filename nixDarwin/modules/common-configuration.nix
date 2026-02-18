@@ -48,13 +48,9 @@ in
       # -----------------------------------------------------------------------------------
       # 🖥️ CLI UTILITIES
       # -----------------------------------------------------------------------------------
-      # Lightweight video thumbnailer (needed for ranger video previews) -> ⚠️ KEEP
-      ffmpegthumbnailer
-      fzf # Command-line fuzzy finder (ls zhs aliases depend on this) -> ⚠️ KEEP
+      fzf # Command-line fuzzy finder (used by shell aliases) -> ⚠️ KEEP
       htop # Interactive process viewer (keep to kill processes easily) -> ⚠️ KEEP
       nh # CLI help for Nix package management (used in zsh.nix) -> ⚠️ KEEP
-      stow # Dotfile symlikn manager -> ⚠️ KEEP
-      ueberzugpp # Image previews for terminal (used by Ranger backend) -> ⚠️ KEEP
       nixfmt # Nix code formatter with RFC style (used in flake.nix) -> ⚠️ KEEP
       sops # Secret management tool -> ⚠️ KEEP
       shellPkg # User shell (zsh, fish, bash) -> ⚠️ KEEP
