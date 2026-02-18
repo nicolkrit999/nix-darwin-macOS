@@ -71,6 +71,7 @@ let
 
     # Repos
     "/Users/krit/github-repos"
+    "/Users/krit/dotfiles"
 
     # Dev
     "/Users/krit/tools"
@@ -125,7 +126,11 @@ let
   ];
 in
 {
-  environment.systemPackages = [ pkgs.borgmatic ];
+
+  environment.systemPackages = with pkgs; [
+    borgbackup
+    borgmatic
+  ];
 
   environment.etc."borgmatic/config.yaml".text = ''
     location:
@@ -137,7 +142,7 @@ in
           label: nas-repo
 
       exclude_patterns:
-        ${builtins.concatStringsSep "\n        " (map (x: ''- "${x}"'') excludes)}
+        ${builtins.concatStringsSep "\n    " (map (x: ''- "${x}"'') excludes)}
 
     storage:
       compression: auto,zstd
