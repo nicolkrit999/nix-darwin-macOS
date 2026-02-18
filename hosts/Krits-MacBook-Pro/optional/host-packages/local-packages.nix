@@ -35,24 +35,10 @@
     wakeonlan # Send magic packets to wake up computers remotely
     xcodegen # Generate Xcode projects from templates
     zoxide # Fast, lightweight alternative to 'cd'
-    # -----------------------------------------------------------------------------------
-    # 🧑🏽‍💻 CODING
-    # -----------------------------------------------------------------------------------
-    cmake # Cross-platform build system
-    docker # Containerization platform
-    jq # Command-line JSON processor
-    maven # Java build tool
-    tectonic # Modernized, complete, self-contained TeX/LaTeX engine
-    texliveFull # The complete TeX Live distribution (Note: Large download)
-    universal-ctags # Tool to generate index (tags) files of source code
     zeal # Offline documentation browser
     (pkgs.python313.withPackages (
       ps: with ps; [
         faker # Generate fake data
-        isort # Sort imports alphabetically
-        pyright # Static type checker
-        pylint # Source code analyzer
-        setuptools # Library for packaging Python projects
       ]
     ))
 
