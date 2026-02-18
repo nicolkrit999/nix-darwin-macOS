@@ -66,9 +66,11 @@
       cleanup = "uninstall";
     };
 
+
     taps = [ ];
 
     brews = [
+      "node"
       "pipes-sh"
     ];
 
