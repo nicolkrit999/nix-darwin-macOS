@@ -84,7 +84,6 @@
 
     brews = [
       "pipes-sh"
-      "cava"
     ];
 
     casks = [

@@ -425,22 +425,4 @@
     };
   };
 
-  xdg.desktopEntries.yazi = lib.mkForce {
-    name = "Yazi";
-    genericName = "File Manager";
-    exec = "${pkgs.${vars.term}}/bin/${vars.term} --class yazi -e yazi";
-    icon = "system-file-manager";
-    terminal = false;
-    startupNotify = false;
-
-    settings = {
-      StartupWMClass = "yazi";
-    };
-    categories = [
-      "System"
-      "FileTools"
-      "FileManager"
-    ];
-    mimeType = [ "inode/directory" ];
-  };
 }

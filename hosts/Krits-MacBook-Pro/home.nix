@@ -8,8 +8,26 @@
 
 {
 
+
+  # -----------------------------------------------------------------------
+  # 🔗 IMPORTS
+  # -----------------------------------------------------------------------
+  # Pulls in all individual program modules
   imports = [
+    # Common home-manager krit modules
+  ../../common/krit/modules/home-manager
+
+    # use-cases home-manager modules
+    ../../common/krit/modules/use-cases/home-imports.nix
+
+    # Architecture specific home-packages
+    ../../common/krit/packages/default.nix
+
+    # Local Host Modules
+   ./optional/general-hm-modules
+    ./optional/host-hm-modules
   ];
+
 
   home.packages =
     (with pkgs; [

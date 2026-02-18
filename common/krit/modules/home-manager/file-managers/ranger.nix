@@ -117,17 +117,5 @@
   # Custom python command to enable udisk mounting support
   home.file.".config/ranger/commands.py".text = "from plugins.ranger_udisk_menu.mounter import mount";
 
-  xdg.desktopEntries.ranger = lib.mkForce {
-    name = "Ranger";
-    genericName = "File Manager";
-    exec = "${vars.term} --class ranger -e ranger";
-    terminal = false;
-    categories = [
-      "System"
-      "FileTools"
-      "FileManager"
-    ];
-    mimeType = [ "inode/directory" ];
-  };
 
 }

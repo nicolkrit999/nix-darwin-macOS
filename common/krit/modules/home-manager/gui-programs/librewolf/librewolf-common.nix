@@ -206,18 +206,6 @@ in
 {
   programs.browserpass.enable = false;
 
-  xdg.desktopEntries."librewolf-privacy" = {
-    name = "LibreWolf Privacy";
-    genericName = "Web Browser";
-    exec = "librewolf -P Privacy --no-remote";
-    icon = "librewolf";
-    terminal = false;
-    categories = [
-      "Network"
-      "WebBrowser"
-    ];
-    comment = "Launch LibreWolf in Hardened Privacy Mode";
-  };
 
   home.file.".librewolf-policyroot/distribution/policies.json".text = policiesJson;
 
