@@ -117,5 +117,4 @@
   # Custom python command to enable udisk mounting support
   home.file.".config/ranger/commands.py".text = "from plugins.ranger_udisk_menu.mounter import mount";
 
-
 }

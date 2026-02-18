@@ -54,7 +54,7 @@ in
       nh # CLI help for Nix package management (used in zsh.nix) -> ⚠️ KEEP
       stow # Dotfile symlikn manager -> ⚠️ KEEP
       ueberzugpp # Image previews for terminal (used by Ranger backend) -> ⚠️ KEEP
-      nixfmt-rfc-style # Nix code formatter with RFC style (used in flake.nix) -> ⚠️ KEEP
+      nixfmt # Nix code formatter with RFC style (used in flake.nix) -> ⚠️ KEEP
       sops # Secret management tool -> ⚠️ KEEP
       shellPkg # User shell (zsh, fish, bash) -> ⚠️ KEEP
       age # Encryption tool used by sops -> ⚠️ KEEP

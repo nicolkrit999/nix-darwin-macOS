@@ -206,7 +206,6 @@ in
 {
   programs.browserpass.enable = false;
 
-
   home.file.".librewolf-policyroot/distribution/policies.json".text = policiesJson;
 
   programs.librewolf = {
