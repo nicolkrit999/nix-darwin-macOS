@@ -19,7 +19,8 @@ in
   };
 
   # Enable Touch ID for sudo
-  security.pam.services.sudo_local.touchIdAuth = true;
+  security.pam.services.sudo_local.touchIdAuth = true; # Enable Touch ID for sudo authentication
+  security.pam.services.sudo_local.reattach = true; # Needed to allow touch id while using tmux
 
   networking.hostName = vars.hostname;
   networking.computerName = vars.hostname;
