@@ -105,7 +105,7 @@ in
   # 🐚 SHELLS & ENVIRONMENT
   # ---------------------------------------------------------
 
-  environment.systemPath = [ "/nix/var/nix/profiles/per-user/${vars.user}/profile/bin" ];
+  environment.systemPath = [ "/nix/var/nix/profiles/per-user/${vars.user}/profile/bin" "/opt/homebrew/bin" ];
 
   environment.shells = [ shellPkg ];
   users.knownUsers = [ vars.user ];

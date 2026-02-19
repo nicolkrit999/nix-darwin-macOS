@@ -37,6 +37,8 @@ in
       cleardns = "sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder";
       fzf-prev = ''fzf --preview="cat {}"'';
       zlist = "zoxide query -l -s"; # List all zoxide entries with scores
+      tksession = "tmux kill-session -t";  # Kill a tmux session by name
+      tks = "tmux kill-server"; # Kill all tmux sessions
 
       # Nix-Darwin Maintenance
       nixpush = "cd ~/nix-darwin-macOS/ && sudo darwin-rebuild switch --flake .#$(scutil --get LocalHostName)";
