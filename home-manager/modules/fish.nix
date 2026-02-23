@@ -24,7 +24,7 @@ lib.mkIf ((vars.shell or "zsh") == "fish") {
       brew-inst-cask = "brew install --cask";
       brew-search = "brew search";
       brew-clean = "brew cleanup";
-      sw = "chd ${flakeDir} && nh darwin switch ${flakeDir}";
+      sw = "cd ${flakeDir} && nh darwin switch ${flakeDir}";
       gsw = "cd ${flakeDir} && git add -A && nh darwin switch ${flakeDir}";
       upd = "cd ${flakeDir} && nix flake update && sudo -H darwin-rebuild switch --flake ${flakeDir}";
 
