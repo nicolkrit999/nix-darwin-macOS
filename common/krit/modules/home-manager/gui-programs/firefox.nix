@@ -156,6 +156,7 @@ in
           "T9nJot5PurhJSy8n038xGA=="
         ] (_: 1);
 
+        "media.videocontrols.picture-in-picture.enabled" = true;
         # Disable some telemetry
         "app.shield.optoutstudies.enabled" = false;
         "browser.discovery.enabled" = false;
