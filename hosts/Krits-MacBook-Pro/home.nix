@@ -65,7 +65,7 @@
   home.activation = {
     createHostDirs = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       mkdir -p $HOME/Pictures/wallpapers
-      mkdir -p $HOME/Pictures/momentary
+      mkdir -p $HOME/momentary
     '';
   };
 
