@@ -24,7 +24,7 @@
   catppuccinAccent = "mauve";
 
   # 🐙 GIT CONFIG
-  gitUserName = "nicolkrit999";
+  gitUserName = "Krit Pio Nicol";
   gitUserEmail = "githubgitlabmain.hu5b7@passfwd.com";
 
 }

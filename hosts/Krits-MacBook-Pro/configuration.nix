@@ -241,7 +241,7 @@
           condition = "gitdir:~/school-workspace/**";
           contents = {
             user.email = "kritpio.nicol@student.supsi.ch";
-            user.name = "nicolkrit999-uni";
+            user.name = "Krit Pio Nicol-University";
             user.signingkey = "/Users/${vars.user}/.ssh/id_school";
           };
         }
