@@ -68,6 +68,7 @@ let
     "/Users/krit/Pictures/Photos Library.photoslibrary"
     "/Users/krit/Pictures/Photo Booth Library"
     "/Users/krit/Documents/Actual"
+    "/Users/krit/school-workspace/github-repos"
 
     # Repos
     "/Users/krit/github-repos"
