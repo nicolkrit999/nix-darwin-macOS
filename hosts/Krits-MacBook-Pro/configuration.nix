@@ -1,8 +1,7 @@
-{
-  pkgs,
-  config,
-  vars,
-  ...
+{ pkgs
+, config
+, vars
+, ...
 }:
 {
   imports = [
@@ -203,5 +202,31 @@
         CriticalUpdateInstall = 1; # Automatically install critical updates. 1 = true , 0 = false.
       };
     };
+  };
+
+  # -----------------------------------------------------------------------
+  # 🔐 HOST-SPECIFIC GIT SSH SIGNING (Overrides common configs)
+  # -----------------------------------------------------------------------
+  home-manager.users.${vars.user} = { lib, ... }: {
+    programs.git = {
+      signing = lib.mkForce {
+        key = "/Users/${vars.user}/.ssh/id_github";
+        signByDefault = true;
+      };
+
+      settings = {
+        gpg.format = lib.mkForce "ssh";
+        user.signingKey = lib.mkForce "/Users/${vars.user}/.ssh/id_github";
+        commit.gpgSign = lib.mkForce true;
+        gpg.ssh.allowedSignersFile = lib.mkForce "/Users/${vars.user}/.ssh/allowed_signers";
+      };
+    };
+
+    home.file.".ssh/allowed_signers".text = ''
+      githubgitlabmain.hu5b7@passfwd.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO4fJZtoawnvuR2D/CAk7fBrioEyhyagheH4RtTaf8gD
+    '';
+
+    programs.gpg.enable = lib.mkForce false;
+    services.gpg-agent.enable = lib.mkForce false;
   };
 }
