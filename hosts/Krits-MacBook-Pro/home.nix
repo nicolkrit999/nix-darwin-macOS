@@ -1,9 +1,8 @@
-{
-  pkgs,
-  pkgs-unstable,
-  lib,
-  vars,
-  ...
+{ pkgs
+, pkgs-unstable
+, lib
+, vars
+, ...
 }:
 
 {
@@ -52,6 +51,8 @@
     ]);
 
   home.sessionVariables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
   };
 
   programs.zoxide = {

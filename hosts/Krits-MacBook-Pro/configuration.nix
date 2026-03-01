@@ -52,6 +52,21 @@
         mode = "0600";
       };
 
+      # Comm-1b: School ssh keys
+      school_ssh_key = {
+        sopsFile = commonSecrets;
+        owner = vars.user;
+        path = "/Users/${vars.user}/.ssh/id_school";
+        mode = "0600";
+      };
+
+      school_ssh_pub = {
+        sopsFile = commonSecrets;
+        owner = vars.user;
+        path = "/Users/${vars.user}/.ssh/id_school.pub";
+        mode = "0644"; # Public keys should be readable
+      };
+
       # Comm-4
       Krit_Wifi_pass = {
         sopsFile = commonSecrets;
@@ -62,12 +77,7 @@
       Nicol_2Ghz_pass = {
         sopsFile = commonSecrets;
       };
-      # Comm-7. PGP signing key (git)
 
-      commit_signing_key = {
-        sopsFile = commonSecrets;
-        mode = "0444";
-      };
     };
 
   # Tell Nix to read the Github token
@@ -204,27 +214,64 @@
     };
   };
 
+
+
   # -----------------------------------------------------------------------
   # 🔐 HOST-SPECIFIC GIT SSH SIGNING (Overrides common configs)
   # -----------------------------------------------------------------------
   home-manager.users.${vars.user} = { lib, ... }: {
+
     programs.git = {
+      # (KEEP your existing personal signing and settings overrides here...)
       signing = lib.mkForce {
         key = "/Users/${vars.user}/.ssh/id_github";
         signByDefault = true;
       };
-
       settings = {
         gpg.format = lib.mkForce "ssh";
         user.signingKey = lib.mkForce "/Users/${vars.user}/.ssh/id_github";
         commit.gpgSign = lib.mkForce true;
         gpg.ssh.allowedSignersFile = lib.mkForce "/Users/${vars.user}/.ssh/allowed_signers";
       };
+
+      # ✨ ADD THIS: Automatically switch to School identity in school folders
+      includes = [
+        {
+          # Change this path to wherever you keep your school code!
+          condition = "gitdir:~/school-workspace/**";
+          contents = {
+            user.email = "kritpio.nicol@student.supsi.ch";
+            user.name = "nicolkrit999-uni";
+            user.signingkey = "/Users/${vars.user}/.ssh/id_school";
+          };
+        }
+      ];
+    };
+
+    programs.ssh = {
+      enable = true;
+      matchBlocks = {
+        "gitlab-edu.supsi.ch" = {
+          hostname = "gitlab-edu.supsi.ch";
+          identityFile = "/Users/${vars.user}/.ssh/id_school";
+          identitiesOnly = true;
+        };
+
+        # 2. Create a custom "alias" for GitHub school projects
+        "github-school" = {
+          hostname = "github.com";
+          identityFile = "/Users/${vars.user}/.ssh/id_school";
+          identitiesOnly = true;
+        };
+      };
     };
 
     home.file.".ssh/allowed_signers".text = ''
       githubgitlabmain.hu5b7@passfwd.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO4fJZtoawnvuR2D/CAk7fBrioEyhyagheH4RtTaf8gD
+      kritpio.nicol@student.supsi.ch ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBRKQLjixO72qgAc64gzJwsmOdoNQs+KkQg8GewHnm66
     '';
+
+
 
     programs.gpg.enable = lib.mkForce false;
     services.gpg-agent.enable = lib.mkForce false;
