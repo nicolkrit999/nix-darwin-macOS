@@ -13,7 +13,6 @@
 
     ignores = [
       ".direnv/"
-      ".envrc"
       ".venv/"
       "result"
       "*.swp"

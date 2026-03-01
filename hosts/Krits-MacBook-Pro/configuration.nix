@@ -45,7 +45,7 @@
         sopsFile = commonSecrets;
         mode = "0444";
       };
-      # Comm-1
+      # Comm-1a: Personal ssh key
       github_general_ssh_key = {
         sopsFile = commonSecrets;
         owner = vars.user;
