@@ -52,6 +52,13 @@
         mode = "0600";
       };
 
+      github_general_ssh_pub = {
+        sopsFile = commonSecrets;
+        owner = vars.user;
+        path = "/Users/${vars.user}/.ssh/id_github.pub";
+        mode = "0644";
+      };
+
       # Comm-1b: School ssh keys
       school_ssh_key = {
         sopsFile = commonSecrets;
