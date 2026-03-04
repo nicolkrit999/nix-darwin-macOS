@@ -72,6 +72,7 @@
     brews = [
       "node"
       "pipes-sh"
+      "yt-dlp"
     ];
 
     casks = [
