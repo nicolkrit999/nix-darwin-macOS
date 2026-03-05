@@ -15,7 +15,7 @@
   uid = 501;
 
   # 🎨 THEMING
-  base16Theme = "rose-pine-moon";
+  base16Theme = "nord";
   polarity = "dark";
 
   # Catppuccin Logic (Disable if using Nord)
