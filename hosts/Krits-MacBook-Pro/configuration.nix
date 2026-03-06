@@ -104,7 +104,7 @@
   # The app can only be installed if they are purchased/downloaded once manually from the app store
   homebrew.masApps = {
     "Whatsapp" = 310633997;
-    "Microsoft Word" = 462054704;
+    #"Microsoft Word" = 462054704;
     "Microsoft PowerPoint" = 462062816;
     "Microsoft Excel" = 462058435;
     "HP Print" = 1474276998;

@@ -1,6 +1,5 @@
-{
-  vars,
-  ...
+{ vars
+, ...
 }:
 {
 
@@ -19,6 +18,7 @@
       gui.quitOnTopLevelReturn = false;
       gui.skipNoPasswordPrompt = true;
       confirmOnQuit = false;
+      git.overrideGpg = true;
     };
   };
 }
