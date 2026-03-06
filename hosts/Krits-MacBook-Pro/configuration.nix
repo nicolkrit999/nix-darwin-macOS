@@ -258,6 +258,13 @@
     programs.ssh = {
       enable = true;
       matchBlocks = {
+
+        "nicol-nas 192.168.1.98 ssh.nicolkrit.ch" = {
+          identityFile = "/Users/${vars.user}/.ssh/id_github";
+          identitiesOnly = true;
+          user = "krit";
+        };
+
         "gitlab-edu.supsi.ch" = {
           hostname = "gitlab-edu.supsi.ch";
           identityFile = "/Users/${vars.user}/.ssh/id_school";
