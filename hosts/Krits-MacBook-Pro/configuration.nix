@@ -103,7 +103,7 @@
   # -----------------------------------------------------------------------
   # The app can only be installed if they are purchased/downloaded once manually from the app store
   homebrew.masApps = {
-    "Whatsapp" = 310633997;
+    #"Whatsapp" = 310633997;
     #"Microsoft Word" = 462054704;
     "Microsoft PowerPoint" = 462062816;
     "Microsoft Excel" = 462058435;
@@ -113,7 +113,7 @@
     "Numbers" = 409203825;
     "Pages" = 409201541;
     "Kindle" = 302584613;
-    "geogebra" = 1182481622;
+   # "geogebra" = 1182481622;
   };
 
   # -----------------------------------------------------------------------
