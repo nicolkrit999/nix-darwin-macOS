@@ -29,6 +29,7 @@
       # --- Language Servers (LSP) ---
       bash-language-server # Bash Language Server
       lua-language-server # Lua Language Server
+      marksman # Markdown Language Server
       nixd # Nix language server
       nixpkgs-fmt
 
