@@ -29,8 +29,10 @@
       ".credentials.json"
       "credentials.json"
       "security_warnings_*.json"
+      "worktrees/" 
       "**/.claude/*"
       "!**/.claude/agents/"
+      "!**/.claude/agent-memory/"
       "!**/.claude/settings.json"
       "!**/.claude/statusline-commands.sh"
     ];
