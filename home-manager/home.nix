@@ -1,9 +1,8 @@
-{
-  inputs,
-  pkgs,
-  lib,
-  vars,
-  ...
+{ inputs
+, pkgs
+, lib
+, vars
+, ...
 }:
 {
   # -----------------------------------------------------------------------
@@ -12,6 +11,10 @@
   home = {
     stateVersion = vars.homeStateVersion or "25.11"; # Controls backwards compatibility logic
   };
+
+  home.sessionPath = [
+    "$HOME/.local/bin"
+  ];
 
   # -----------------------------------------------------------------------
   # 🏠 HOME MANAGER SELF-MANAGEMENT
