@@ -22,8 +22,15 @@
       "*.swp"
       ".DS_Store"
 
-      # Claude Code dynamic state & credentials
-      ".claude/"
+      # Claude Code - Ignore everything inside the folder by default
+      ".claude/*"
+
+      # Claude Code - Allowed exceptions
+      "!.claude/agents/"
+      "!.claude/settings.json"
+      "!.claude/statusline-commands.sh"
+
+      # Claude Code - Other dynamic state & credentials to block globally
       "*.jsonl"
       ".claude.json"
       ".claude.json.backup.*"
