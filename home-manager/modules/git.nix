@@ -34,6 +34,7 @@
       "!**/.claude/agents/"
       "!**/.claude/agent-memory/"
       "!**/.claude/plugins/"
+      "!**/.claude/skills/"
       "!**/.claude/settings.json"
       "!**/.claude/statusline-commands.sh"
     ];
