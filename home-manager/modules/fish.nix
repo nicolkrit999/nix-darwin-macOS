@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  vars,
-  ...
+{ config
+, lib
+, vars
+, ...
 }:
 
 let
@@ -43,7 +42,7 @@ lib.mkIf ((vars.shell or "zsh") == "fish") {
       cleardns = "sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder";
       fzf-prev = ''fzf --preview="cat {}"'';
       zlist = "zoxide query -l -s"; # List all zoxide entries with scores
-      tksession = "tmux kill-session -t";  # Kill a tmux session by name
+      tksession = "tmux kill-session -t"; # Kill a tmux session by name
       tks = "tmux kill-server"; # Kill all tmux sessions
 
       # Nix-Darwin Maintenance
@@ -53,6 +52,11 @@ lib.mkIf ((vars.shell or "zsh") == "fish") {
       nfcall = "cd ${flakeDir} && nix flake check --all-systems"; # Check flake for errors
       swdry = "cd ${flakeDir} && nh os test --dry --ask"; # Dry run of nixos-rebuild switch
 
+      cai = "claude";
+      caitempplugins = "npx claude-code-templates@latest --plugins";
+      caitemphealt = "npx claude-code-templates@latest --health-check";
+      caitempchat = "npx claude-code-templates@latest --chats";
+      caitempanalytics = "npx claude-code-templates@latest --analytics";
     };
 
     # -----------------------------------------------------
