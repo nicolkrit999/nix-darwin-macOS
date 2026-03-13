@@ -76,6 +76,7 @@
     ];
 
     casks = [
+      "claude"
       "pycharm-ce"
       "intellij-idea-ce"
       "alacritty"

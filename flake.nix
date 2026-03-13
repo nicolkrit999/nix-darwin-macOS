@@ -24,22 +24,24 @@
 
     nix-sops.url = "github:Mic92/sops-nix";
     nix-sops.inputs.nixpkgs.follows = "nixpkgs";
+    claude-code.url = "github:sadjow/claude-code-nix";
   };
 
   outputs =
-    {
-      self,
-      nixpkgs,
-      nixpkgs-unstable,
-      nix-darwin,
-      home-manager,
-      ...
+    { self
+    , nixpkgs
+    , nixpkgs-unstable
+    , nix-darwin
+    , home-manager
+    , ...
     }@inputs:
     let
       hostNames = nixpkgs.lib.attrNames (
-        nixpkgs.lib.filterAttrs (
-          name: type: type == "directory" && builtins.pathExists (./hosts + "/${name}/configuration.nix")
-        ) (builtins.readDir ./hosts)
+        nixpkgs.lib.filterAttrs
+          (
+            name: type: type == "directory" && builtins.pathExists (./hosts + "/${name}/configuration.nix")
+          )
+          (builtins.readDir ./hosts)
       );
 
       # 🛠️ SYSTEM BUILDER (Nix-Darwin)
@@ -53,13 +55,14 @@
 
           extraVars =
             if builtins.pathExists modulesPath then
-              builtins.trace "✅ [${hostname} System] Loading host HM Variables from: ${toString modulesPath}" (
-                import modulesPath {
-                  vars = baseVars;
-                  lib = nixpkgs.lib;
-                  pkgs = nixpkgs.pkgs;
-                }
-              )
+              builtins.trace "✅ [${hostname} System] Loading host HM Variables from: ${toString modulesPath}"
+                (
+                  import modulesPath {
+                    vars = baseVars;
+                    lib = nixpkgs.lib;
+                    pkgs = nixpkgs.pkgs;
+                  }
+                )
             else
               builtins.trace
                 "ℹ️ [${hostname} System] No host HM Variables module found at ${toString modulesPath}"
@@ -84,7 +87,10 @@
             {
               nixpkgs.hostPlatform = hostVars.system;
               nixpkgs.config.allowUnfree = true;
-              nixpkgs.overlays = [ inputs.nix-index-database.overlays.nix-index ];
+              nixpkgs.overlays = [
+                inputs.nix-index-database.overlays.nix-index
+                inputs.claude-code.overlays.default
+              ];
 
               networking.hostName = hostname;
               networking.computerName = hostname;
@@ -162,13 +168,14 @@
 
           extraVars =
             if builtins.pathExists modulesPath then
-              builtins.trace "✅ [${hostname} Home] Loading host HM Variables from: ${toString modulesPath}" (
-                import modulesPath {
-                  vars = baseVars;
-                  lib = nixpkgs.lib;
-                  pkgs = nixpkgs.pkgs;
-                }
-              )
+              builtins.trace "✅ [${hostname} Home] Loading host HM Variables from: ${toString modulesPath}"
+                (
+                  import modulesPath {
+                    vars = baseVars;
+                    lib = nixpkgs.lib;
+                    pkgs = nixpkgs.pkgs;
+                  }
+                )
             else
               builtins.trace "ℹ️ [${hostname} Home] No host HM Variables module found." { };
 

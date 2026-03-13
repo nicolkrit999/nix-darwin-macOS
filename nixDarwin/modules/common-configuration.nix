@@ -55,7 +55,7 @@ in
       sops # Secret management tool -> ⚠️ KEEP
       shellPkg # User shell (zsh, fish, bash) -> ⚠️ KEEP
       age # Encryption tool used by sops -> ⚠️ KEEP
-
+      claude-code # AI code assistant CLI -> ⚠️ KEEP
       # -----------------------------------------------------------------------------------
       # 🧑🏽‍💻 CODING
       # -----------------------------------------------------------------------------------

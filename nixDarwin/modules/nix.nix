@@ -5,6 +5,7 @@
     "flakes"
   ];
 
+
   nix.gc = {
     automatic = true;
 
