@@ -56,6 +56,13 @@ in
       shellPkg # User shell (zsh, fish, bash) -> ⚠️ KEEP
       age # Encryption tool used by sops -> ⚠️ KEEP
       claude-code # AI code assistant CLI -> ⚠️ KEEP
+
+      (pkgs.writeShellScriptBin "cai" ''
+        if [ -f /run/secrets/openrouter_api_claude_code ]; then
+          export OPENROUTER_API_KEY=$(cat /run/secrets/openrouter_api_claude_code)
+        fi
+        exec ${pkgs.claude-code}/bin/claude "$@"
+      '')
       # -----------------------------------------------------------------------------------
       # 🧑🏽‍💻 CODING
       # -----------------------------------------------------------------------------------

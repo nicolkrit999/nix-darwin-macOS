@@ -52,7 +52,6 @@ lib.mkIf ((vars.shell or "zsh") == "fish") {
       nfcall = "cd ${flakeDir} && nix flake check --all-systems"; # Check flake for errors
       swdry = "cd ${flakeDir} && nh os test --dry --ask"; # Dry run of nixos-rebuild switch
 
-      cai = "claude";
       caitempplugins = "npx claude-code-templates@latest --plugins";
       caitemphealt = "npx claude-code-templates@latest --health-check";
       caitempchat = "npx claude-code-templates@latest --chats";

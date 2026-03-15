@@ -84,6 +84,11 @@
       Nicol_2Ghz_pass = {
         sopsFile = commonSecrets;
       };
+      # Comm-6
+      openrouter_api_claude_code = {
+        sopsFile = commonSecrets;
+        owner = vars.user;
+      };
 
     };
 
@@ -96,7 +101,9 @@
     gnupg
     pinentry_mac
     stow
+    python313Packages.litellm
   ];
+
 
   # -----------------------------------------------------------------------
   # 🍎 MAC APP STORE APPS (Host Specific)
@@ -113,7 +120,7 @@
     "Numbers" = 409203825;
     "Pages" = 409201541;
     #"Kindle" = 302584613;
-   # "geogebra" = 1182481622;
+    # "geogebra" = 1182481622;
   };
 
   # -----------------------------------------------------------------------
