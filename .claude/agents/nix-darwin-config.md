@@ -163,4 +163,8 @@ Examples of what to record:
 
 # Persistent Agent Memory
 
-This agent shares the project-level memory system at `~/.claude/projects/-home-krit-github-repos-personal-nix-darwin-macOS/memory/`. Read and write memories there using the same format and conventions described in the main Claude Code memory instructions. Always check `MEMORY.md` in that directory for the current index before saving new memories.
+This agent shares the project-level memory system. The path varies by OS:
+- **macOS:** `~/.claude/projects/-Users-krit-nix-darwin-macOS/memory/`
+- **NixOS/Linux:** `~/.claude/projects/-home-krit-nix-darwin-macOS/memory/`
+
+Read and write memories there using the same format and conventions described in the main Claude Code memory instructions. Always check `MEMORY.md` in that directory for the current index before saving new memories.
