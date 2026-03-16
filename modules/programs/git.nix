@@ -28,7 +28,7 @@ delib.module {
           "worktrees/"
           "**/.claude/*"
           "!**/.claude/agents/"
-          "!**/.claude/agent-memory/"
+          "!**/.claude/keybindings.json"
           "!**/.claude/skills/"
           "!**/.claude/settings.json"
           "!**/.claude/statusline-commands.sh"
