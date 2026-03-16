@@ -58,6 +58,7 @@ delib.module {
         "/Users/krit/github-repos"
         "/Users/krit/dotfiles"
         "/Users/krit/tools"
+        "/Users/krit/.config/portainer-mcp"
         "/Users/krit/.nix-defexpr"
         "/Users/krit/.nix-profile"
         "/Users/krit/.local"
