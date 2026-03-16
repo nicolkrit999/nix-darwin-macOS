@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Repo Is
 
-A flake-based, multi-host **nix-darwin** configuration for macOS (aarch64-darwin). It uses nix-darwin for system-level config, home-manager for user-level config, Stylix for unified theming, and sops-nix for encrypted secrets.
+A flake-based, multi-host **nix-darwin** configuration for macOS (aarch64-darwin) built on the **denix** library (yunfachi/denix). It uses nix-darwin for system-level config, home-manager for user-level config, Stylix for unified theming, and sops-nix for encrypted secrets. All modules use `delib.module` / `delib.host` wrappers with automatic path discovery.
 
 ## Apply Changes
 
@@ -22,78 +22,138 @@ nix fmt                  # format all .nix files with nixfmt-rfc-style (alias: f
 
 ## Repository Architecture
 
-### How Hosts Are Built
+### How Hosts Are Built (denix auto-discovery)
 
-`flake.nix` dynamically discovers hosts by scanning `hosts/` for directories containing `configuration.nix`. For each host it calls `makeSystem`, which:
-1. Loads `hosts/<hostname>/variables.nix` as `vars` (passed as `specialArgs` to all modules)
-2. Imports `hosts/<hostname>/configuration.nix` (nix-darwin system config)
-3. Imports `nixDarwin/modules/` (shared system defaults)
-4. Mounts home-manager, passing `hosts/<hostname>/home.nix` as the user config
+`flake.nix` calls `denix.lib.configurations` which **automatically discovers** all `.nix` files under the configured paths. For each host it finds a `delib.host` block with a matching `name`. No manual imports needed.
+
+```nix
+paths = [ ./hosts ./modules ./packages ./users ];
+exclude = [ ./users/krit/dev-environments ];
+```
+
+Key flake settings:
+- `moduleSystem` — `"darwin"` for `darwinConfigurations`, `"home"` for `homeConfigurations`
+- `homeManagerUser = "krit"` — hardcoded home-manager user
+- `specialArgs` passes `inputs`, `moduleSystem`, and `pkgs-unstable`
+
+### Module System (delib)
+
+Every `.nix` file (except those in `exclude`) is auto-discovered. There are two types:
+
+| Type | Wrapper | Purpose |
+|------|---------|---------|
+| `delib.module` | Shared reusable module | Declares options + config in `darwin.always`, `darwin.ifEnabled`, `home.always`, `home.ifEnabled` blocks |
+| `delib.host` | Host-specific config | Sets `name`, `type`, `homeManagerSystem`, and provides `myconfig`, `darwin`, `home` blocks |
+
+Module enable/disable is controlled in the host's `default.nix` via `myconfig` options (e.g., `programs.bat.enable = true`).
 
 ### Three Layers of Config
 
 | Layer | Location | Purpose |
 |-------|----------|---------|
-| Shared system | `nixDarwin/modules/` | Dock, Finder, Touch ID sudo, Nix settings, system packages — auto-applied to all hosts |
-| Shared home-manager | `home-manager/` | Shell configs (fish, zsh), git, kitty, tmux, starship, bat, eza, lazygit, stylix — auto-applied to all hosts |
-| Host-specific | `hosts/<hostname>/` | Identity, SOPS secrets, Homebrew apps, SSH/git configs, opt-in modules |
+| Shared modules | `modules/` | Programs (bat, eza, fish, git, kitty, etc.), toplevel config (stylix, nix, common-configuration, user, home, home-packages) — auto-discovered, enabled per-host |
+| User modules | `users/krit/modules/` | Krit-specific opt-in modules (neovim, direnv, firefox, librewolf, yazi, NAS services, borg-backup) — auto-discovered, enabled per-host via `krit.*` options |
+| Host-specific | `hosts/<hostname>/` | Identity (`default.nix`), system config (`system.nix`), home config (`home.nix`), local packages, SOPS secrets |
 
-### `variables.nix` Is the Source of Truth
+### `default.nix` Is the Source of Truth
 
-Every host has `hosts/<hostname>/variables.nix` defining identity and preferences. This is passed as `vars` to all modules. Never hardcode values that belong here:
+Every host has `hosts/<hostname>/default.nix` using `delib.host` that defines constants and enables modules. Constants are set via `myconfig.constants`:
 
 ```nix
-{
-  hostname = "Krits-MacBook-Pro";
-  user = "krit";
-  system = "aarch64-darwin";
-  shell = "fish";           # fish | zsh | bash
-  term = "kitty";
-  editor = "nvim";
-  browser = "firefox";
-  base16Theme = "nord";     # Stylix theme
-  polarity = "dark";        # light | dark
-  # catppuccin.enable = false; catppuccinFlavor = "mocha"; catppuccinAccent = "blue";
-  gitUserName = "...";
-  gitUserEmail = "...";
+{ delib, ... }:
+delib.host {
+  name = "Krits-MacBook-Pro";
+  type = "desktop";
+  homeManagerSystem = "aarch64-darwin";
+
+  myconfig = { ... }: {
+    constants = {
+      hostname = "Krits-MacBook-Pro";
+      user = "krit";
+      uid = 501;
+      terminal = "kitty";
+      shell = "fish";
+      browser = "firefox";
+      editor = "nvim";
+      fileManager = "yazi";
+      theme = {
+        polarity = "dark";
+        base16Theme = "nord";
+        catppuccin = false;
+        catppuccinFlavor = "macchiato";
+        catppuccinAccent = "mauve";
+      };
+      gitUserName = "...";
+      gitUserEmail = "...";
+    };
+
+    # Enable shared modules
+    programs.bat.enable = true;
+    programs.fish.enable = true;
+    # ...
+
+    # Enable user modules
+    krit.programs.neovim.enable = true;
+    krit.services.nas.sshfs.enable = true;
+    # ...
+  };
 }
 ```
 
-### Opt-In Modules (`common/krit/`)
+### Constants System (`modules/config/constants.nix`)
 
-Reusable modules that hosts explicitly import — not auto-applied. Organized as:
-- `cli-programs/`: neovim, direnv, cava
-- `gui-programs/`: firefox, librewolf, chromium (with privacy profiles)
-- `terminal-emulators/`: kitty, alacritty
-- `file-managers/`: yazi (with Lua config), ranger
-- `nas/`: SMB/SSH/OwnCloud NAS access
-- `dev-environments/`: Standalone flakes per language (Go, Rust, Python, Node, Haskell, C/C++, Java, Swift, R, LaTeX, Typst, Jupyter, PHP, Shell, web-dev combos) — use with direnv
+Declares all shared option types via `delib.moduleOptions`. Constants set in a host's `default.nix` are accessible in all modules as `myconfig.constants.*`. Also exported as `args.shared.constants` for cross-module access.
 
-Host opt-in modules live in `hosts/<hostname>/optional/` and are imported from `configuration.nix` or `home.nix`.
+### User Modules (`users/krit/`)
+
+Reusable modules under `krit.*` namespace that hosts explicitly enable:
+- `modules/programs/cli-programs/`: neovim, direnv, cava
+- `modules/programs/gui-programs/`: firefox, librewolf, chromium
+- `modules/programs/terminal-emulators/`: kitty, alacritty
+- `modules/programs/file-managers/`: yazi (with Lua config), ranger
+- `modules/services/nas/`: SMB, SSH, OwnCloud, borg-backup
+- `dev-environments/`: Standalone flakes per language (excluded from auto-discovery, used with direnv)
+- `sops/`: Shared encrypted secrets (krit-common-secrets-sops.yaml)
+
+### Templates (`templates/krit/`)
+
+Plain Nix functions (not delib modules) imported by other modules. Currently: librewolf profile definitions.
 
 ### Theming
 
-Stylix with base16 themes flows: `variables.nix` (base16Theme + polarity) → `home-manager/modules/stylix.nix` → program-specific theme application. Catppuccin is opt-in per-host.
+Stylix with base16 themes flows: host `default.nix` (constants.theme) → `modules/toplevel/stylix.nix` → program-specific theme targets. Catppuccin is opt-in per-host. The stylix module handles both darwin and home-manager layers, with conditional `homeModules.stylix` import for standalone home configurations.
 
 ### Secrets (sops-nix)
 
-Encrypted YAML files at `hosts/<hostname>/optional/host-sops-nix/` (host-specific) and `common/krit/sops/` (shared). Age keys defined in `.sops.yaml` — both the user key and host key can decrypt.
+Encrypted YAML files:
+- Host-specific: `hosts/<hostname>/Krits-MacBook-Pro-secrets-sops.yaml`
+- Shared: `users/krit/sops/krit-common-secrets-sops.yaml`
+
+Age keys for decryption. SOPS config is in the host's `system.nix`.
 
 ### Package Channels
 
 - `pkgs` — nixpkgs stable (nixpkgs-25.11-darwin)
-- `pkgs.unstable` — nixpkgs-unstable overlay, available via `pkgs-unstable` specialArg
+- `pkgs-unstable` — nixpkgs-unstable, passed as `specialArgs`
+
+### Placeholder Directories
+
+- `packages/` — for custom package definitions (currently empty, `.gitkeep`)
+- `modules/services/` — for shared service modules (currently empty, `.gitkeep`)
 
 ## Adding a New Host
 
-1. Create `hosts/<hostname>/` with `variables.nix`, `configuration.nix`, `home.nix`
-2. The flake auto-discovers it — no changes to `flake.nix` needed
-3. Create `optional/` if host-specific opt-in modules are needed
+1. Create `hosts/<hostname>/default.nix` with `delib.host` — set `name`, constants, and enable desired modules
+2. Create `system.nix` (darwin config) and `home.nix` (home-manager config) as additional `delib.host` blocks
+3. The flake auto-discovers it — no changes to `flake.nix` needed
+4. Add host-specific packages via a `delib.module` with a namespaced enable option
 
 ## Nix Code Conventions
 
 - Formatter: `nixfmt-rfc-style` (2-space indentation)
-- Module signature: `{ config, pkgs, lib, ... }:`
+- Module wrapper: `delib.module` for shared modules, `delib.host` for host-specific config
+- Module signature: `{ delib, pkgs, lib, ... }:` (outer scope); `{ myconfig, cfg, ... }` (inner delib lambdas)
 - Prefer explicit `lib.` prefixes over `with lib;`
-- Use `mkIf`, `mkMerge`, `mkOption`, `mkDefault` for module composition
-- Host-specific logic stays in `hosts/<hostname>/`; shared modules must not reference host-specific values directly
+- Use `mkIf`, `mkMerge`, `mkOption`, `mkDefault`, `mkForce` for module composition
+- Host-specific logic stays in `hosts/<hostname>/`; shared modules access host values via `myconfig.constants`
+- Standard args (pkgs, lib, config, inputs) go in the outer function scope, NOT in `.ifEnabled` lambdas

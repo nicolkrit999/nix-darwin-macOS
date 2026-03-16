@@ -72,7 +72,7 @@ delib.host {
       krit.programs.direnv.enable = true;
       krit.programs.neovim.enable = true;
       krit.programs.firefox.enable = true;
-      krit.programs.librewolf.enable = true;
+      krit.programs.librewolf.enable = false; # disabled: librewolf-148.0 fails to link on nixpkgs-25.11 (LLVM 21 vs 20 mismatch)
       krit.programs.chromium.enable = false;
       krit.programs.yazi.enable = true;
       krit.programs.ranger.enable = false;

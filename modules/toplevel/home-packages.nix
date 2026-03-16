@@ -1,4 +1,4 @@
-{ delib, pkgs, pkgs-unstable, lib, config, ... }:
+{ delib, pkgs, lib, ... }:
 delib.module {
   name = "home-packages";
   options = delib.singleEnableOption false;
@@ -38,7 +38,10 @@ delib.module {
       editorName = translatedEditor;
       myEditorPkg = getPkg editorName fallbackEditor;
 
-      isModuleEnabled = name: lib.attrByPath [ "programs" name "enable" ] false config;
+      isModuleEnabled =
+        name:
+        (lib.attrByPath [ "programs" name "enable" ] false myconfig)
+        || (lib.attrByPath [ "krit" "programs" name "enable" ] false myconfig);
     in
     {
       home.packages =
