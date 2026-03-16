@@ -157,3 +157,15 @@ Age keys for decryption. SOPS config is in the host's `system.nix`.
 - Use `mkIf`, `mkMerge`, `mkOption`, `mkDefault`, `mkForce` for module composition
 - Host-specific logic stays in `hosts/<hostname>/`; shared modules access host values via `myconfig.constants`
 - Standard args (pkgs, lib, config, inputs) go in the outer function scope, NOT in `.ifEnabled` lambdas
+
+## Developer Configuration
+
+Personal preferences (editor config, personal shortcuts, code style opinions) belong in your
+**user-level** Claude Code config, not in this project file:
+
+- Linux/macOS: `~/.claude/CLAUDE.md` and `~/.claude/rules/`
+- Windows: `%USERPROFILE%\.claude\CLAUDE.md` and `%USERPROFILE%\.claude\rules\`
+
+Auto memory is machine-local by default. Do **not** set `autoMemoryDirectory` in
+`.claude/settings.local.json` — keeping it unset means each developer's memory stays on their
+own machine and doesn't cause noise across environments.
