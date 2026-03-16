@@ -3,3 +3,6 @@ result
 result-*
 .DS_Store
 *.nix.swp
+hosts/Krits-MacBook-Pro/optional.bak/
+*.bak
+*.bak/

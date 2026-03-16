@@ -1,7 +1,0 @@
-{ ... }:
-{
-  imports = [
-    ./yazi
-    ./ranger.nix
-  ];
-}
