@@ -119,7 +119,7 @@ This file contains aspects that can change between hosts, such as theming
     * latte/frappe/macchiato/mocha
 *  **catppuccinAccent**:** Refer to [palette](https://catppuccin.com/palette/)
 *  **gitUserName**: Username of github account
-*  **gitUserEmail**: E-Mail of github account   
+*  **gitUserEmail**: E-Mail of github account
 
 An example:
 ```nix
@@ -182,7 +182,7 @@ Once installed, use the convenient aliases configured in `zsh.nix` to manage you
 **Error: home-manager options not found**
 *   **Cause:** You might be mixing up system-level options with Home Manager options.
 *   **Fix:** Ensure app-specific settings (like `programs.zsh`) are inside `home-manager/modules`, not `nixDarwin/modules`.
-*   
+*
 
 
 
