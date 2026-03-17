@@ -23,10 +23,25 @@ delib.module {
       # 1. SOPS: Secrets
       # ---------------------------------------------------------
       sops.secrets = {
-        nas_owncloud_user.sopsFile = ../../../sops/krit-common-secrets-sops.yaml;
-        nas_owncloud_pass.sopsFile = ../../../sops/krit-common-secrets-sops.yaml;
-        nas_owncloud_url.sopsFile = ../../../sops/krit-common-secrets-sops.yaml;
+        nas_owncloud_user = {
+          sopsFile = ../../../sops/krit-common-secrets-sops.yaml;
+          owner = user;
+        };
+        nas_owncloud_pass = {
+          sopsFile = ../../../sops/krit-common-secrets-sops.yaml;
+          owner = user;
+        };
+        nas_owncloud_url = {
+          sopsFile = ../../../sops/krit-common-secrets-sops.yaml;
+          owner = user;
+        };
       };
+
+      # Pre-create mount directory as root (user agents can't mkdir in /Volumes)
+      system.activationScripts.owncloud-nas-mountpoints.text = ''
+        mkdir -p /Volumes/nicol_nas/webdav/owncloud
+        chown -R ${user} /Volumes/nicol_nas
+      '';
 
       launchd.user.agents.owncloud-rclone = {
         serviceConfig = {
@@ -41,7 +56,7 @@ delib.module {
                 pkgs.rclone
                 pkgs.coreutils
               ]
-            }:/usr/bin:/bin";
+            }:/usr/bin:/bin:/usr/sbin:/sbin";
           };
         };
 

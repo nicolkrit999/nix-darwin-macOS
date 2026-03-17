@@ -73,6 +73,13 @@ delib.module {
         owner = user;
       };
 
+      # /Volumes is root:wheel 755 — user launchd agents can't mkdir there.
+      # Pre-create the mount base as root so the agent script succeeds.
+      system.activationScripts.smb-nas-mountpoints.text = ''
+        mkdir -p /Volumes/nicol_nas/smb
+        chown -R ${user} /Volumes/nicol_nas
+      '';
+
       launchd.user.agents.smb-nas = {
         serviceConfig = {
           Label = "com.krit.smb-nas";

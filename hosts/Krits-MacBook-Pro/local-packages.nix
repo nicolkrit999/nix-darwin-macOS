@@ -61,6 +61,7 @@ delib.module {
         ];
 
         casks = [
+          "macfuse"
           "claude"
           "pycharm-ce"
           "intellij-idea-ce"

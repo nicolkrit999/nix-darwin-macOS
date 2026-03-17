@@ -34,6 +34,12 @@ delib.module {
       # ---------------------------------------------------------
       # LAUNCHD AGENT (Replaces systemd mount)
       # ---------------------------------------------------------
+      # Pre-create mount directory as root (user agents can't mkdir in /Volumes)
+      system.activationScripts.sshfs-nas-mountpoints.text = ''
+        mkdir -p /Volumes/nicol_nas/ssh/system_root
+        chown -R ${user} /Volumes/nicol_nas
+      '';
+
       launchd.user.agents.sshfs-nas = {
         serviceConfig = {
           Label = "com.krit.sshfs-nas";
@@ -49,7 +55,7 @@ delib.module {
                 pkgs.sshfs
                 pkgs.coreutils
               ]
-            }:/usr/bin:/bin";
+            }:/usr/bin:/bin:/usr/sbin:/sbin";
           };
         };
 
