@@ -26,7 +26,7 @@ delib.module {
           gsw = "git add -A && nh darwin switch ${flakeDir}";
           upd = "cd ${flakeDir} && nix flake update && sudo -H darwin-rebuild switch --flake ${flakeDir}";
           hms = "home-manager switch --flake ${flakeDir}";
-          pkgs = "nvim ${flakeDir}/home-manager/modules/default.nix";
+          pkgs = "nvim ${flakeDir}/modules/";
           fmt = "cd ${flakeDir} && nix fmt -- **/*.nix";
           fmt-dry = "cd ${flakeDir} && nix fmt --check";
           caff = "caffeinate";
@@ -41,7 +41,7 @@ delib.module {
           cdnix = "cd ~/nix-darwin-macOS/";
           nfc = "cd ${flakeDir} && nix flake check";
           nfcall = "cd ${flakeDir} && nix flake check --all-systems";
-          swdry = "cd ${flakeDir} && nh os test --dry --ask";
+          swdry = "cd ${flakeDir} && nh darwin switch --dry ${flakeDir}";
 
           caitempplugins = "npx claude-code-templates@latest --plugins";
           caitemphealt = "npx claude-code-templates@latest --health-check";
@@ -54,10 +54,9 @@ delib.module {
             source "$HOME/.zshrc_custom"
           fi
 
-          if status is-interactive
-          and not set -q TMUX
-          exec tmux new-session -A -s main
-          end
+          if [[ -z "$TMUX" ]] && [[ "$-" == *i* ]]; then
+            exec tmux new-session -A -s main
+          fi
 
           export CASE_SENSITIVE="true"
           export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"

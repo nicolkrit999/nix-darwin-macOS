@@ -1,6 +1,7 @@
-{ delib
-, pkgs
-, ...
+{
+  delib,
+  pkgs,
+  ...
 }:
 delib.module {
   name = "common-configuration";
@@ -56,7 +57,10 @@ delib.module {
         '')
       ];
 
-      environment.systemPath = [ "/nix/var/nix/profiles/per-user/${user}/profile/bin" "/opt/homebrew/bin" ];
+      environment.systemPath = [
+        "/nix/var/nix/profiles/per-user/${user}/profile/bin"
+        "/opt/homebrew/bin"
+      ];
 
       programs.zsh.enable = true;
       programs.zsh.interactiveShellInit =
@@ -71,12 +75,6 @@ delib.module {
 
       programs.fish = {
         enable = true;
-        interactiveShellInit = ''
-          if status is-interactive
-            and not set -q TMUX
-            exec tmux new-session -A -s main
-          end
-        '';
       };
     };
 }

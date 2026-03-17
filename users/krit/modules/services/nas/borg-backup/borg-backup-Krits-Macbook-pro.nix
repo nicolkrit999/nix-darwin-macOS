@@ -1,8 +1,9 @@
-{ delib
-, config
-, lib
-, pkgs
-, ...
+{
+  delib,
+  config,
+  lib,
+  pkgs,
+  ...
 }:
 delib.module {
   name = "krit.services.nas.Krits-MacBook-Pro-borg-backup";
@@ -112,31 +113,27 @@ delib.module {
       ];
 
       environment.etc."borgmatic/config.yaml".text = ''
-        location:
-          source_directories:
-            - /Users/krit
+        source_directories:
+          - /Users/krit
 
-          repositories:
-            - path: ssh://${nasUser}@${nasHost}${nasPath}
-              label: nas-repo
+        repositories:
+          - path: ssh://${nasUser}@${nasHost}${nasPath}
+            label: nas-repo
 
-          exclude_patterns:
-            ${builtins.concatStringsSep "\n    " (map (x: ''- "${x}"'') excludes)}
+        exclude_patterns:
+          ${builtins.concatStringsSep "\n    " (map (x: ''- "${x}"'') excludes)}
 
-        storage:
-          compression: auto,zstd
-          archive_name_format: '{hostname}-{now}'
-          encryption_passcommand: cat ${passphraseFile}
+        compression: auto,zstd
+        archive_name_format: '{hostname}-{now}'
+        encryption_passcommand: cat ${passphraseFile}
 
-        retention:
-          keep_daily: 7
-          keep_weekly: 4
-          keep_monthly: 6
+        keep_daily: 7
+        keep_weekly: 4
+        keep_monthly: 6
 
-        consistency:
-          checks:
-            - repository
-            - archives
+        checks:
+          - name: repository
+          - name: archives
 
         ssh_command: ssh -i ${sshKeyPath} -o StrictHostKeyChecking=accept-new -o ConnectTimeout=30
       '';

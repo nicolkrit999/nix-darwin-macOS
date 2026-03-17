@@ -1,4 +1,10 @@
-{ delib, pkgs, lib, config, ... }:
+{
+  delib,
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 delib.module {
   name = "krit.programs.ranger";
 
@@ -9,26 +15,23 @@ delib.module {
   home.ifEnabled =
     { myconfig, ... }:
     {
-      home.packages = lib.mkIf config.programs.ranger.enable (
-        with pkgs;
-        [
-          ffmpegthumbnailer
-          fzf
-          ueberzugpp
-        ]
-      );
+      home.packages = with pkgs; [
+        ffmpegthumbnailer
+        fzf
+        ueberzugpp
+      ];
 
       programs.ranger = {
-        enable = false;
+        enable = true;
         rifle = [
           {
             condition = "flag f";
-            command = ''xdg-open "$1"'';
+            command = ''open "$1"'';
           }
           {
             # Catch-all for everything else.
             condition = "else";
-            command = ''xdg-open "$1"'';
+            command = ''open "$1"'';
           }
         ];
 
@@ -117,7 +120,5 @@ delib.module {
         ];
       };
 
-      # Custom python command to enable udisk mounting support
-      home.file.".config/ranger/commands.py".text = "from plugins.ranger_udisk_menu.mounter import mount";
     };
 }

@@ -1,4 +1,10 @@
-{ delib, pkgs, lib, inputs, ... }:
+{
+  delib,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 delib.module {
   name = "krit.programs.firefox";
 
@@ -13,7 +19,7 @@ delib.module {
       buildFirefoxXpiAddon = lib.makeOverridable (
         {
           stdenv ? pkgs.stdenv,
-          fetchurl,
+          fetchurl ? pkgs.fetchurl,
           pname,
           version,
           addonId,
@@ -56,7 +62,7 @@ delib.module {
       programs.browserpass.enable = false;
 
       programs.firefox = {
-        enable = false;
+        enable = true;
         profiles.${myconfig.constants.user or "krit"} = {
           # Search Configuration
           # Forces Google as default while keeping privacy options like Kagi and duck duck go available.

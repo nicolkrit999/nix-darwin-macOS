@@ -1,4 +1,10 @@
-{ delib, pkgs, lib, inputs, ... }:
+{
+  delib,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 delib.module {
   name = "krit.programs.librewolf";
 
@@ -40,7 +46,7 @@ delib.module {
       };
       user = myconfig.constants.user or "krit";
       polarity = myconfig.constants.theme.polarity or "dark";
-      policyRoot = "/home/${user}/.librewolf-policyroot";
+      policyRoot = "/Users/${user}/.librewolf-policyroot";
 
       policiesJson = builtins.toJSON {
         policies = {
@@ -202,8 +208,8 @@ delib.module {
 
         "browser.download.useDownloadDir" = true;
         "browser.download.folderList" = 2;
-        "browser.download.dir" = "/home/${user}/Downloads";
-        "browser.download.lastDir" = "/home/${user}/Downloads";
+        "browser.download.dir" = "/Users/${user}/Downloads";
+        "browser.download.lastDir" = "/Users/${user}/Downloads";
 
         # Telemetry/junk off
         "extensions.pocket.enabled" = false;

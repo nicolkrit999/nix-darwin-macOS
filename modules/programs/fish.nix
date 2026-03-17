@@ -23,7 +23,7 @@ delib.module {
           gsw = "cd ${flakeDir} && git add -A && nh darwin switch ${flakeDir}";
           upd = "cd ${flakeDir} && nix flake update && sudo -H darwin-rebuild switch --flake ${flakeDir}";
           hms = "home-manager switch --flake ${flakeDir}";
-          pkgs = "nvim ${flakeDir}/home-manager/modules/default.nix";
+          pkgs = "nvim ${flakeDir}/modules/";
           fmt = "cd ${flakeDir} && nix fmt -- **/*.nix";
           fmt-dry = "cd ${flakeDir} && nix fmt --check";
           caff = "caffeinate";
@@ -38,7 +38,7 @@ delib.module {
           cdnix = "cd ~/nix-darwin-macOS/";
           nfc = "cd ${flakeDir} && nix flake check";
           nfcall = "cd ${flakeDir} && nix flake check --all-systems";
-          swdry = "cd ${flakeDir} && nh os test --dry --ask";
+          swdry = "cd ${flakeDir} && nh darwin switch --dry ${flakeDir}";
           caitempplugins = "npx claude-code-templates@latest --plugins";
           caitemphealt = "npx claude-code-templates@latest --health-check";
           caitempchat = "npx claude-code-templates@latest --chats";

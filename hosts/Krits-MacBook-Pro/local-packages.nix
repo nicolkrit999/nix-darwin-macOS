@@ -1,6 +1,7 @@
-{ delib
-, pkgs
-, ...
+{
+  delib,
+  pkgs,
+  ...
 }:
 delib.module {
   name = "krit.services.Krits-MacBook-Pro.local-packages";
@@ -33,7 +34,6 @@ delib.module {
         yt-dlp
         wakeonlan
         xcodegen
-        zoxide
         zeal
         (pkgs.python313.withPackages (
           ps: with ps; [
@@ -58,7 +58,6 @@ delib.module {
         brews = [
           "node"
           "pipes-sh"
-          "yt-dlp"
         ];
 
         casks = [
@@ -67,7 +66,6 @@ delib.module {
           "intellij-idea-ce"
           "alacritty"
           "discord"
-          "kitty"
           "iterm2"
           "pearcleaner"
           "only-switch"

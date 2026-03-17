@@ -1,4 +1,10 @@
-{ delib, config, pkgs, lib, ... }:
+{
+  delib,
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 delib.module {
   name = "krit.services.nas.smb";
 
@@ -65,6 +71,28 @@ delib.module {
       sops.secrets.nas-krit-credentials = {
         sopsFile = ../../../sops/krit-common-secrets-sops.yaml;
         owner = user;
+      };
+
+      launchd.user.agents.smb-nas = {
+        serviceConfig = {
+          Label = "com.krit.smb-nas";
+          RunAtLoad = true;
+          StandardOutPath = "/Users/${user}/Library/Logs/smb-nas.log";
+          StandardErrorPath = "/Users/${user}/Library/Logs/smb-nas.err";
+
+          # Re-check mounts every 10 minutes
+          StartInterval = 600;
+
+          EnvironmentVariables = {
+            PATH = "${
+              lib.makeBinPath [
+                pkgs.coreutils
+              ]
+            }:/usr/bin:/bin:/usr/sbin:/sbin";
+          };
+        };
+
+        script = mountScript;
       };
     };
 }

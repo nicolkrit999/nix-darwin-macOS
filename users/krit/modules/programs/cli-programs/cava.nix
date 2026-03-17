@@ -10,7 +10,7 @@ delib.module {
     { ... }:
     {
       programs.cava = {
-        enable = false;
+        enable = true;
         settings = {
           general.framerate = 60;
 

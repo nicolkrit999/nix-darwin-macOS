@@ -57,6 +57,7 @@ delib.host {
         cava.enable = true;
         kitty.enable = true;
         alacritty.enable = true;
+        firefox.profileNames = [ "krit" ];
         librewolf.profileNames = [
           "default"
           "privacy"

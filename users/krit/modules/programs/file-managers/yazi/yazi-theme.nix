@@ -10,7 +10,7 @@ delib.module {
     {
       programs.yazi.theme = {
 
-        mng = {
+        mgr = {
           cwd = {
             fg = "#${colors.base0C}";
           };
