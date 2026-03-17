@@ -14,7 +14,6 @@ delib.module {
 
       nixpkgs.overlays = [
         inputs.nix-index-database.overlays.nix-index
-        inputs.claude-code.overlays.default
       ];
 
       nix.enable = true;

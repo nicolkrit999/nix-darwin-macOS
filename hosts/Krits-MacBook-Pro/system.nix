@@ -77,6 +77,38 @@ delib.host {
           sopsFile = commonSecrets;
           owner = "krit";
         };
+        claude_mcp_actual_password = {
+          sopsFile = commonSecrets;
+          owner = "krit";
+        };
+        claude_mcp_actual_sync_id = {
+          sopsFile = commonSecrets;
+          owner = "krit";
+        };
+        claude_mcp_actual_encryption_password = {
+          sopsFile = commonSecrets;
+          owner = "krit";
+        };
+        claude_mcp_context7_api_key = {
+          sopsFile = commonSecrets;
+          owner = "krit";
+        };
+        claude_mcp_openai_api_key = {
+          sopsFile = commonSecrets;
+          owner = "krit";
+        };
+        claude_mcp_milvus_token = {
+          sopsFile = commonSecrets;
+          owner = "krit";
+        };
+        claude_mcp_github_copilot_token = {
+          sopsFile = commonSecrets;
+          owner = "krit";
+        };
+        claude_mcp_portainer_token = {
+          sopsFile = commonSecrets;
+          owner = "krit";
+        };
       };
 
     nix.extraOptions = ''

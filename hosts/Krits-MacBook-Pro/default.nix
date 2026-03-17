@@ -50,6 +50,7 @@ delib.host {
       programs.tmux.enable = true;
       programs.zsh.enable = true;
       programs.zoxide.enable = true;
+      programs.claude-code.enable = true;
 
       stylix.enable = true;
       stylix.targets = {

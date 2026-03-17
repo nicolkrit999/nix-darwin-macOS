@@ -42,11 +42,6 @@ delib.module {
           nfc = "cd ${flakeDir} && nix flake check";
           nfcall = "cd ${flakeDir} && nix flake check --all-systems";
           swdry = "cd ${flakeDir} && nh darwin switch --dry ${flakeDir}";
-
-          caitempplugins = "npx claude-code-templates@latest --plugins";
-          caitemphealt = "npx claude-code-templates@latest --health-check";
-          caitempchat = "npx claude-code-templates@latest --chats";
-          caitempanalytics = "npx claude-code-templates@latest --analytics";
         };
 
         initContent = ''
