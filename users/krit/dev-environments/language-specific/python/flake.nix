@@ -60,6 +60,10 @@
                 pylint # Source code analyzer
                 setuptools # Library for packaging Python projects
                 venvShellHook # Hook to create and manage virtual-environments
+                numpy # Fundamental package for scientific computing
+                pandas # Data analysis and manipulation TOOLS
+                matplotlib # Plotting Library
+                numba # JIT compiler for numerical functions
 
                 # 2. TOP-LEVEL TOOLS (static)
                 pkgs.pyright # Static type checker (Written in TS, top-level pkg)
