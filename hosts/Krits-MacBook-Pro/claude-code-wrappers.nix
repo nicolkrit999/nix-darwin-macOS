@@ -71,10 +71,12 @@ delib.module {
             matplotlib # matplotlib skill
             networkx # networkx skill
             pandas # xlsx, data analysis
+            python-docx # docx skill — creation/editing
             openpyxl # xlsx creation/editing
             pillow # pptx thumbnail grids, image handling
             pypdf # pdf skill — merge/split/metadata
             pdfplumber # pdf skill — text/table extraction
+            python-pptx # pptx skill — presentation creation
             reportlab # pdf skill — create PDFs
             requests # citation-management, literature-review
             bibtexparser # citation-management — BibTeX parsing
@@ -88,6 +90,7 @@ delib.module {
         pkgs.pandoc # docx/literature-review — text extraction and PDF generation
         pkgs.poppler-utils # pdf/pptx/docx — pdftoppm, pdftotext, pdfimages
         pkgs.tesseract # pdf — OCR for scanned documents
+        pkgs.octave # Matlab skill - numerical computing, plotting, data analysis
         # libreoffice-still: not available on aarch64-darwin — install via Homebrew Cask if needed
         pkgs.uv # fast Python package installer (fallback for non-nix envs)
         pkgs.nodejs # docx (npm install -g docx), pptx (npm install -g pptxgenjs)
