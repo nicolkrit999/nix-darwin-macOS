@@ -21,13 +21,6 @@ delib.module {
     {
       environment.systemPackages = [
         pkgs.claude-code
-
-        (pkgs.writeShellScriptBin "cai" ''
-          if [ -f /run/secrets/openrouter_api_claude_code ]; then
-            export OPENROUTER_API_KEY=$(cat /run/secrets/openrouter_api_claude_code)
-          fi
-          exec ${pkgs.claude-code}/bin/claude "$@"
-        '')
       ];
     };
 
@@ -67,7 +60,6 @@ delib.module {
                 --arg openai "$(_read_secret /run/secrets/claude_mcp_openai_api_key)" \
                 --arg milvus "$(_read_secret /run/secrets/claude_mcp_milvus_token)" \
                 --arg ghtoken "$(_read_secret /run/secrets/claude_mcp_github_copilot_token)" \
-                --arg portainer "$(_read_secret /run/secrets/claude_mcp_portainer_token)" \
                 '
                 (if ($actual_pw != "") and (.mcpServers["budget-principale"]? != null) then .mcpServers["budget-principale"].env.ACTUAL_PASSWORD = $actual_pw else . end) |
                 (if ($actual_sync != "") and (.mcpServers["budget-principale"]? != null) then .mcpServers["budget-principale"].env.ACTUAL_BUDGET_SYNC_ID = $actual_sync else . end) |
@@ -75,8 +67,7 @@ delib.module {
                 (if ($ctx7 != "") and (.mcpServers["context7"]? != null) then .mcpServers["context7"].args[-1] = $ctx7 else . end) |
                 (if ($openai != "") and (.mcpServers["claude-context"]? != null) then .mcpServers["claude-context"].env.OPENAI_API_KEY = $openai else . end) |
                 (if ($milvus != "") and (.mcpServers["claude-context"]? != null) then .mcpServers["claude-context"].env.MILVUS_TOKEN = $milvus else . end) |
-                (if ($ghtoken != "") and (.mcpServers["github"]? != null) then .mcpServers["github"].headers.Authorization = ("Bearer " + $ghtoken) else . end) |
-                (if ($portainer != "") and (.mcpServers["portainer"]? != null) then .mcpServers["portainer"].args[3] = $portainer else . end)
+                (if ($ghtoken != "") and (.mcpServers["github"]? != null) then .mcpServers["github"].headers.Authorization = ("Bearer " + $ghtoken) else . end)
                 ' "$CLAUDE_JSON" > "$CLAUDE_JSON.tmp" && mv "$CLAUDE_JSON.tmp" "$CLAUDE_JSON"
             fi
           '';

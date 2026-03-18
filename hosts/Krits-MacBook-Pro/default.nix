@@ -89,5 +89,6 @@ delib.host {
       krit.services.nas.owncloud.enable = true;
       krit.services.nas.Krits-MacBook-Pro-borg-backup.enable = true;
       krit.services.Krits-MacBook-Pro.local-packages.enable = true;
+      krit.services.Krits-MacBook-Pro.claude-code-wrappers.enable = true;
     };
 }
