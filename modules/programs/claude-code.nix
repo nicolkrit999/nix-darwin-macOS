@@ -32,6 +32,21 @@ delib.module {
         caitemphealt = "npx claude-code-templates@latest --health-check";
         caitempchat = "npx claude-code-templates@latest --chats";
         caitempanalytics = "npx claude-code-templates@latest --analytics";
+        "cai-openrouter-geminipro" = "cai-openrouter --model google/gemini-3.1-pro-preview";
+        "cai-openrouter-geminiflash" = "cai-openrouter --model google/gemini-3.1-flash-lite-preview";
+        "cai-openrouter-gptpro" = "cai-openrouter --model openai/gpt-5.4-pro";
+        "cai-openrouter-gptmini" = "cai-openrouter --model openai/gpt-5.4-mini";
+        "cai-openrouter-opus" = "cai-openrouter --model anthropic/claude-opus-4.6";
+        "cai-openrouter-sonnet" = "cai-openrouter --model anthropic/claude-sonnet-4.6";
+        "cai-openrouter-maverick" = "cai-openrouter --model meta-llama/llama-4-maverick";
+        "cai-openrouter-scout" = "cai-openrouter --model meta-llama/llama-4-scout";
+        "cai-openrouter-glmturbo" = "cai-openrouter --model z-ai/glm-5-turbo";
+        "cai-openrouter-grokbeta" = "cai-openrouter --model x-ai/grok-4.20-beta";
+        "cai-openrouter-free-step" = "cai-openrouter --model stepfun/step-3.5-flash:free";
+        "cai-openrouter-free-hunter" = "cai-openrouter --model openrouter/hunter-alpha";
+        "cai-openrouter-mistral-small" = "cai-openrouter --model mistralai/mistral-small-2603";
+        "cai-openrouter-kimi" = "cai-openrouter --model moonshotai/kimi-k2.5";
+        "cai-openrouter-qwen" = "cai-openrouter --model qwen/qwen3.5-397b-a17b";
       };
 
       programs.zsh.shellAliases = {
@@ -39,6 +54,21 @@ delib.module {
         caitemphealt = "npx claude-code-templates@latest --health-check";
         caitempchat = "npx claude-code-templates@latest --chats";
         caitempanalytics = "npx claude-code-templates@latest --analytics";
+        "cai-openrouter-geminipro" = "cai-openrouter --model google/gemini-3.1-pro-preview";
+        "cai-openrouter-geminiflash" = "cai-openrouter --model google/gemini-3.1-flash-lite-preview";
+        "cai-openrouter-gptpro" = "cai-openrouter --model openai/gpt-5.4-pro";
+        "cai-openrouter-gptmini" = "cai-openrouter --model openai/gpt-5.4-mini";
+        "cai-openrouter-opus" = "cai-openrouter --model anthropic/claude-opus-4.6";
+        "cai-openrouter-sonnet" = "cai-openrouter --model anthropic/claude-sonnet-4.6";
+        "cai-openrouter-maverick" = "cai-openrouter --model meta-llama/llama-4-maverick";
+        "cai-openrouter-scout" = "cai-openrouter --model meta-llama/llama-4-scout";
+        "cai-openrouter-glmturbo" = "cai-openrouter --model z-ai/glm-5-turbo";
+        "cai-openrouter-grokbeta" = "cai-openrouter --model x-ai/grok-4.20-beta";
+        "cai-openrouter-free-step" = "cai-openrouter --model stepfun/step-3.5-flash:free";
+        "cai-openrouter-free-hunter" = "cai-openrouter --model openrouter/hunter-alpha";
+        "cai-openrouter-mistral-small" = "cai-openrouter --model mistralai/mistral-small-2603";
+        "cai-openrouter-kimi" = "cai-openrouter --model moonshotai/kimi-k2.5";
+        "cai-openrouter-qwen" = "cai-openrouter --model qwen/qwen3.5-397b-a17b";
       };
 
       home.activation.patchClaudeJsonSecrets =
