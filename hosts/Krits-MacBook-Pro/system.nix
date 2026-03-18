@@ -101,7 +101,7 @@ delib.host {
           sopsFile = commonSecrets;
           owner = "krit";
         };
-        claude_mcp_github_copilot_token = {
+        claude_mcp_github_token = {
           sopsFile = commonSecrets;
           owner = "krit";
         };

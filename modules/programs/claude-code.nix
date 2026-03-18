@@ -93,7 +93,7 @@ delib.module {
                 --arg ctx7 "$(_read_secret /run/secrets/claude_mcp_context7_api_key)" \
                 --arg openai "$(_read_secret /run/secrets/claude_mcp_openai_api_key)" \
                 --arg milvus "$(_read_secret /run/secrets/claude_mcp_milvus_token)" \
-                --arg ghtoken "$(_read_secret /run/secrets/claude_mcp_github_copilot_token)" \
+                --arg ghtoken "$(_read_secret /run/secrets/claude_mcp_github_token)" \
                 '
                 (if ($actual_pw != "") and (.mcpServers["budget-principale"]? != null) then .mcpServers["budget-principale"].env.ACTUAL_PASSWORD = $actual_pw else . end) |
                 (if ($actual_sync != "") and (.mcpServers["budget-principale"]? != null) then .mcpServers["budget-principale"].env.ACTUAL_BUDGET_SYNC_ID = $actual_sync else . end) |
