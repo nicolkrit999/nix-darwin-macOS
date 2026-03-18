@@ -48,6 +48,7 @@ delib.module {
         cai-openrouter-mistralsmall = "cai-openrouter --model mistralai/mistral-small-2603";
         cai-openrouter-kimi = "cai-openrouter --model moonshotai/kimi-k2.5";
         cai-openrouter-qwen = "cai-openrouter --model qwen/qwen3.5-397b-a17b";
+        cai-openrouter-minimax = "cai-openrouter --model minimax/minimax-m2.5";
       };
 
       programs.zsh.shellAliases = {
@@ -71,6 +72,7 @@ delib.module {
         cai-openrouter-mistralsmall = "cai-openrouter --model mistralai/mistral-small-2603";
         cai-openrouter-kimi = "cai-openrouter --model moonshotai/kimi-k2.5";
         cai-openrouter-qwen = "cai-openrouter --model qwen/qwen3.5-397b-a17b";
+        cai-openrouter-minimax = "cai-openrouter --model minimax/minimax-m2.5";
       };
 
       home.activation.patchClaudeJsonSecrets =
