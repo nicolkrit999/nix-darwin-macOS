@@ -2,7 +2,7 @@
 
 - [ Personal Nix-Darwin Config](#-personal-nix-darwin-config)
   - [✨ Features](#-features)
-    - [🖥️ Adaptive Host Support](#️-adaptive-host-support)
+    - [🖥️ Adaptive Host Support (Denix)](#️-adaptive-host-support)
     - [🎨 Unified Theming (Stylix)](#-unified-theming-stylix)
     - [🏠 Home Manager Integration](#-home-manager-integration)
     - [🍎 macOS System Defaults](#-macos-system-defaults)
@@ -12,30 +12,27 @@
   - [2. Clone the Repository](#2-clone-the-repository)
   - [3. Create Your Host Configuration](#3-create-your-host-configuration)
   - [4. Configure the host-specific aspects](#4-configure-the-host-specific-aspects)
+    - [default.nix (Source of Truth)](#defaultnix-source-of-truth)
+    - [system.nix & home.nix](#systemnix--homenix)
     - [local-packages.nix](#local-packagesnix)
-    - [variables.nix](#variablesnix)
   - [5. First Time Build](#5-first-time-build)
   - [🔄 Daily Usage](#-daily-usage)
   - [❓ Troubleshooting](#-troubleshooting)
-  - [Other resources](#other-resources)
-    - [Structure](#structure)
-    - [Issues](#issues)
-    - [Ideas](#ideas)
 
 ---
 
 ## ✨ Features
 
 ### 🖥️ Adaptive Host Support
-Define unique parameters (monitor resolutions for wallpaper scaling, usernames, git credentials) per MacBook while keeping the core environment identical.
+Built on the **denix** library, this configuration uses auto-discovery for all modules. Define unique parameters (monitor resolutions for wallpaper scaling, usernames, git credentials) per MacBook while keeping the core environment identical. No manual imports needed!
 
 ### 🎨 Unified Theming (Stylix)
 A central theme engine that controls the look of the entire system.
 * **Modes:** Switch between a generated **Base16** theme or the official **Catppuccin** implementation.
-* **Scope:** Controls Terminal colors (Alacritty), Shell prompts (Starship), and application themes (Bat, Lazygit, Firefox).
+* **Scope:** Controls Terminal colors (Alacritty/Kitty), Shell prompts (Starship), and application themes (Bat, Lazygit, Firefox).
 
 ### 🏠 Home Manager Integration
-Fully declarative management of user dotfiles and applications. It defines terminal, shell, browser, and git settings, whihc are reproducible across any Mac.
+Fully declarative management of user dotfiles and applications. It defines terminal, shell, browser, and git settings, which are reproducible across any Mac.
 
 ### 🍎 macOS System Defaults
 Declarative configuration of macOS behavior:
@@ -43,8 +40,8 @@ Declarative configuration of macOS behavior:
 * **Finder:** Show all file extensions, default view modes.
 * **TouchID:** Enabled for `sudo` commands (no more typing passwords for admin tasks).
 
-### ⚡ Zsh + Starship
-A hybrid shell setup. It provides a robust default environment managed by Nix but respects a local `.zshrc_custom` for machine-specific aliases or work-related configs that shouldn't be committed to Git.
+### ⚡ Shell Environment
+Uses fish as the primary shell with a robust default environment managed by Nix.
 
 ---
 
@@ -91,63 +88,58 @@ cd hosts
 cp -r Krits-MacBook-Pro <Your-Hostname>
 ```
 
-**(Optional) Edit Local Packages:**
-Open `hosts/<Your-Hostname>/local-packages.nix` to add or remove software specific to this machine (e.g., if you don't need gaming tools on a work laptop).
-
-
+---
 
 ## 4. Configure the host-specific aspects
 
-### local-packages.nix
-This file contains packages that are installed only for that specific hosts.
-- Change accordingly
+With the migration to `denix` and the `delib` module system, host configuration is centralized.
 
+### default.nix (Source of Truth)
+This file uses `delib.host` and contains the constants and module enablement for the host.
+Variables like theming, hostname, and user are defined here under `myconfig.constants`. Shared and user modules are enabled here (e.g., `programs.bat.enable = true;`).
 
-### variables.nix
-This file contains aspects that can change between hosts, such as theming
-- Make sure to define every variable otherwise the build would fail
+**Variables to customize in `constants`:**
+*   **hostname**: Needs to match the folder name
+*   **user:**: Needs to match the Mac user.
+*   **terminal**, **shell**, **browser**, **editor**: Default applications
+*   **theme.base16Theme**: The general theming (applied via stylix)
+*   **theme.polarity**: Light or dark mode
+*   **theme.catppuccin**: Whether to enable catppuccin or not
+*   **gitUserName**: Username of github account
+*   **gitUserEmail**: E-Mail of github account
 
-
-**Variables to customize:**
-*   **hostname**: Needs to match the one found
-*   **user:**: needs to match the mac user.
-*   **monitorConfig:**: Used for font scaling logic in Alacritty.
-*   **base16Theme**: The general theming, it will be applied to all modules enabled in `stylix.nix`
-*   **polarity**: Whatever the general theme should be light/dark. It should make sense with the chosen base16Theme
-*   **catppuccin**: Whatever to enable catppuccin or not
-*   **catppuccinFlavor**: Which flavor to choose
-    * latte/frappe/macchiato/mocha
-*  **catppuccinAccent**:** Refer to [palette](https://catppuccin.com/palette/)
-*  **gitUserName**: Username of github account
-*  **gitUserEmail**: E-Mail of github account
-
-An example:
+An example snippet from `default.nix`:
 ```nix
-{
-  # 💻 HOST IDENTITY
-  hostname = "Krits-MacBook-Pro";
-  user = "krit";
-  system = "aarch64-darwin";
+{ delib, ... }:
+delib.host {
+  name = "Krits-MacBook-Pro";
+  type = "desktop";
+  homeManagerSystem = "aarch64-darwin";
 
-  # ⚙️ SYSTEM SETTINGS
-  monitorConfig = [ "eDP-1,3024x1964,1" ];
+  myconfig = { ... }: {
+    constants = {
+      hostname = "Krits-MacBook-Pro";
+      user = "krit";
+      theme = {
+        polarity = "dark";
+        base16Theme = "nord";
+        catppuccin = false;
+      };
+      # ...
+    };
 
-  # 🎨 THEMING
-  base16Theme = "nord";
-  polarity = "dark";
-
-  # Catppuccin Logic (Disable if using Nord)
-  catppuccin = false;
-  catppuccinFlavor = "macchiato"; # Unused if false
-  catppuccinAccent = "mauve";
-
-  # 🐙 GIT CONFIG
-  gitUserName = "nicolkrit999";
-  gitUserEmail = "githubgitlabmain.hu5b7@passfwd.com";
+    # Enable shared modules
+    programs.git.enable = true;
+    # ...
+  };
 }
-
 ```
 
+### system.nix & home.nix
+Contains `darwin` (system-level) and `home-manager` (user-level) configurations specific to this host, wrapped in `delib.host` blocks.
+
+### local-packages.nix
+Contains packages that are installed only for that specific host via a `delib.module`.
 
 
 ## 5. First Time Build
@@ -162,13 +154,12 @@ nix run nix-darwin -- switch --flake .#<hostname>
 
 ## 🔄 Daily Usage
 
-Once installed, use the convenient aliases configured in `zsh.nix` to manage your system.
+Once installed, use the convenient aliases configured to manage your system.
 
 | Command | Description                                                               |
 | :------ | :------------------------------------------------------------------------ |
 | `sw`    | **Switch**. Rebuilds the System and Home Manager configuration.           |
 | `upd`   | **Update**. Updates `flake.lock` (packages) and then rebuilds the system. |
-| `pkgs`  | **Edit**. Opens the Home Manager modules folder in Neovim.                |
 | `fmt`   | **Format**. Formats all `.nix` files in the repo using `nixfmt`.          |
 
 ---
@@ -179,22 +170,5 @@ Once installed, use the convenient aliases configured in `zsh.nix` to manage you
 *   **Fix:** The installer should handle this, but if not, ensure `~/.config/nix/nix.conf` contains:
     `experimental-features = nix-command flakes`
 
-**Error: home-manager options not found**
-*   **Cause:** You might be mixing up system-level options with Home Manager options.
-*   **Fix:** Ensure app-specific settings (like `programs.zsh`) are inside `home-manager/modules`, not `nixDarwin/modules`.
-*
-
-
-
-## Other resources
-### [Structure](./Documentation/structure/Structure.md)
-These files contains the entire structure of the project, with an explanation of every single file
-
-### [Issues](./Documentation/issues/issues.md)
-These file contains issues that i noticed that should be resolved
-- Issues include both warnings than critical one
-
-### [Ideas](./Documentation/ideas/ideas.md)
-These file contains ideas that i think may benefit the project
 
 
