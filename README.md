@@ -6,7 +6,7 @@
     - [🎨 Unified Theming (Stylix)](#-unified-theming-stylix)
     - [🏠 Home Manager Integration](#-home-manager-integration)
     - [🍎 macOS System Defaults](#-macos-system-defaults)
-    - [⚡ Zsh + Starship](#-zsh--starship)
+    - [⚡ Shell Environment](#-shell-environment)
   - [🚀 Installation](#-installation)
     - [1. Install Nix](#1-install-nix)
   - [2. Clone the Repository](#2-clone-the-repository)
@@ -14,7 +14,7 @@
   - [4. Configure the host-specific aspects](#4-configure-the-host-specific-aspects)
     - [default.nix (Source of Truth)](#defaultnix-source-of-truth)
     - [system.nix & home.nix](#systemnix--homenix)
-    - [local-packages.nix](#local-packagesnix)
+    - [Opinionated directories and exclusions](#opinionated-directories-and-exclusions)
   - [5. First Time Build](#5-first-time-build)
   - [🔄 Daily Usage](#-daily-usage)
   - [❓ Troubleshooting](#-troubleshooting)
@@ -52,7 +52,7 @@ This configuration is built for the **Determinate Systems** Nix installer (which
 
 Run the installer:
 ```bash
-curl --proto '=https' --tlsv1.2 -sSf -L [https://install.determinate.systems/nix](https://install.determinate.systems/nix) | sh -s -- install
+curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
 ```
 
 
@@ -138,9 +138,12 @@ delib.host {
 ### system.nix & home.nix
 Contains `darwin` (system-level) and `home-manager` (user-level) configurations specific to this host, wrapped in `delib.host` blocks.
 
-### local-packages.nix
-Contains packages that are installed only for that specific host via a `delib.module`.
+### Opinionated directories and exclusions
+By design, anything within `users/<name>` or `templates/<name>` is considered opinionated.
+- **`users/<name>`**: For module logic specific to a given user/workflow. Users can just add a new folder matching their name and import those modules into their `default.nix` in the host file.
+- **`templates/<name>`**: For standard Nix functions that intentionally lack a `delib` wrapper since they are excluded from the auto-discovery engine. It protects standard structural Nix concepts (like dev environment flakes) from breaking the build process because auto-discovery expects `delib.module`. Any user module requiring non-delib logic should be organized here.
 
+See [delib documentation](./documentation/usage/delib/delib.md) for details on available shared modules.
 
 ## 5. First Time Build
 
@@ -169,6 +172,3 @@ Once installed, use the convenient aliases configured to manage your system.
 **Error: experimental-features 'flakes' is disabled**
 *   **Fix:** The installer should handle this, but if not, ensure `~/.config/nix/nix.conf` contains:
     `experimental-features = nix-command flakes`
-
-
-

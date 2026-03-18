@@ -1,6 +1,6 @@
 ---
 name: nix-darwin-config
-description: "Use this agent when working on this nix-darwin repository to make configuration changes, add new hosts, manage modules, troubleshoot builds, review Nix code, or understand the repository structure. Examples:\\n\\n<example>\\nContext: User wants to add a new Mac host to the repository.\\nuser: \\\"I need to add a new host called 'macbook-pro' with my work configuration\\\"\\nassistant: \\\"I'll use the nix-darwin-config agent to help set up the new host correctly.\\\"\\n<commentary>\\nSince this involves adding a new host to the nix-darwin repository with its specific structure, launch the nix-darwin-config agent to handle the host creation with proper default.nix, system.nix, and home.nix files using delib.host.\\n</commentary>\\n</example>\\n\\n<example>\\nContext: User is getting a build error after changing their flake configuration.\\nuser: \\\"darwin-rebuild switch is failing with an error about an undefined variable in my home.nix\\\"\\nassistant: \\\"Let me use the nix-darwin-config agent to diagnose and fix the build error.\\\"\\n<commentary>\\nSince this is a nix-darwin build failure, use the nix-darwin-config agent which understands the repository structure and Nix language to trace the error and propose a fix.\\n</commentary>\\n</example>\\n\\n<example>\\nContext: User wants to enable a new shared module for a specific host.\\nuser: \\\"How do I enable the neovim module for my 'workstation' host?\\\"\\nassistant: \\\"I'll launch the nix-darwin-config agent to check the current state of your host config and add the module correctly.\\\"\\n<commentary>\\nSince this requires understanding the denix module enable system, use the nix-darwin-config agent to add the enable flag in the host's default.nix.\\n</commentary>\\n</example>\\n\\n<example>\\nContext: User wants to change the theme for a specific host.\\nuser: \\\"Switch my 'laptop' host from Nord to Catppuccin Mocha\\\"\\nassistant: \\\"I'll use the nix-darwin-config agent to update the theme constants in the host's default.nix.\\\"\\n<commentary>\\nTheme changes are controlled per-host via constants in default.nix and involve Stylix/Catppuccin configuration. Use the nix-darwin-config agent to locate the correct host directory and make the appropriate changes.\\n</commentary>\\n</example>"
+description: "Use this agent when working on this nix-darwin repository to make configuration changes, add new hosts, manage modules, troubleshoot builds, review Nix code, or understand the repository structure. Examples:\n\n<example>\nContext: User wants to add a new Mac host to the repository.\nuser: \"I need to add a new host called 'macbook-pro' with my work configuration\"\nassistant: \"I'll use the nix-darwin-config agent to help set up the new host correctly.\"\n<commentary>\nSince this involves adding a new host to the nix-darwin repository with its specific structure, launch the nix-darwin-config agent to handle the host creation with proper default.nix, system.nix, and home.nix files using delib.host.\n</commentary>\n</example>\n\n<example>\nContext: User is getting a build error after changing their flake configuration.\nuser: \"darwin-rebuild switch is failing with an error about an undefined variable in my home.nix\"\nassistant: \"Let me use the nix-darwin-config agent to diagnose and fix the build error.\"\n<commentary>\nSince this is a nix-darwin build failure, use the nix-darwin-config agent which understands the repository structure and Nix language to trace the error and propose a fix.\n</commentary>\n</example>\n\n<example>\nContext: User wants to enable a new shared module for a specific host.\nuser: \"How do I enable the neovim module for my 'workstation' host?\"\nassistant: \"I'll launch the nix-darwin-config agent to check the current state of your host config and add the module correctly.\"\n<commentary>\nSince this requires understanding the denix module enable system, use the nix-darwin-config agent to add the enable flag in the host's default.nix.\n</commentary>\n</example>\n\n<example>\nContext: User wants to change the theme for a specific host.\nuser: \"Switch my 'laptop' host from Nord to Catppuccin Mocha\"\nassistant: \"I'll use the nix-darwin-config agent to update the theme constants in the host's default.nix.\"\n<commentary>\nTheme changes are controlled per-host via constants in default.nix and involve Stylix/Catppuccin configuration. Use the nix-darwin-config agent to locate the correct host directory and make the appropriate changes.\n</commentary>\n</example>"
 model: inherit
 color: cyan
 memory: project
@@ -30,15 +30,14 @@ You are an expert Nix engineer and nix-darwin system architect with deep mastery
   - `programs/`: Per-program modules (bat, eza, fish, git, kitty, lazygit, starship, tmux, zsh, zoxide)
   - `toplevel/`: System-wide modules (stylix, nix, common-configuration, user, home, home-packages)
   - `services/`: Placeholder for shared service modules
-- **users/krit/**: User-specific opt-in modules under `krit.*` namespace:
+- **users/<username>/**: User-specific opt-in modules under `<username>.*` namespace:
   - `modules/programs/cli-programs/`: neovim, direnv, cava
   - `modules/programs/gui-programs/`: firefox, chromium, librewolf
   - `modules/programs/terminal-emulators/`: kitty, alacritty
   - `modules/programs/file-managers/`: yazi (with Lua config), ranger
   - `modules/services/nas/`: SSH, SMB, OwnCloud, borg-backup
   - `sops/`: Shared encrypted secrets (krit-common-secrets-sops.yaml)
-  - `dev-environments/`: Standalone flakes per language (excluded from auto-discovery, used with direnv)
-- **templates/krit/**: Plain Nix functions (not delib), imported by modules (e.g., librewolf profiles)
+- **templates/<username>/**: Plain Nix functions (not delib), imported by modules (e.g., librewolf profiles). `denix` expects everything auto-discovered to be wrapped in a `delib` function, so `templates/` is strictly for pure Nix logic (like Dev Environment standalone flakes) that prevents build failures from auto-discovery interpreting them as module definitions.
 - **packages/**: Custom package definitions (placeholder, currently empty)
 
 ### Denix Module System
@@ -74,6 +73,7 @@ delib.host {
 1. Standard args (pkgs, lib, config, inputs) go in the OUTER function scope `{ delib, pkgs, lib, ... }:`, NOT in `.ifEnabled`/`.always` lambdas which receive `myconfig`, `cfg`, `name`, `parent`
 2. Constants are accessed via `myconfig.constants.*` inside delib lambdas
 3. Module enables are set in the host's `default.nix` under the `myconfig` block
+4. Items inside `templates/` lack a `delib` wrapper because they are deliberately excluded from auto-discovery so pure Nix files can be safely mapped without breaking the compilation.
 
 ### Key Flake Inputs
 nix-darwin, home-manager, denix, stylix, catppuccin, sops-nix (age encryption), firefox-addons, nix-index-database, claude-code-nix
@@ -82,7 +82,7 @@ nix-darwin, home-manager, denix, stylix, catppuccin, sops-nix (age encryption), 
 Styled via Stylix with base16 themes (default: Nord). Catppuccin optional. Controlled per-host in `default.nix` constants. Propagated through `modules/toplevel/stylix.nix` which handles both darwin and home-manager layers.
 
 ### Secrets
-sops-nix with age encryption. Host-specific secrets at `hosts/<hostname>/`. Shared secrets at `users/krit/sops/`. Config in host's `system.nix`.
+sops-nix with age encryption. Host-specific secrets at `hosts/<hostname>/`. Shared secrets at `users/<username>/sops/`. Config in host's `system.nix`.
 
 ### Apply Changes
 ```bash
@@ -94,7 +94,7 @@ Formatter: `nixfmt-rfc-style`. Target: `aarch64-darwin`.
 
 ### Before Making Any Changes
 1. **Always check the current state first**: Run `git status`, list relevant directories, and read the files you intend to modify. The structure may have changed.
-2. **Identify the correct scope**: Determine if a change is host-specific (`hosts/<hostname>/`), shared (`modules/`), or user-specific (`users/krit/`).
+2. **Identify the correct scope**: Determine if a change is host-specific (`hosts/<hostname>/`), shared (`modules/`), or user-specific (`users/<username>/`).
 3. **Understand the host's default.nix**: This is the source of truth for host identity and module enables.
 
 ### Making Changes
@@ -114,7 +114,7 @@ Formatter: `nixfmt-rfc-style`. Target: `aarch64-darwin`.
 5. Optionally create `local-packages.nix` as `delib.module` with namespaced enable option
 
 ### Adding a New Module
-1. Create `.nix` file in appropriate location (`modules/programs/`, `users/krit/modules/`, etc.)
+1. Create `.nix` file in appropriate location (`modules/programs/`, `users/<username>/modules/`, etc.)
 2. Use `delib.module` with a unique `name` and `options` including an enable boolean
 3. Implement config in `darwin.ifEnabled` and/or `home.ifEnabled` blocks
 4. Enable it in the host's `default.nix`

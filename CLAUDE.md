@@ -52,7 +52,7 @@ Module enable/disable is controlled in the host's `default.nix` via `myconfig` o
 | Layer | Location | Purpose |
 |-------|----------|---------|
 | Shared modules | `modules/` | Programs (bat, eza, fish, git, kitty, etc.), toplevel config (stylix, nix, common-configuration, user, home, home-packages) — auto-discovered, enabled per-host |
-| User modules | `users/krit/modules/` | Krit-specific opt-in modules (neovim, direnv, firefox, librewolf, yazi, NAS services, borg-backup) — auto-discovered, enabled per-host via `krit.*` options |
+| User modules | `users/<username>/modules/` | User-specific opt-in modules (neovim, direnv, firefox, librewolf, yazi, NAS services, etc.) — auto-discovered, enabled per-host via `myconfig.<username>.*` options |
 | Host-specific | `hosts/<hostname>/` | Identity (`default.nix`), system config (`system.nix`), home config (`home.nix`), local packages, SOPS secrets |
 
 ### `default.nix` Is the Source of Truth
@@ -104,20 +104,19 @@ delib.host {
 
 Declares all shared option types via `delib.moduleOptions`. Constants set in a host's `default.nix` are accessible in all modules as `myconfig.constants.*`. Also exported as `args.shared.constants` for cross-module access.
 
-### User Modules (`users/krit/`)
+### User Modules (`users/<username>/`)
 
-Reusable modules under `krit.*` namespace that hosts explicitly enable:
+Reusable modules under `<username>.*` namespace that hosts explicitly enable. For example, under `users/krit/`:
 - `modules/programs/cli-programs/`: neovim, direnv, cava
 - `modules/programs/gui-programs/`: firefox, librewolf, chromium
 - `modules/programs/terminal-emulators/`: kitty, alacritty
 - `modules/programs/file-managers/`: yazi (with Lua config), ranger
 - `modules/services/nas/`: SMB, SSH, OwnCloud, borg-backup
-- `dev-environments/`: Standalone flakes per language (excluded from auto-discovery, used with direnv)
 - `sops/`: Shared encrypted secrets (krit-common-secrets-sops.yaml)
 
-### Templates (`templates/krit/`)
+### Templates (`templates/<username>/`)
 
-Plain Nix functions (not delib modules) imported by other modules. Currently: librewolf profile definitions.
+**Important Exclusions**: Plain Nix functions (not delib modules) imported by other modules. `denix` expects everything auto-discovered to be wrapped in a `delib` function. This directory is strictly for pure Nix logic (like Dev Environment standalone flakes or complex record exports) that prevents build failures from auto-discovery interpreting them as module definitions.
 
 ### Theming
 
@@ -126,8 +125,8 @@ Stylix with base16 themes flows: host `default.nix` (constants.theme) → `modul
 ### Secrets (sops-nix)
 
 Encrypted YAML files:
-- Host-specific: `hosts/<hostname>/Krits-MacBook-Pro-secrets-sops.yaml`
-- Shared: `users/krit/sops/krit-common-secrets-sops.yaml`
+- Host-specific: `hosts/<hostname>/<Hostname>-secrets-sops.yaml`
+- Shared: `users/<username>/sops/<Shared>-secrets-sops.yaml`
 
 Age keys for decryption. SOPS config is in the host's `system.nix`.
 
