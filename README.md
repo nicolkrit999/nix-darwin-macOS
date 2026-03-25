@@ -1,8 +1,7 @@
 #  Personal Nix-Darwin Config
-
 - [ Personal Nix-Darwin Config](#-personal-nix-darwin-config)
   - [✨ Features](#-features)
-    - [🖥️ Adaptive Host Support (Denix)](#️-adaptive-host-support)
+    - [🖥️ Adaptive Host Support](#️-adaptive-host-support)
     - [🎨 Unified Theming (Stylix)](#-unified-theming-stylix)
     - [🏠 Home Manager Integration](#-home-manager-integration)
     - [🍎 macOS System Defaults](#-macos-system-defaults)
@@ -13,13 +12,16 @@
   - [3. Create Your Host Configuration](#3-create-your-host-configuration)
   - [4. Configure the host-specific aspects](#4-configure-the-host-specific-aspects)
     - [default.nix (Source of Truth)](#defaultnix-source-of-truth)
-    - [system.nix & home.nix](#systemnix--homenix)
+    - [system.nix \& home.nix](#systemnix--homenix)
     - [Opinionated directories and exclusions](#opinionated-directories-and-exclusions)
   - [5. First Time Build](#5-first-time-build)
   - [🔄 Daily Usage](#-daily-usage)
   - [❓ Troubleshooting](#-troubleshooting)
 
 ---
+
+[bye World](./documentation/end-certificate.jpeg)
+
 
 ## ✨ Features
 
